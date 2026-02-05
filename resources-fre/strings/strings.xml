@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">Bold0 MkII</string>
+    <string id="AppName">TimeGate</string>
 
     <string id="UNIT_KCAL">KCAL</string>
     <string id="UNIT_M">M</string>
@@ -288,6 +288,7 @@
     <string id="settings_alarms_count" scope="settings">Alarmes (nombre)</string>
     <string id="settings_weather_daily_high" scope="settings">Météo : Température maximale quotidienne</string>
     <string id="settings_weather_daily_low" scope="settings">Météo : Température minimale quotidienne</string>
+    <string id="settings_weather_daily_high_low" scope="settings">Météo : Température maximale et minimale quotidienne</string>
     <string id="settings_weather_temperature" scope="settings">Météo : Température</string>
     <string id="settings_weather_chance_precipitation" scope="settings">Météo : Risque de précipitations</string>
     <string id="settings_weather_humidity" scope="settings">Météo : Humidité</string>
@@ -349,6 +350,12 @@
     <string id="settings_bottom_value_4" scope="settings">Valeur inférieure 4 (si disponible) :</string>
     <string id="settings_bottom_5_digit" scope="settings">Valeur à 5 chiffres inférieure :</string>
     <string id="settings_bottom_5_digit_value" scope="settings">Valeur à 5 chiffres inférieure :</string>
+    <string id="settings_circle_value_1" scope="settings">Valeur circulaire 1 :</string>
+    <string id="settings_circle_value_2" scope="settings">Valeur circulaire 2 :</string>
+    <string id="settings_circle_value_3" scope="settings">Valeur circulaire 3 :</string>
+    <string id="settings_circle_value_4" scope="settings">Valeur circulaire 4 :</string>
+    <string id="settings_circle_value_5" scope="settings">Valeur circulaire 5 :</string>
+    <string id="settings_circle_value_6" scope="settings">Valeur circulaire 6 :</string>
     <string id="settings_distance_meter_day" scope="settings">Distance (mètres) / jour</string>
     <string id="settings_battery_display" scope="settings">Affichage de la batterie :</string>
     <string id="settings_remaining_days" scope="settings">Jours restants</string>
@@ -451,4 +458,5 @@
     <string id="settings_hide_all_labels" scope="settings">Masquer toutes les étiquettes</string>
     <string id="settings_hide_top_labels" scope="settings">Masquer les étiquettes supérieures</string>
     <string id="settings_hide_bottom_labels" scope="settings">Masquer les étiquettes inférieures</string>
+    <string id="settings_current_time" scope="settings">Heure actuelle</string>
 </strings>

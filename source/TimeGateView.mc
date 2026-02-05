@@ -8,7 +8,7 @@ import Toybox.Weather;
 import Toybox.Complications;
 using Toybox.Position;
 
-class Segment34View extends WatchUi.WatchFace {
+class TimeGateView extends WatchUi.WatchFace {
 
     hidden var visible as Boolean = true;
     hidden var screenHeight as Number;
@@ -60,13 +60,14 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var monthNames as Array<String>?;
 
     hidden var drawGradient as BitmapResource?;
+    hidden var drawClockFace as BitmapResource?;
     hidden var drawAODPattern as BitmapResource?;
     
     hidden var dataMoon as String = "";
     hidden var dataTopLeft as String = "";
     hidden var dataTopRight as String = "";
-    hidden var dataAboveLine1 as String = "";
-    hidden var dataAboveLine2 as String = "";
+    hidden var dataTopLine as String = "";
+    hidden var dataBottomLine as String = "";
     hidden var dataClock as String = "";
     hidden var dataBelow as String = "";
     hidden var dataNotifications as String = "";
@@ -77,6 +78,12 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var dataBottomRight as String = "";
     hidden var dataBottomFourth as String = "";
     hidden var dataBottom as String = "";
+    hidden var dataCircle1 as String = "";
+    hidden var dataCircle2 as String = "";
+    hidden var dataCircle3 as String = "";
+    hidden var dataCircle4 as String = "";
+    hidden var dataCircle5 as String = "";
+    hidden var dataCircle6 as String = "";
     hidden var dataIcon1 as String = "";
     hidden var dataIcon2 as String = "";
     hidden var dataBattery as String = "";
@@ -92,6 +99,12 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var dataLabelBottomMiddle as String = "";
     hidden var dataLabelBottomRight as String = "";
     hidden var dataLabelBottomFourth as String = "";
+    hidden var dataLabelCircular1 as String = "";
+    hidden var dataLabelCircular2 as String = "";
+    hidden var dataLabelCircular3 as String = "";
+    hidden var dataLabelCircular4 as String = "";
+    hidden var dataLabelCircular5 as String = "";
+    hidden var dataLabelCircular6 as String = "";
 
     public var infoMessage as String = "";
     public var nightModeOverride as Number = -1;
@@ -120,6 +133,12 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var propRightValueShows as Number = 0;
     hidden var propFourthValueShows as Number = 0;
     hidden var propValueInsteadOfSeconds as Number = 0;
+    hidden var propCircle1ValueShows as Number = 0;
+    hidden var propCircle2ValueShows as Number = 0;
+    hidden var propCircle3ValueShows as Number = 0;
+    hidden var propCircle4ValueShows as Number = 0;
+    hidden var propCircle5ValueShows as Number = 0;
+    hidden var propCircle6ValueShows as Number = 0;
     hidden var propAlwaysShowSeconds as Boolean = false;
     hidden var propUpdateFreq as Number = 5;
     hidden var propShowClockBg as Boolean = true;
@@ -149,8 +168,8 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var propHistogramData as Number = 0;
     hidden var propSunriseFieldShows as Number = 39;
     hidden var propSunsetFieldShows as Number = 40;
-    hidden var propWeatherLine1Shows as Number = 49;
-    hidden var propWeatherLine2Shows as Number = 50;
+    hidden var propTopLineFieldShows as Number = 49;
+    hidden var propBottomLineFieldShows as Number = 50;
     hidden var propDateFormat as Number = 0;
     hidden var propShowNotificationCount as Boolean = true;
     hidden var propTzOffset1 as Number = 0;
@@ -278,10 +297,11 @@ class Segment34View extends WatchUi.WatchFace {
         
         //fontClock = Graphics.FONT_SYSTEM_NUMBER_THAI_HOT;
         fontClock = Graphics.getVectorFont({:face=>["BionicBold"], :size=>130});
+        drawClockFace = Application.loadResource(Rez.Drawables.clockFace) as BitmapResource;
         propShowClockBg = false;
         clockYOffset = 11;
         topDataYOffset = 5; 
-        smallDataHeight = 17;
+        smallDataHeight = 20;
         dateLineYOffset = -6;
         clockHeight = 80;
         labelMargin = 3;
@@ -290,10 +310,11 @@ class Segment34View extends WatchUi.WatchFace {
         fieldSpaceingAdj = 0;
         
         fontTinyData = Application.loadResource(Rez.Fonts.roboto_condensed_bold_13px);
+        fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>23});
         //fontTinyData = Application.loadResource(Rez.Fonts.smol);
-        if(propSmallFontVariant == 0) { fontSmallData = Application.loadResource(Rez.Fonts.led_small); }
-        if(propSmallFontVariant == 1) { fontSmallData = Application.loadResource(Rez.Fonts.led_small_readable); }
-        if(propSmallFontVariant == 2) { fontSmallData =  Graphics.FONT_SYSTEM_SMALL; }
+        // if(propSmallFontVariant == 0) { fontSmallData = Application.loadResource(Rez.Fonts.led_small); }
+        // if(propSmallFontVariant == 1) { fontSmallData = Application.loadResource(Rez.Fonts.led_small_readable); }
+        // if(propSmallFontVariant == 2) { fontSmallData =  Graphics.FONT_SYSTEM_SMALL; }
         fontLargeData = Application.loadResource(Rez.Fonts.led);
         if(propLinesFontforBottomData == true) { 
             fontLargeData = Graphics.FONT_SYSTEM_SMALL;
@@ -590,12 +611,13 @@ class Segment34View extends WatchUi.WatchFace {
             lastSlowUpdate = unix_timestamp;
             updateSlowData(now);
             updateWeather();
+            drawWatchface(dc, now, false);
         }
 
         if(isSleeping and canBurnIn) {
             drawAOD(dc, now);
         } else {
-            drawWatchface(dc, now, false);
+            //drawWatchface(dc, now, false);
         }
     }
 
@@ -653,169 +675,55 @@ class Segment34View extends WatchUi.WatchFace {
         // Clear
         dc.setColor(themeColors[bg], themeColors[bg]);
         dc.clear();
-        var yn1 = baseY + (topDataYOffset) - halfClockHeight - marginY - smallDataHeight;
-        var yn2 = yn1 - marginY - smallDataHeight;
-        var yn3 = yn2 - marginY - histogramHeight;
-
-        // Draw Top data fields or histogram
-        if(propTopPartShows == 2) {
-            drawHistogram(dc, dataGraph1, centerX, yn3, histogramHeight);
-        } else {
-            var top_data_height = halfMarginY;
-            var top_field_font = fontTinyData;
-            var top_field_center_offset = 20;
-            if(propTopPartShows == 1) { top_field_center_offset = labelHeight; }
-            if(propLabelVisibility == 0 or propLabelVisibility == 3) {
-                dc.setColor(themeColors[fieldLbl], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(centerX - top_field_center_offset, marginY, fontLabel, dataLabelTopLeft, Graphics.TEXT_JUSTIFY_RIGHT);
-                dc.drawText(centerX + top_field_center_offset, marginY, fontLabel, dataLabelTopRight, Graphics.TEXT_JUSTIFY_LEFT);
-
-                top_data_height = labelHeight + halfMarginY;
-            }
-
-            dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-            if(propTopPartShows == 0) {
-                dc.drawText(centerX - top_field_center_offset, marginY + top_data_height, top_field_font, dataTopLeft, Graphics.TEXT_JUSTIFY_RIGHT);
-                dc.drawText(centerX + top_field_center_offset, marginY + top_data_height, top_field_font, dataTopRight, Graphics.TEXT_JUSTIFY_LEFT);
-
-                // Draw Moon
-                dc.setColor(themeColors[moon], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(centerX, marginY + ((top_data_height + tinyDataHeight) / 2), fontMoon, dataMoon, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            } else {
-                if(top_data_height == halfMarginY) { top_field_font = fontSmallData; }
-                dc.drawText(centerX - top_field_center_offset, marginY + top_data_height, top_field_font, dataTopLeft, Graphics.TEXT_JUSTIFY_RIGHT);
-                dc.drawText(centerX + top_field_center_offset, marginY + top_data_height, top_field_font, dataTopRight, Graphics.TEXT_JUSTIFY_LEFT);
-            }
+        
+        // Draw clock face background
+        if(drawClockFace != null and !aod) {
+            dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => 0xbdbdbd, :blendMode => Graphics.BLEND_MODE_MULTIPLY });
         }
+        
+        var y1 = centerY - halfClockHeight - marginY - 5;
+        var y2 = centerY + halfClockHeight - marginY + 5;
+        
 
         // Draw Lines above clock
         dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX, yn2, fontSmallData, dataAboveLine1, Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(centerX, yn1, fontSmallData, dataAboveLine2, Graphics.TEXT_JUSTIFY_CENTER);        
+        dc.drawText(centerX, y1, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y2, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
-        // Draw Clock
-        dc.setColor(themeColors[clockBg], Graphics.COLOR_TRANSPARENT);
-        if(propShowClockBg and !aod) {
-            dc.drawText(baseX, baseY + clockYOffset, fontClock, clockBgText, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        }
+        // Draw data fields in a ring around the clock
+        var ringRadius = halfClockWidth * 1.0;
+        var numFields = 6;
+        var angleStep = 360.0 / numFields;
 
-        dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(baseX, baseY + clockYOffset, fontClock, dataClock, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-
-        // Draw clock gradient
-        if(drawGradient != null and themeColors[bg] == 0x000000 and !aod) {
-            dc.drawBitmap(centerX - halfClockWidth, baseY - halfClockHeight, drawGradient);
-        }
-
-        if(propClockOutlineStyle == 2 or propClockOutlineStyle == 3) {
-            if(fontClockOutline != null) { // Someone has only bothered to draw this font for AMOLED sizes
-                // Draw outline
-                dc.setColor(themeColors[outline], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(baseX, baseY + clockYOffset, fontClockOutline, dataClock, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        for(var i = 0; i < numFields; i++) {
+            var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.5)); // Start from top (12 o'clock)
+            
+            dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
+           // dc.setAntiAlias(true);
+            
+            // Draw label and value (you can customize which data to show)
+                var value = "";
+                if(i == 0) { value = dataLabelCircular1 + dataCircle1; }
+                else if(i == 1) { value = dataLabelCircular2 + dataCircle2; }
+                else if(i == 2) { value = dataLabelCircular3 + dataCircle3; }
+                else if(i == 3) { value = dataLabelCircular4 + dataCircle4; }
+                else if(i == 4) { value = dataLabelCircular5 + dataCircle5; }
+                else if(i == 5) { value = dataLabelCircular6 + dataCircle6; }
+            
+            // Draw radial text
+            if(i >=2 and i <= 4) {
+                dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + (smallDataHeight /2) + 2, Graphics.RADIAL_TEXT_DIRECTION_COUNTER_CLOCKWISE);
+            } else {
+                dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + - 2, Graphics.RADIAL_TEXT_DIRECTION_CLOCKWISE);
             }
-        }
-
-        // Draw stress and body battery bars
-        drawSideBars(dc);
-
-        // Draw Line below clock
-        var y1 = baseY + halfClockHeight + marginY;
-        dc.setColor(themeColors[date], Graphics.COLOR_TRANSPARENT);
-        if(propDateAlignment == 0) {
-            dc.drawText(baseX - halfClockWidth + textSideAdj, y1 + dateLineYOffset, fontSmallData, dataBelow, Graphics.TEXT_JUSTIFY_LEFT);
-        } else {
-            dc.drawText(baseX, y1 + dateLineYOffset, fontSmallData, dataBelow, Graphics.TEXT_JUSTIFY_CENTER);
-        }
+           
         
-        // Draw seconds
-        if(propShowSeconds) {
-            updateSeconds(now);
-            dc.drawText(baseX + halfClockWidth - textSideAdj, y1 + dateLineYOffset, fontSmallData, dataSeconds, Graphics.TEXT_JUSTIFY_RIGHT);
-        } else{
-            dc.drawText(baseX + halfClockWidth - textSideAdj, y1 + dateLineYOffset, fontSmallData, dataNoSeconds, Graphics.TEXT_JUSTIFY_RIGHT);
+           // dc.setAntiAlias(false);
         }
 
-        // Draw Notification count
-        dataNotifications = "2";
-        if(!dataNotifications.equals("") and propShowNotificationCount) {
-            dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
-            var notificationWith = dc.getTextWidthInPixels(dataNotifications, fontSmallData) + 2;
-            if(propDateAlignment == 0) {
-                if(!propShowSeconds && propValueInsteadOfSeconds<0) { // No seconds, notification on right sid
-                    var pos = baseX + halfClockWidth - textSideAdj;
-                    dc.fillRectangle(pos - (notificationWith/2), y1 + dateLineYOffset + ((largeDataHeight+2)/2)-5,notificationWith,(largeDataHeight+2)); 
-                    dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(pos, y1 + dateLineYOffset, fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_RIGHT);
-                } else {
-                    var date_width = dc.getTextWidthInPixels(dataBelow, fontSmallData);
-                    var sec_width = 0;
-                    if(propValueInsteadOfSeconds>=0){
-                        sec_width = dc.getTextWidthInPixels(dataNoSeconds, fontSmallData); 
-                    }else{
-                        sec_width = dc.getTextWidthInPixels(dataSeconds, fontSmallData); 
-                    }
-                
-                    var date_right_edge = baseX - halfClockWidth + textSideAdj + date_width;
-                    var sec_left = baseX + halfClockWidth - textSideAdj - sec_width;
-                    var pos = sec_left - marginX;
-                    if((sec_left - date_right_edge) < 3 * marginX) {
-                        pos = (date_right_edge + sec_left) / 2;
-                    }
-                    dc.fillRectangle(pos - (notificationWith/2), y1 + dateLineYOffset + ((largeDataHeight+2)/2)-5,notificationWith,(largeDataHeight+2)); 
-                    dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(pos, y1 + dateLineYOffset, fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
-                }
-            } else { // Date is centered, notification on left side
-
-                var pos = baseX + halfClockWidth;
-                dc.fillRectangle(pos - (notificationWith/2), y1 + dateLineYOffset + ((largeDataHeight+2)/2)-5,notificationWith,(largeDataHeight+2)); 
-                dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-                dc.drawText(pos, y1 + dateLineYOffset, fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_LEFT);
-            }
-        }
-        // Draw the three bottom data fields
-        var y2 = y1 + smallDataHeight + marginY;
-        var y3 = y2 + labelHeight + labelMargin + largeDataHeight;
-        var data_width = Math.sqrt(centerY*centerY - (y3 - centerY)*(y3 - centerY)) * 2 + fieldSpaceingAdj;
-        y3 = y3 - bottomLargeDataHeightOffset;
-        var left_edge = Math.round((screenWidth - data_width) / 2);
-        if(propLinesFontforBottomData == true){
-            left_edge = left_edge - 6;
-        }
-        var digits = getFieldWidths();
-        var tot_digits = digits[0] + digits[1] + digits[2] + digits[3];
-        var dw1 = Math.round(digits[0] * data_width / tot_digits);
-        var dw2 = Math.round(digits[1] * data_width / tot_digits);
-        var dw3 = Math.round(digits[2] * data_width / tot_digits);
-        var dw4 = Math.round(digits[3] * data_width / tot_digits);
-
-        drawDataField(dc, left_edge + Math.round(dw1 / 2), y2, 3, dataLabelBottomLeft, dataBottomLeft, digits[0], fontLargeData, largeDataWidth * digits[0]);
-        drawDataField(dc, left_edge + Math.round(dw1 + (dw2 / 2)), y2, 3, dataLabelBottomMiddle, dataBottomMiddle, digits[1], fontLargeData, largeDataWidth * digits[1]);
-        drawDataField(dc, left_edge + Math.round(dw1 + dw2 + (dw3 / 2)), y2, 3, dataLabelBottomRight, dataBottomRight, digits[2], fontLargeData, largeDataWidth * digits[2]);
-        drawDataField(dc, left_edge + Math.round(dw1 + dw2 + dw3 + (dw4 / 2)), y2, 3, dataLabelBottomFourth, dataBottomFourth, digits[3], fontLargeData, largeDataWidth * digits[3]);
-
-        // Draw the 5 digit bottom field
-        var y4 = y3 + halfMarginY + bottomFiveAdj;
-        if((propLabelVisibility == 1 or propLabelVisibility == 3)) { y4 = y4 - labelHeight; }
-        var step_width = 0;
-        if(screenHeight == 240) {
-            step_width = drawDataField(dc, centerX - 19, y4 + 3, 0, null, dataBottom, 7, fontBottomData, bottomDataWidth * 5);
-        } else {
-            step_width = drawDataField(dc, centerX, y4, 0, null, dataBottom, 7, fontBottomData, bottomDataWidth * 5);
-        }
-
-        // Draw icons
-        dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-        if(screenHeight == 240) { step_width += 30; }
-        dc.drawText(centerX - (step_width / 2) - (marginX / 2), y4 + (largeDataHeight / 2) + iconYAdj, fontIcons, dataIcon1, Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.drawText(centerX + (step_width / 2) + (marginX / 2) - 2, y4 + (largeDataHeight / 2) + iconYAdj, fontIcons, dataIcon2, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+        // Draw hour and minute bars (lines with different thickness)
+        drawTimeIndicators(dc, now);
         
-        // Draw battery icon
-        if(screenHeight == 240 and propBottomFieldShows != -2) {
-            drawBatteryIcon(dc, centerX + 32, y4);
-        } else {
-            drawBatteryIcon(dc, null, null);
-        }
     }
 
     (:MIP)
@@ -878,6 +786,67 @@ class Segment34View extends WatchUi.WatchFace {
             dc.drawText(0, i*20 + offset, fontIcons, text, Graphics.TEXT_JUSTIFY_LEFT);
             i++;
         }
+    }
+
+    hidden function drawTimeIndicators(dc as Dc, now as Gregorian.Info) as Void {
+        // Enable anti-aliasing for smoother hand edges
+        dc.setAntiAlias(true);
+
+        // Calculate hour and minute angles (12 o'clock is 0 degrees, clockwise)
+        var totalMinutes = now.hour * 60 + now.min;
+        var hourAngle = (totalMinutes / 720.0) * 360.0;  // 720 minutes in 12 hours
+        var minuteAngle = (now.min / 60.0) * 360.0;
+        var secondAngle = (now.sec / 60.0) * 360.0;
+
+        // Convert angles to radians
+        var hourRad = (hourAngle - 90.0) * Math.PI / 180.0;
+        var minuteRad = (minuteAngle - 90.0) * Math.PI / 180.0;
+        var secondRad = (secondAngle - 90.0) * Math.PI / 180.0;
+
+       
+        // Minute hand: 40% of total width
+        var minuteLength = halfClockWidth * 0.90;
+        var minuteX2 = centerX + (minuteLength * Math.cos(minuteRad)).toNumber();
+        var minuteY2 = centerY + (minuteLength * Math.sin(minuteRad)).toNumber();
+
+        dc.setPenWidth(10);  // Thicker line for minute hand
+        dc.drawLine(centerX, centerY, minuteX2, minuteY2);
+
+        var minuteSmallerLength = halfClockWidth * 0.3;
+        var minuteSmallerX2 = centerX + (minuteSmallerLength * Math.cos(minuteRad)).toNumber();
+        var minutSmallereY2 = centerY + (minuteSmallerLength * Math.sin(minuteRad)).toNumber();
+
+        dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(5);  // Thicker line for minute hand
+        dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
+
+         // Hour hand: 30% of total width
+        var hourLength = halfClockWidth * 0.50;
+        var hourX2 = centerX + (hourLength * Math.cos(hourRad)).toNumber();
+        var hourY2 = centerY + (hourLength * Math.sin(hourRad)).toNumber();
+
+        dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(6);  // Thinner line for hour hand
+        dc.drawLine(centerX, centerY, hourX2, hourY2);
+
+        // Second hand: even longer and very thin (optional, can disable if preferred)
+        if(propShowSeconds) {
+            var secondLength = halfClockWidth * 0.45;
+            var secondX2 = centerX + (secondLength * Math.cos(secondRad)).toNumber();
+            var secondY2 = centerY + (secondLength * Math.sin(secondRad)).toNumber();
+
+            dc.setColor(themeColors[date], Graphics.COLOR_TRANSPARENT);
+            dc.setPenWidth(1);  // Very thin line for second hand
+            dc.drawLine(centerX, centerY, secondX2, secondY2);
+        }
+
+        // Draw center circle
+        dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(centerX, centerY, 4);
+
+        // Reset line width and disable anti-aliasing
+        dc.setPenWidth(1);
+        dc.setAntiAlias(false);
     }
 
     hidden function getFieldWidths() as Array<Number> {
@@ -1228,8 +1197,8 @@ class Segment34View extends WatchUi.WatchFace {
         propHistogramData = getValueOrDefault("histogramData", 0) as Number;
         propSunriseFieldShows = getValueOrDefault("sunriseFieldShows", 39) as Number;
         propSunsetFieldShows = getValueOrDefault("sunsetFieldShows", 40) as Number;
-        propWeatherLine1Shows = getValueOrDefault("weatherLine1Shows", 49) as Number;
-        propWeatherLine2Shows = getValueOrDefault("weatherLine2Shows", 50) as Number;
+        propTopLineFieldShows = getValueOrDefault("topLineShows", 49) as Number;
+        propBottomLineFieldShows = getValueOrDefault("bottomLineShows", 50) as Number;
         propDateFieldShows = getValueOrDefault("dateFieldShows", -1) as Number;
         propShowSeconds = getValueOrDefault("showSeconds", true) as Boolean;
         propAlwaysShowSeconds = getValueOrDefault("alwaysShowSeconds", false) as Boolean;
@@ -1239,6 +1208,12 @@ class Segment34View extends WatchUi.WatchFace {
         propRightValueShows = getValueOrDefault("rightValueShows", 0) as Number;
         propFourthValueShows = getValueOrDefault("fourthValueShows", -2) as Number;
         propValueInsteadOfSeconds = getValueOrDefault("valueInsteadOfSeconds", -2) as Number;
+        propCircle1ValueShows = getValueOrDefault("circle1ValueShows", 0) as Number;
+        propCircle2ValueShows = getValueOrDefault("circle2ValueShows", 0) as Number;
+        propCircle3ValueShows = getValueOrDefault("circle3ValueShows", 0) as Number;
+        propCircle4ValueShows = getValueOrDefault("circle4ValueShows", 0) as Number;
+        propCircle5ValueShows = getValueOrDefault("circle5ValueShows", 0) as Number;
+        propCircle6ValueShows = getValueOrDefault("circle6ValueShows", 0) as Number;
         propBottomFieldShows = getValueOrDefault("bottomFieldShows", 17) as Number;
         propLeftBarShows = getValueOrDefault("leftBarShows", 1) as Number;
         propRightBarShows = getValueOrDefault("rightBarShows", 2) as Number;
@@ -1285,8 +1260,8 @@ class Segment34View extends WatchUi.WatchFace {
         var fieldWidths = getFieldWidths();
         dataTopLeft = getValueByType(propSunriseFieldShows, 5);
         dataTopRight = getValueByType(propSunsetFieldShows, 5);
-        dataAboveLine1 = getValueByTypeWithUnit(propWeatherLine1Shows, 10);
-        dataAboveLine2 = getValueByTypeWithUnit(propWeatherLine2Shows, 10);
+        dataTopLine = getValueByTypeWithUnit(propTopLineFieldShows, 10);
+        dataBottomLine = getValueByTypeWithUnit(propBottomLineFieldShows, 10);
         dataBelow = getValueByTypeWithUnit(propDateFieldShows, 10);
         dataNotifications = getNotificationsData();
         dataNoSeconds = getValueByType(propValueInsteadOfSeconds,5);
@@ -1295,6 +1270,12 @@ class Segment34View extends WatchUi.WatchFace {
         dataBottomRight = getValueByType(propRightValueShows, fieldWidths[2]);
         dataBottomFourth = getValueByType(propFourthValueShows, fieldWidths[3]);
         dataBottom = getValueByType(propBottomFieldShows, 7);
+        dataCircle1 = getValueByType(propCircle1ValueShows, 8);
+        dataCircle2 = getValueByType(propCircle2ValueShows, 8);
+        dataCircle3 = getValueByType(propCircle3ValueShows, 8);
+        dataCircle4 = getValueByType(propCircle4ValueShows, 8);
+        dataCircle5 = getValueByType(propCircle5ValueShows, 8);
+        dataCircle6 = getValueByType(propCircle6ValueShows, 8);
         dataIcon1 = getIconState(propIcon1);
         dataIcon2 = getIconState(propIcon2);
         dataBattery = getBattData();
@@ -1323,6 +1304,16 @@ class Segment34View extends WatchUi.WatchFace {
         dataLabelBottomMiddle = getLabelByType(propMiddleValueShows, fieldWidths[1] - 1);
         dataLabelBottomRight = getLabelByType(propRightValueShows, fieldWidths[2] - 1);
         dataLabelBottomFourth = getLabelByType(propFourthValueShows, fieldWidths[3] - 1);
+
+        dataTopLine = getValueByTypeWithUnit(propTopLineFieldShows, 10);
+        dataBottomLine = getValueByTypeWithUnit(propBottomLineFieldShows, 10);
+
+        dataLabelCircular1= getLabelByType(propCircle1ValueShows, 1);
+        dataLabelCircular2= getLabelByType(propCircle2ValueShows, 1);
+        dataLabelCircular3= getLabelByType(propCircle3ValueShows, 1);
+        dataLabelCircular4= getLabelByType(propCircle4ValueShows, 1);
+        dataLabelCircular5= getLabelByType(propCircle5ValueShows, 1);
+        dataLabelCircular6= getLabelByType(propCircle6ValueShows, 1);
 
         updateColorTheme();
     }
@@ -1939,7 +1930,7 @@ class Segment34View extends WatchUi.WatchFace {
             val = formatDistanceByWidth(weekly_distance, width);
         } else if(complicationType == 34) { // Battery percentage
             var battery = System.getSystemStats().battery;
-            val = battery.format("%d");
+            val = battery.format("%d")+"%";
         } else if(complicationType == 35) { // Battery days remaining
             if(System.getSystemStats() has :batteryInDays) {
                 if (System.getSystemStats().batteryInDays != null){
@@ -2180,8 +2171,11 @@ class Segment34View extends WatchUi.WatchFace {
             var uv = getUVIndex();
             var wind = getWind();
             val = join([temp, uv, wind]);
+        } else if(complicationType == 70) { // Current time 
+            val = getClockData(Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT));
+        } else if(complicationType == 71) { // High/Low
+            val = getHighLow();
         }
-
         return val;
     }
 
@@ -2329,9 +2323,9 @@ class Segment34View extends WatchUi.WatchFace {
     }
 
     hidden function formatLabel(short as ResourceId, mid as ResourceId, long as ResourceId, size as Number) as String {
-        if(size == 1) { return Application.loadResource(short) + ":"; }
-        if(size == 2) { return Application.loadResource(mid) + ":"; }
-        return Application.loadResource(long) + ":";
+        if(size == 1) { return Application.loadResource(short) + ": "; }
+        if(size == 2) { return Application.loadResource(mid) + ": "; }
+        return Application.loadResource(long) + ": ";
     }
 
     hidden function formatDate() as String {
@@ -2555,7 +2549,7 @@ class Segment34View extends WatchUi.WatchFace {
             var temp_unit = getTempUnit();
             var temp_val = weatherCondition.temperature;
             var temp = formatTemperature(temp_val, temp_unit).format("%01d");
-            return temp + temp_unit;
+            return temp + "°";
         }
         return "";
     }
@@ -2675,7 +2669,7 @@ class Segment34View extends WatchUi.WatchFace {
                 var tempUnit = getTempUnit();
                 var high = formatTemperature(weatherCondition.highTemperature, tempUnit);
                 var low = formatTemperature(weatherCondition.lowTemperature, tempUnit);
-                ret = high.format("%d") + tempUnit + "/" + low.format("%d") + tempUnit;
+                ret = "H " + high.format("%d") + "°" + "/L " + low.format("%d") + "°";
             }
         }
         return ret;
@@ -2883,12 +2877,12 @@ class Segment34View extends WatchUi.WatchFace {
 
 }
 
-class Segment34Delegate extends WatchUi.WatchFaceDelegate {
+class TimeGatDelegate extends WatchUi.WatchFaceDelegate {
     var screenW = null;
     var screenH = null;
-    var view as Segment34View;
+    var view as TimeGateView;
 
-    public function initialize(v as Segment34View) {
+    public function initialize(v as TimeGateView) {
         WatchFaceDelegate.initialize();
         screenW = System.getDeviceSettings().screenWidth;
         screenH = System.getDeviceSettings().screenHeight;

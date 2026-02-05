@@ -2,7 +2,7 @@ import Toybox.Application;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
-class Bold0App extends Application.AppBase {
+class TimeGateApp extends Application.AppBase {
     
     var mView;
     
@@ -20,9 +20,9 @@ class Bold0App extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() {
-        mView = new Bold0View();
+        mView = new TimeGateView();
 		onSettingsChanged();
-        var delegate = new Bold0Delegate(mView);
+        var delegate = new TimeGatDelegate(mView);
 		return [mView, delegate];
     }
 
@@ -33,6 +33,6 @@ class Bold0App extends Application.AppBase {
 
 }
 
-function getApp() as Bold0App {
-    return Application.getApp() as Bold0App;
+function getApp() as TimeGateApp {
+    return Application.getApp() as TimeGateApp;
 }

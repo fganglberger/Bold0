@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">Bold0 MkII</string>
+    <string id="AppName">TimeGate</string>
 
     <string id="UNIT_KCAL">KCAL</string>
     <string id="UNIT_M">M</string>
@@ -288,6 +288,7 @@
     <string id="settings_alarms_count" scope="settings">Alarmy (liczba)</string>
     <string id="settings_weather_daily_high" scope="settings">Pogoda: Dzienna temperatura maksymalna</string>
     <string id="settings_weather_daily_low" scope="settings">Pogoda: Dzienna temperatura minimalna</string>
+    <string id="settings_weather_daily_high_low" scope="settings">Pogoda: Dzienna temperatura maksymalna i minimalna</string>
     <string id="settings_weather_temperature" scope="settings">Pogoda: Temperatura</string>
     <string id="settings_weather_chance_precipitation" scope="settings">Pogoda: Szansa opadów</string>
     <string id="settings_weather_humidity" scope="settings">Pogoda: Wilgotność</string>
@@ -349,6 +350,12 @@
     <string id="settings_bottom_value_4" scope="settings">Wartość dolna 4 (jeśli dostępna):</string>
     <string id="settings_bottom_5_digit" scope="settings">Wartość dolna 5 cyfr:</string>
     <string id="settings_bottom_5_digit_value" scope="settings">Wartość dolna 5 cyfr:</string>
+    <string id="settings_circle_value_1" scope="settings">Wartość kołowa 1:</string>
+    <string id="settings_circle_value_2" scope="settings">Wartość kołowa 2:</string>
+    <string id="settings_circle_value_3" scope="settings">Wartość kołowa 3:</string>
+    <string id="settings_circle_value_4" scope="settings">Wartość kołowa 4:</string>
+    <string id="settings_circle_value_5" scope="settings">Wartość kołowa 5:</string>
+    <string id="settings_circle_value_6" scope="settings">Wartość kołowa 6:</string>
     <string id="settings_distance_meter_day" scope="settings">Dystans (metr) / dzień</string>
     <string id="settings_battery_display" scope="settings">Wyświetlanie baterii:</string>
     <string id="settings_remaining_days" scope="settings">Pozostałe dni</string>
@@ -451,4 +458,5 @@
     <string id="settings_hide_all_labels" scope="settings">Ukryj wszystkie etykiety</string>
     <string id="settings_hide_top_labels" scope="settings">Ukryj górne etykiety</string>
     <string id="settings_hide_bottom_labels" scope="settings">Ukryj dolne etykiety</string>
+    <string id="settings_current_time" scope="settings">Ora aktualna</string>
 </strings>

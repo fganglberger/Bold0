@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">Bold0 MkII</string>
+    <string id="AppName">TimeGate</string>
 
     <string id="UNIT_KCAL">KCAL</string>
     <string id="UNIT_M">M</string>
@@ -65,26 +65,26 @@
     <string id="WEATHER_52">Thin Clouds</string>
     <string id="WEATHER_53">Unknown</string>
 
-    <string id="DAY_OF_WEEK_SUN">SUN</string>
-    <string id="DAY_OF_WEEK_MON">MON</string>
-    <string id="DAY_OF_WEEK_TUE">TUE</string>
-    <string id="DAY_OF_WEEK_WED">WED</string>
-    <string id="DAY_OF_WEEK_THU">THU</string>
-    <string id="DAY_OF_WEEK_FRI">FRI</string>
-    <string id="DAY_OF_WEEK_SAT">SAT</string>
+    <string id="DAY_OF_WEEK_SUN">Sun</string>
+    <string id="DAY_OF_WEEK_MON">Mon</string>
+    <string id="DAY_OF_WEEK_TUE">Tue</string>
+    <string id="DAY_OF_WEEK_WED">Wed</string>
+    <string id="DAY_OF_WEEK_THU">Thu</string>
+    <string id="DAY_OF_WEEK_FRI">Fri</string>
+    <string id="DAY_OF_WEEK_SAT">Sat</string>
 
-    <string id="MONTH_JAN">JAN</string>
-    <string id="MONTH_FEB">FEB</string>
-    <string id="MONTH_MAR">MAR</string>
-    <string id="MONTH_APR">APR</string>
-    <string id="MONTH_MAY">MAY</string>
-    <string id="MONTH_JUN">JUN</string>
-    <string id="MONTH_JUL">JUL</string>
-    <string id="MONTH_AUG">AUG</string>
-    <string id="MONTH_SEP">SEP</string>
-    <string id="MONTH_OCT">OCT</string>
-    <string id="MONTH_NOV">NOV</string>
-    <string id="MONTH_DEC">DEC</string>
+    <string id="MONTH_JAN">Jan</string>
+    <string id="MONTH_FEB">Feb</string>
+    <string id="MONTH_MAR">Mar</string>
+    <string id="MONTH_APR">Apr</string>
+    <string id="MONTH_MAY">May</string>
+    <string id="MONTH_JUN">Jun</string>
+    <string id="MONTH_JUL">Jul</string>
+    <string id="MONTH_AUG">Aug</string>
+    <string id="MONTH_SEP">Sep</string>
+    <string id="MONTH_OCT">Oct</string>
+    <string id="MONTH_NOV">Nov</string>
+    <string id="MONTH_DEC">Dec</string>
 
     <string id="LABEL_WMIN_1">W MIN</string>
     <string id="LABEL_WMIN_2">WEEK MIN</string>
@@ -152,18 +152,18 @@
     <string id="LABEL_WDISTKM_3">WEEK DIST KM</string>
     <string id="LABEL_WDISTMI_2">WEEK MI</string>
     <string id="LABEL_WDISTMI_3">WEEKLY MILES</string>
-    <string id="LABEL_BATT_1">BATT</string>
+    <string id="LABEL_BATT_1">Batt</string>
     <string id="LABEL_BATT_2">BATT %</string>
     <string id="LABEL_BATT_3">BATTERY %</string>
     <string id="LABEL_BATTD_1">BATT D</string>
     <string id="LABEL_BATTD_2">BATT DAYS</string>
     <string id="LABEL_BATTD_3">BATTERY DAYS</string>
-    <string id="LABEL_NOTIFS_1">NOTIFS</string>
+    <string id="LABEL_NOTIFS_1">Notif</string>
     <string id="LABEL_NOTIFS_3">NOTIFICATIONS</string>
     <string id="LABEL_SUN_1">SUN</string>
     <string id="LABEL_SUNINT_2">SUN INT</string>
     <string id="LABEL_SUNINT_3">SUN INTENSITY</string>
-    <string id="LABEL_TEMP_1">TEMP</string>
+    <string id="LABEL_TEMP_1">Temp</string>
     <string id="LABEL_STEMP_3">SENSOR TEMP</string>
     <string id="LABEL_DAWN_1">S RISE</string>
     <string id="LABEL_DAWN_2">SUNRISE</string>
@@ -181,7 +181,7 @@
     <string id="LABEL_NEXTSUN_1">SUN</string>
     <string id="LABEL_NEXTSUN_2">NEXT SUN</string>
     <string id="LABEL_NEXTSUN_3">NEXT SUN EVNT</string>
-    <string id="LABEL_NEXTCAL_1">CAL</string>
+    <string id="LABEL_NEXTCAL_1">Cal</string>
     <string id="LABEL_NEXTCAL_2">NEXT CAL</string>
     <string id="LABEL_NEXTCAL_3">NEXT CAL EVNT</string>
     <string id="LABEL_OX_1">OX</string>
@@ -289,6 +289,7 @@
     <string id="settings_alarms_count" scope="settings">Alarms (count)</string>
     <string id="settings_weather_daily_high" scope="settings">Weather: Daily high temperature</string>
     <string id="settings_weather_daily_low" scope="settings">Weather: Daily low temperature</string>
+    <string id="settings_weather_daily_high_low" scope="settings">Weather: Daily high and low temperature</string>
     <string id="settings_weather_temperature" scope="settings">Weather: Temperature</string>
     <string id="settings_weather_chance_precipitation" scope="settings">Weather: Chance of Precipitation</string>
     <string id="settings_weather_humidity" scope="settings">Weather: Humidity</string>
@@ -350,6 +351,12 @@
     <string id="settings_bottom_value_4" scope="settings">Bottom value 4 (if available):</string>
     <string id="settings_bottom_5_digit" scope="settings">Bottom 5 digit value:</string>
     <string id="settings_bottom_5_digit_value" scope="settings">Bottom 5 digit value:</string>
+    <string id="settings_circle_value_1" scope="settings">Circular value 1:</string>
+    <string id="settings_circle_value_2" scope="settings">Circular value 2:</string>
+    <string id="settings_circle_value_3" scope="settings">Circular value 3:</string>
+    <string id="settings_circle_value_4" scope="settings">Circular value 4:</string>
+    <string id="settings_circle_value_5" scope="settings">Circular value 5:</string>
+    <string id="settings_circle_value_6" scope="settings">Circular value 6:</string>
     <string id="settings_distance_meter_day" scope="settings">Distance (meter) / day</string>
     <string id="settings_battery_display" scope="settings">Battery display:</string>
     <string id="settings_remaining_days" scope="settings">Remaining days</string>
@@ -462,4 +469,5 @@
     <string id="settings_text_alignment_bottom_labels" scope="settings">Text alignment for bottom field labels:</string>
     <string id="settings_temperature_uv_precipitation" scope="settings">Temperature, UV Index, Precipitation chance</string>
     <string id="settings_temperature_uv_wind" scope="settings">Temperature, UV Index, Wind</string>
+    <string id="settings_current_time" scope="settings">Current time</string>
 </strings>

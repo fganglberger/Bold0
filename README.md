@@ -1,7 +1,7 @@
-# Bold0
+# TimeGate
 This is a fork of Segment34 mkII with stock fonts. WARNING: AT THE MOMENT, this works only properly for watches with a 240x240 resolution like Fenix 7 Pro.
 
-![Screenshot of the watchface](screenshotBold0.png "Screenshot")
+![Screenshot of the watchface](screenshotTimeGate.png "Screenshot")
 
 The watchface features the following (because this was included in Segment34):
 
@@ -47,5 +47,5 @@ Pull requests are welcome, but please follow the following guidelines:
 - Clean code
 
 ## Change log
-2025-12-15 v0.1
+2026-02-05 v0.1
 - First implementation for Fenix 7 Pro

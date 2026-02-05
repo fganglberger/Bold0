@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">Bold0 MkII</string>
+    <string id="AppName">TimeGate</string>
 
     <string id="UNIT_KCAL">KCAL</string>
     <string id="UNIT_M">M</string>
@@ -289,6 +289,7 @@
     <string id="settings_alarms_count" scope="settings">Sveglie (conteggio)</string>
     <string id="settings_weather_daily_high" scope="settings">Meteo: Temperatura massima giornaliera</string>
     <string id="settings_weather_daily_low" scope="settings">Meteo: Temperatura minima giornaliera</string>
+    <string id="settings_weather_daily_high_low" scope="settings">Meteo: Temperatura massima e minima giornaliera</string>
     <string id="settings_weather_temperature" scope="settings">Meteo: Temperatura</string>
     <string id="settings_weather_chance_precipitation" scope="settings">Meteo: Probabilità di precipitazioni</string>
     <string id="settings_weather_humidity" scope="settings">Meteo: Umidità</string>
@@ -349,6 +350,12 @@
     <string id="settings_bottom_value_3" scope="settings">Valore inferiore 3:</string>
     <string id="settings_bottom_value_4" scope="settings">Valore inferiore 4 (se disponibile):</string>
     <string id="settings_bottom_5_digit" scope="settings">Valore 5 cifre inferiore:</string>
+    <string id="settings_circle_value_1" scope="settings">Valore circolare 1:</string>
+    <string id="settings_circle_value_2" scope="settings">Valore circolare 2:</string>
+    <string id="settings_circle_value_3" scope="settings">Valore circolare 3:</string>
+    <string id="settings_circle_value_4" scope="settings">Valore circolare 4:</string>
+    <string id="settings_circle_value_5" scope="settings">Valore circolare 5:</string>
+    <string id="settings_circle_value_6" scope="settings">Valore circolare 6:</string>
     <string id="settings_bottom_5_digit_value" scope="settings">Valore 5 cifre inferiore:</string>
     <string id="settings_distance_meter_day" scope="settings">Distanza (metri) / giorno</string>
     <string id="settings_battery_display" scope="settings">Visualizzazione batteria:</string>
@@ -452,4 +459,5 @@
     <string id="settings_hide_all_labels" scope="settings">Nascondi Tutte le Etichette</string>
     <string id="settings_hide_top_labels" scope="settings">Nascondi Etichette Superiori</string>
     <string id="settings_hide_bottom_labels" scope="settings">Nascondi Etichette Inferiori</string>
+    <string id="settings_current_time" scope="settings">Ora corrente</string>
 </strings>
