@@ -14,20 +14,15 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var screenHeight as Number;
     hidden var screenWidth as Number;
     (:initialized) hidden var clockHeight as Number;
-    (:initialized) hidden var clockYOffset as Number = 0;
-    (:initialized) hidden var dateLineYOffset as Number = 0;
-    (:initialized) hidden var topDataYOffset as Number = 0;
     (:initialized) hidden var bottomLargeDataHeightOffset as Number = 0;
     (:initialized) hidden var clockWidth as Number;
     (:initialized) hidden var labelHeight as Number;
-    (:initialized) hidden var labelMargin as Number;
     (:initialized) hidden var tinyDataHeight as Number;
     (:initialized) hidden var smallDataHeight as Number;
     (:initialized) hidden var largeDataHeight as Number;
     (:initialized) hidden var largeDataWidth as Number;
     (:initialized) hidden var bottomDataWidth as Number;
-    (:initialized) hidden var baseX as Number;
-    (:initialized) hidden var baseY as Number;
+
     hidden var centerX as Number;
     hidden var centerY as Number;
     hidden var marginX as Number;
@@ -45,8 +40,7 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var histogramHeight as Number = 20;
     hidden var histogramTargetWidth as Number = 40;
 
-    hidden var fontMoon as FontType;
-    hidden var fontIcons as FontType;
+
     (:initialized) hidden var fontClock as FontType;
     (:initialized) hidden var fontClockOutline as FontType;
     (:initialized) hidden var fontLabel as FontType;;
@@ -63,42 +57,20 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var drawClockFace as BitmapResource?;
     hidden var drawAODPattern as BitmapResource?;
     
-    hidden var dataMoon as String = "";
-    hidden var dataTopLeft as String = "";
-    hidden var dataTopRight as String = "";
+
     hidden var dataTopLine as String = "";
     hidden var dataBottomLine as String = "";
-    hidden var dataClock as String = "";
-    hidden var dataBelow as String = "";
-    hidden var dataNotifications as String = "";
     hidden var dataSeconds as String = "";
     hidden var dataNoSeconds as String = "";
-    hidden var dataBottomLeft as String = "";
-    hidden var dataBottomMiddle as String = "";
-    hidden var dataBottomRight as String = "";
-    hidden var dataBottomFourth as String = "";
-    hidden var dataBottom as String = "";
     hidden var dataCircle1 as String = "";
     hidden var dataCircle2 as String = "";
     hidden var dataCircle3 as String = "";
     hidden var dataCircle4 as String = "";
     hidden var dataCircle5 as String = "";
     hidden var dataCircle6 as String = "";
-    hidden var dataIcon1 as String = "";
-    hidden var dataIcon2 as String = "";
-    hidden var dataBattery as String = "";
     hidden var dataAODLeft as String = "";
     hidden var dataAODRight as String = "";
-    hidden var dataRightBar as Number = 0;
-    hidden var dataLeftBar as Number = 0;
-    hidden var dataGraph1 as Array<Number>?;
-
-    hidden var dataLabelTopLeft as String = "";
-    hidden var dataLabelTopRight as String = "";
-    hidden var dataLabelBottomLeft as String = "";
-    hidden var dataLabelBottomMiddle as String = "";
-    hidden var dataLabelBottomRight as String = "";
-    hidden var dataLabelBottomFourth as String = "";
+   
     hidden var dataLabelCircular1 as String = "";
     hidden var dataLabelCircular2 as String = "";
     hidden var dataLabelCircular3 as String = "";
@@ -115,24 +87,12 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var canBurnIn as Boolean = false;
     hidden var isSleeping as Boolean = false;
     hidden var lastUpdate as Number? = null;
-    hidden var lastSlowUpdate as Number? = null;
     hidden var doesPartialUpdate as Boolean = false;
     hidden var hasComplications as Boolean = false;
     
     hidden var propIs24H as Boolean = false;
     hidden var propTheme as Integer = 0;
-    hidden var propNightTheme as Integer = -1;
-    hidden var propNightThemeActivation as Number = 0;
-    hidden var propColorOverride as String = "";
-    hidden var propClockOutlineStyle as Number = 0;
-    hidden var propBatteryVariant as Number = 3;
     hidden var propShowSeconds as Boolean = true;
-    hidden var propFieldLayout as Number = 0;
-    hidden var propLeftValueShows as Number = 6;
-    hidden var propMiddleValueShows as Number = 10;
-    hidden var propRightValueShows as Number = 0;
-    hidden var propFourthValueShows as Number = 0;
-    hidden var propValueInsteadOfSeconds as Number = 0;
     hidden var propCircle1ValueShows as Number = 0;
     hidden var propCircle2ValueShows as Number = 0;
     hidden var propCircle3ValueShows as Number = 0;
@@ -141,33 +101,21 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var propCircle6ValueShows as Number = 0;
     hidden var propAlwaysShowSeconds as Boolean = false;
     hidden var propUpdateFreq as Number = 5;
-    hidden var propShowClockBg as Boolean = true;
     hidden var propShowDataBg as Boolean = false;
 
     hidden var propAodStyle as Number = 1;
-    hidden var propAodFieldShows as Number = -1;
-    hidden var propAodRightFieldShows as Number = -2;
-    hidden var propDateFieldShows as Number = -1;
-    hidden var propBottomFieldShows as Number = 17;
     hidden var propAodAlignment as Number = 0;
-    hidden var propDateAlignment as Number = 0;
     hidden var propBottomFieldAlignment as Number = 2;
     hidden var propBottomFieldLabelAlignment as Number = 0;
     hidden var propLeftBarShows as Number = 1;
     hidden var propRightBarShows as Number = 2;
-    hidden var propIcon1 as Number = 1;
-    hidden var propIcon2 as Number = 2;
     hidden var propHemisphere as Number = 0;
     hidden var propHourFormat as Number = 0;
-    hidden var propZeropadHour as Boolean = true;
     hidden var propTimeSeparator as Number = 0;
     hidden var propTempUnit as Number = 0;
     hidden var propWindUnit as Number = 0;
     hidden var propPressureUnit as Number = 0;
-    hidden var propTopPartShows as Number = 0;
     hidden var propHistogramData as Number = 0;
-    hidden var propSunriseFieldShows as Number = 39;
-    hidden var propSunsetFieldShows as Number = 40;
     hidden var propTopLineFieldShows as Number = 49;
     hidden var propBottomLineFieldShows as Number = 50;
     hidden var propDateFormat as Number = 0;
@@ -224,8 +172,6 @@ class TimeGateView extends WatchUi.WatchFace {
         
         screenHeight = Toybox.System.getDeviceSettings().screenHeight;
         screenWidth = Toybox.System.getDeviceSettings().screenWidth;
-        fontMoon = Application.loadResource(Rez.Fonts.moon);
-        fontIcons = Application.loadResource(Rez.Fonts.icons);
         centerX = Math.round(screenWidth / 2);
         centerY = Math.round(screenHeight / 2);
         marginY = Math.round(screenHeight / 30);
@@ -249,42 +195,7 @@ class TimeGateView extends WatchUi.WatchFace {
     (:Round240)
     hidden function loadResources() as Void {
         
-        //fontClock = Graphics.FONT_SYSTEM_NUMBER_THAI_HOT;
-        fontClock = Graphics.getVectorFont({:face=>["BionicBold"], :size=>130});
-        propShowClockBg = false;
-        
-        fontTinyData = Application.loadResource(Rez.Fonts.smol);
-        if(propSmallFontVariant == 0) { fontSmallData = Application.loadResource(Rez.Fonts.led_small); }
-        if(propSmallFontVariant == 1) { fontSmallData = Application.loadResource(Rez.Fonts.led_small_readable); }
-        if(propSmallFontVariant == 2) { fontSmallData = Application.loadResource(Rez.Fonts.led_small_lines); }
-        fontLargeData = Application.loadResource(Rez.Fonts.led);
-        if(propLinesFontforBottomData == true) { 
-            fontBottomData = Application.loadResource(Rez.Fonts.led_small_lines);
-        } else {
-            fontBottomData = Application.loadResource(Rez.Fonts.led_small);
-        }
-        fontLabel = Application.loadResource(Rez.Fonts.xsmol);
-        fontBattery = fontTinyData;
-
-        clockHeight = 80;
-        clockWidth = 220;
-        labelHeight = 5;
-        labelMargin = 6;
-        tinyDataHeight = 8;
-        smallDataHeight = 13;
-        largeDataHeight = 20;
-        largeDataWidth = 18;
-        bottomDataWidth = 12;
-
-        baseX = centerX;
-        baseY = centerY - smallDataHeight + 4;
-        marginY = Math.round(screenHeight / 35);
-        fieldSpaceingAdj = 10;
-        barBottomAdj = 1;
-        histogramBarWidth = 1;
-        histogramBarSpacing = 1;
-        histogramHeight = 15;
-        histogramTargetWidth = 30;
+      
     }
 
     (:Round260)
@@ -295,286 +206,38 @@ class TimeGateView extends WatchUi.WatchFace {
         // HERE HERE HERE HERE HERE HEREHERE HERE HEREHERE HERE HEREHERE HERE HEREHERE HERE HEREHERE HERE HERE
      
         
-        //fontClock = Graphics.FONT_SYSTEM_NUMBER_THAI_HOT;
-        fontClock = Graphics.getVectorFont({:face=>["BionicBold"], :size=>130});
+      
         drawClockFace = Application.loadResource(Rez.Drawables.clockFace) as BitmapResource;
-        propShowClockBg = false;
-        clockYOffset = 11;
-        topDataYOffset = 5; 
-        smallDataHeight = 20;
-        dateLineYOffset = -6;
-        clockHeight = 80;
-        labelMargin = 3;
-        bottomLargeDataHeightOffset = 3;
-        iconYAdj = 6;
-        fieldSpaceingAdj = 0;
-        
-        fontTinyData = Application.loadResource(Rez.Fonts.roboto_condensed_bold_13px);
+        smallDataHeight = 23;
         fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>23});
-        //fontTinyData = Application.loadResource(Rez.Fonts.smol);
-        // if(propSmallFontVariant == 0) { fontSmallData = Application.loadResource(Rez.Fonts.led_small); }
-        // if(propSmallFontVariant == 1) { fontSmallData = Application.loadResource(Rez.Fonts.led_small_readable); }
-        // if(propSmallFontVariant == 2) { fontSmallData =  Graphics.FONT_SYSTEM_SMALL; }
-        fontLargeData = Application.loadResource(Rez.Fonts.led);
-        if(propLinesFontforBottomData == true) { 
-            fontLargeData = Graphics.FONT_SYSTEM_SMALL;
-            propShowDataBg = false;
-        } else {
-            fontLargeData = Application.loadResource(Rez.Fonts.led);
-        }
-        fontBottomData = fontLargeData;
-        fontLabel = fontTinyData;
-        fontBattery = fontTinyData;
-        
+        clockHeight = 80;
         clockWidth = 227;
-        labelHeight = 5;
-        tinyDataHeight = 8;
-    
-        largeDataHeight = 20;
-        largeDataWidth = 18;
-        bottomDataWidth = 18;
-
-        baseX = centerX + 1;
-        baseY = centerY - smallDataHeight - 1;
-        
-        bottomFiveAdj = 2;
-        barBottomAdj = 1;
-        histogramBarWidth = 1;
-        histogramBarSpacing = 1;
-        histogramHeight = 18;
     }
 
     (:Round280)
     hidden function loadResources() as Void {
         
-            fontClock = Graphics.FONT_SYSTEM_NUMBER_THAI_HOT;
-            propShowClockBg = false;
-       
-        fontTinyData = Application.loadResource(Rez.Fonts.storre);
-        if(propSmallFontVariant == 0) { fontSmallData = Application.loadResource(Rez.Fonts.led_small); }
-        if(propSmallFontVariant == 1) { fontSmallData = Application.loadResource(Rez.Fonts.led_small_readable); }
-        if(propSmallFontVariant == 2) { fontSmallData = Application.loadResource(Rez.Fonts.led_small_lines); }
-        if(propLinesFontforBottomData == true) { 
-            fontLargeData = Application.loadResource(Rez.Fonts.led_lines);
-        } else {
-            fontLargeData = Application.loadResource(Rez.Fonts.led);
-        }
-        fontBottomData = fontLargeData;
-        fontLabel = Application.loadResource(Rez.Fonts.smol);
-        fontBattery = fontLabel;
-
-        clockHeight = 80;
-        clockWidth = 236;
-        labelHeight = 8;
-        labelMargin = 6;
-        tinyDataHeight = 10;
-        smallDataHeight = 13;
-        largeDataHeight = 20;
-        largeDataWidth = 18;
-        bottomDataWidth = 18;
-
-        baseX = centerX;
-        baseY = centerY - smallDataHeight - 4;
-        bottomFiveAdj = 5;
-        barBottomAdj = 1;
-        histogramBarWidth = 1;
-        histogramBarSpacing = 1;
-        histogramHeight = 20;
     }
 
     (:Round360)
     hidden function loadResources() as Void {
         
-        //fontClock = Graphics.FONT_SYSTEM_NUMBER_THAI_HOT;
-        fontClock = Graphics.getVectorFont({:face=>["BionicBold"], :size=>130});
-        propShowClockBg = false;
-        
-        fontClockOutline = Graphics.getVectorFont({:face=>["BionicBold"], :size=>130});
-        fontTinyData = Application.loadResource(Rez.Fonts.storre);
-        if(propSmallFontVariant == 0) { fontSmallData = Application.loadResource(Rez.Fonts.led); }
-        if(propSmallFontVariant == 1) { fontSmallData = Application.loadResource(Rez.Fonts.led_inbetween); }
-        if(propSmallFontVariant == 2) { fontSmallData = Application.loadResource(Rez.Fonts.led_lines); }
-        if(propLinesFontforBottomData == true) { 
-            fontBottomData = Application.loadResource(Rez.Fonts.led_lines);
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big_lines);
-        } else {
-            fontBottomData = Application.loadResource(Rez.Fonts.led);
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-        }
-
-        fontLabel = Application.loadResource(Rez.Fonts.smol);
-        fontAODData = fontBottomData;
-        fontBattery = Application.loadResource(Rez.Fonts.led_small_lines);
-
-        drawGradient = Application.loadResource(Rez.Drawables.gradient) as BitmapResource;
-        if(propClockOutlineStyle == 0 or propClockOutlineStyle == 2 or propClockOutlineStyle == 4) {
-            drawAODPattern = Application.loadResource(Rez.Drawables.aod) as BitmapResource;
-        } else {
-            drawAODPattern = Application.loadResource(Rez.Drawables.aod2) as BitmapResource;
-        }
-
-        clockHeight = 125;
-        clockWidth = 345;
-        labelHeight = 8;
-        labelMargin = 8;
-        tinyDataHeight = 10;
-        smallDataHeight = 20;
-        largeDataHeight = 27;
-        largeDataWidth = 24;
-        bottomDataWidth = 18;
-
-        baseX = centerX;
-        baseY = centerY - smallDataHeight + 4;
-        fieldSpaceingAdj = 20;
-        barBottomAdj = 2;
-        textSideAdj = 10;
-        iconYAdj = -4;
-        marginY = 10;
-        histogramHeight = 20;
-        histogramTargetWidth = 30;
     }
 
     (:Round390)
     hidden function loadResources() as Void {
        
-        //fontClock = Graphics.FONT_SYSTEM_NUMBER_THAI_HOT;
-        fontClock = Graphics.getVectorFont({:face=>["BionicBold"], :size=>130});
-        propShowClockBg = false;
         
-        fontClockOutline = Graphics.getVectorFont({:face=>["BionicBold"], :size=>130});
-        fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
-        if(propSmallFontVariant == 0) { fontSmallData = Application.loadResource(Rez.Fonts.led); }
-        if(propSmallFontVariant == 1) { fontSmallData = Application.loadResource(Rez.Fonts.led_inbetween); }
-        if(propSmallFontVariant == 2) { fontSmallData = Application.loadResource(Rez.Fonts.led_lines); }
-        if(propLinesFontforBottomData == true) { 
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big_lines);
-        } else {
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-        }
-        fontBottomData = fontLargeData;
-        fontLabel = Application.loadResource(Rez.Fonts.storre);
-        fontAODData = Application.loadResource(Rez.Fonts.led);
-        fontBattery = fontTinyData;
-
-        drawGradient = Application.loadResource(Rez.Drawables.gradient) as BitmapResource;
-        if(propClockOutlineStyle == 0 or propClockOutlineStyle == 2 or propClockOutlineStyle == 4) {
-            drawAODPattern = Application.loadResource(Rez.Drawables.aod) as BitmapResource;
-        } else {
-            drawAODPattern = Application.loadResource(Rez.Drawables.aod2) as BitmapResource;
-        }
-
-        clockHeight = 125;
-        clockWidth = 355;
-        labelHeight = 10;
-        labelMargin = 8;
-        tinyDataHeight = 13;
-        smallDataHeight = 20;
-        largeDataHeight = 27;
-        largeDataWidth = 24;
-        bottomDataWidth = 24;
-
-        baseX = centerX;
-        baseY = centerY - smallDataHeight - 3;
-        barBottomAdj = 2;
-        bottomFiveAdj = 6;
-        marginY = 10;
-        histogramHeight = 25;
     }
 
     (:Round416)
     hidden function loadResources() as Void {
-        
-        //fontClock = Graphics.FONT_SYSTEM_NUMBER_THAI_HOT;
-        fontClock = Graphics.getVectorFont({:face=>["BionicBold"], :size=>130});
-        propShowClockBg = false;
-        
-        fontClockOutline = Graphics.getVectorFont({:face=>["BionicBold"], :size=>130});
-        fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
-        if(propSmallFontVariant == 0) { fontSmallData = Application.loadResource(Rez.Fonts.led); }
-        if(propSmallFontVariant == 1) { fontSmallData = Application.loadResource(Rez.Fonts.led_inbetween); }
-        if(propSmallFontVariant == 2) { fontSmallData = Application.loadResource(Rez.Fonts.led_lines); }
-        if(propLinesFontforBottomData == true) { 
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big_lines);
-        } else {
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-        }
-        fontBottomData = fontLargeData;
-        fontLabel = Application.loadResource(Rez.Fonts.storre);
-        fontAODData = Application.loadResource(Rez.Fonts.led);
-        fontBattery = fontTinyData;
-
-        drawGradient = Application.loadResource(Rez.Drawables.gradient) as BitmapResource;
-        if(propClockOutlineStyle == 0 or propClockOutlineStyle == 2 or propClockOutlineStyle == 4) {
-            drawAODPattern = Application.loadResource(Rez.Drawables.aod) as BitmapResource;
-        } else {
-            drawAODPattern = Application.loadResource(Rez.Drawables.aod2) as BitmapResource;
-        }
-
-        clockHeight = 125;
-        clockWidth = 360;
-        labelHeight = 10;
-        labelMargin = 8;
-        tinyDataHeight = 13;
-        smallDataHeight = 20;
-        largeDataHeight = 27;
-        largeDataWidth = 24;
-        bottomDataWidth = 24;
-
-        baseX = centerX;
-        baseY = centerY - smallDataHeight - 5;
-        barBottomAdj = 2;
-        bottomFiveAdj = 8;
-        histogramHeight = 25;
+       
     }
 
     (:Round454)
     hidden function loadResources() as Void {
         
-        //fontClock = Graphics.FONT_SYSTEM_NUMBER_THAI_HOT;
-        fontClock = Graphics.getVectorFont({:face=>["BionicBold"], :size=>130});
-        propShowClockBg = false;
-        
-        fontClockOutline = Graphics.getVectorFont({:face=>["BionicBold"], :size=>130});
-        fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
-        if(propSmallFontVariant == 0) { fontSmallData = Application.loadResource(Rez.Fonts.led); }
-        if(propSmallFontVariant == 1) { fontSmallData = Application.loadResource(Rez.Fonts.led_inbetween); }
-        if(propSmallFontVariant == 2) { fontSmallData = Application.loadResource(Rez.Fonts.led_lines); }
-        if(propLinesFontforBottomData == true) { 
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big_lines);
-        } else {
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-        }
-        fontBottomData = fontLargeData;
-        fontLabel = Application.loadResource(Rez.Fonts.storre);
-        fontAODData = Application.loadResource(Rez.Fonts.led);
-        fontBattery = fontTinyData;
-
-        drawGradient = Application.loadResource(Rez.Drawables.gradient) as BitmapResource;
-        if(propClockOutlineStyle == 0 or propClockOutlineStyle == 2 or propClockOutlineStyle == 4) {
-            drawAODPattern = Application.loadResource(Rez.Drawables.aod) as BitmapResource;
-        } else {
-            drawAODPattern = Application.loadResource(Rez.Drawables.aod2) as BitmapResource;
-        }
-
-        clockHeight = 145;
-        clockWidth = 413;
-        labelHeight = 10;
-        labelMargin = 8;
-        tinyDataHeight = 13;
-        smallDataHeight = 20;
-        largeDataHeight = 27;
-        largeDataWidth = 24;
-        bottomDataWidth = 24;
-
-        baseX = centerX + 3;
-        baseY = centerY - smallDataHeight + 4;
-        fieldSpaceingAdj = 20;
-        textSideAdj = 4;
-        bottomFiveAdj = 4;
-        barBottomAdj = 2;
-        marginY = 17;
-        histogramHeight = 30;
-        histogramTargetWidth = 45;
     }
 
     // Load your resources here
@@ -587,7 +250,6 @@ class TimeGateView extends WatchUi.WatchFace {
     function onShow() as Void {
         visible = true;
         lastUpdate = null;
-        lastSlowUpdate = null;
     }
 
     // Update the view
@@ -597,28 +259,19 @@ class TimeGateView extends WatchUi.WatchFace {
         var now = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
         var unix_timestamp = Time.now().value();
 
-        if(doesPartialUpdate) {
-            dc.clearClip();
-            doesPartialUpdate = false;
-        }
-
         if(lastUpdate == null or unix_timestamp - lastUpdate >= propUpdateFreq) {
             lastUpdate = unix_timestamp;
             updateData(now);
-        }
-
-        if(now.sec % 60 == 0 or lastSlowUpdate == null or unix_timestamp - lastSlowUpdate >= 60) {
-            lastSlowUpdate = unix_timestamp;
-            updateSlowData(now);
             updateWeather();
-            drawWatchface(dc, now, false);
-        }
 
-        if(isSleeping and canBurnIn) {
-            drawAOD(dc, now);
-        } else {
-            //drawWatchface(dc, now, false);
+            if(isSleeping and canBurnIn) {
+                drawAOD(dc, now);
+            } else {
+                drawWatchface(dc, now, false);
+            }
         }
+        
+
     }
 
     // Called when this View is removed from the screen. Save the
@@ -631,7 +284,6 @@ class TimeGateView extends WatchUi.WatchFace {
     // The user has just looked at their watch. Timers and animations may be started here.
     function onExitSleep() as Void {
         lastUpdate = null;
-        lastSlowUpdate = null;
         isSleeping = false;
         WatchUi.requestUpdate();
     }
@@ -639,7 +291,6 @@ class TimeGateView extends WatchUi.WatchFace {
     // Terminate any active timers and prepare for slow updates.
     function onEnterSleep() as Void {
         lastUpdate = null;
-        lastSlowUpdate = null;
         isSleeping = true;
         WatchUi.requestUpdate();
     }
@@ -647,28 +298,7 @@ class TimeGateView extends WatchUi.WatchFace {
     function onSettingsChanged() as Void {
         initialize();
         lastUpdate = null;
-        lastSlowUpdate = null;
         WatchUi.requestUpdate();
-    }
-
-    function onPartialUpdate(dc) {
-        if(canBurnIn) { return; }
-        if(!propAlwaysShowSeconds) { return; }
-        doesPartialUpdate = true;
-
-        var clip_width = 24;
-        var clip_height = 20;
-        var now = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
-        var y1 = baseY + halfClockHeight + marginY;
-
-        updateSeconds(now);
-        
-        dc.setClip(baseX + halfClockWidth - textSideAdj - clip_width, y1, clip_width, clip_height);
-        dc.setColor(themeColors[bg], themeColors[bg]);
-        dc.clear();
-
-        dc.setColor(themeColors[date], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(baseX + halfClockWidth - textSideAdj, y1, fontSmallData, dataSeconds, Graphics.TEXT_JUSTIFY_RIGHT);
     }
 
     hidden function drawWatchface(dc as Dc, now as Gregorian.Info, aod as Boolean) as Void {
@@ -678,7 +308,8 @@ class TimeGateView extends WatchUi.WatchFace {
         
         // Draw clock face background
         if(drawClockFace != null and !aod) {
-            dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => 0xbdbdbd, :blendMode => Graphics.BLEND_MODE_MULTIPLY });
+            //dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => 0xbdbdbd, :blendMode => Graphics.BLEND_MODE_MULTIPLY });
+            dc.drawBitmap(0, 0, drawClockFace);
         }
         
         var y1 = centerY - halfClockHeight - marginY - 5;
@@ -712,7 +343,7 @@ class TimeGateView extends WatchUi.WatchFace {
             
             // Draw radial text
             if(i >=2 and i <= 4) {
-                dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + (smallDataHeight /2) + 2, Graphics.RADIAL_TEXT_DIRECTION_COUNTER_CLOCKWISE);
+                dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + (smallDataHeight /2) , Graphics.RADIAL_TEXT_DIRECTION_COUNTER_CLOCKWISE);
             } else {
                 dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + - 2, Graphics.RADIAL_TEXT_DIRECTION_CLOCKWISE);
             }
@@ -731,61 +362,26 @@ class TimeGateView extends WatchUi.WatchFace {
 
     (:AMOLED)
     hidden function drawAOD(dc as Dc, now as Gregorian.Info) as Void {
-        dc.setColor(0x000000, 0x000000);
+        // Clear
+        dc.setColor(themeColors[bg], themeColors[bg]);
         dc.clear();
-
-        if(propAodStyle == 2) {
-            drawWatchface(dc, now, true);
-            drawPattern(dc, 0x000000, (now.min % 3));
-        } else if (propAodStyle == 1) {
-            var clock_color = themeColors[clock];
-            if(clock_color == 0x000000) { clock_color = 0x555555; }
-
-            if(propClockOutlineStyle == 0 or propClockOutlineStyle == 2 or propClockOutlineStyle == 5) {
-                // Draw Clock
-                dc.setColor(clock_color, Graphics.COLOR_TRANSPARENT);
-                dc.drawText(baseX, baseY, fontClock, dataClock, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            }
-
-            if(propClockOutlineStyle == 1 or propClockOutlineStyle == 2 or propClockOutlineStyle == 3) {
-                dc.setColor(themeColors[outline], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(baseX, baseY, fontClockOutline, dataClock, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            }
-
-            if(propClockOutlineStyle == 4) {
-                // Filled clock but outline color
-                dc.setColor(themeColors[outline], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(baseX, baseY, fontClock, dataClock, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            }
-
-            // Draw clock gradient
-            dc.drawBitmap(centerX - halfClockWidth - (now.min % 2), baseY - halfClockHeight, drawAODPattern);
-
-            // Draw Line below clock
-            var y1 = baseY + halfClockHeight + marginY;
-            dc.setColor(themeColors[dateDim], Graphics.COLOR_TRANSPARENT);
-            if(propAodAlignment == 0) {
-                dc.drawText(baseX - halfClockWidth + textSideAdj - (now.min % 3), y1, fontAODData, dataAODLeft, Graphics.TEXT_JUSTIFY_LEFT);
-            } else {
-                dc.drawText(baseX - (now.min % 3), y1, fontAODData, dataAODLeft, Graphics.TEXT_JUSTIFY_CENTER);
-            }
-            dc.drawText(baseX + halfClockWidth - textSideAdj - 2 - (now.min % 3), y1, fontAODData, dataAODRight, Graphics.TEXT_JUSTIFY_RIGHT);
+        
+        // Draw clock face background
+        if(drawClockFace != null and !aod) {
+            dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => 0x4f4f4f, :blendMode => Graphics.BLEND_MODE_MULTIPLY });
         }
-    }
+        
+        var y1 = centerY - halfClockHeight - marginY - 5;
+        var y2 = centerY + halfClockHeight - marginY + 5;
+        
 
-    (:AMOLED)
-    hidden function drawPattern(dc as Dc, color as ColorType, offset as Number) as Void {
-        var text = "";
-        for(var i = 0; i < Math.ceil(screenWidth / 20) + 1; i++) {
-                text += "S";
-        }
+        // Draw Lines above clock
+        dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
+        dc.drawText(centerX, y1, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y2, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
-        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
-        var i = 0;
-        while(i < Math.ceil(screenHeight / 20) + 1) {
-            dc.drawText(0, i*20 + offset, fontIcons, text, Graphics.TEXT_JUSTIFY_LEFT);
-            i++;
-        }
+        // Draw hour and minute bars (lines with different thickness)
+        drawTimeIndicators(dc, now);
     }
 
     hidden function drawTimeIndicators(dc as Dc, now as Gregorian.Info) as Void {
@@ -805,7 +401,7 @@ class TimeGateView extends WatchUi.WatchFace {
 
        
         // Minute hand: 40% of total width
-        var minuteLength = halfClockWidth * 0.90;
+        var minuteLength = halfClockWidth * 0.88;
         var minuteX2 = centerX + (minuteLength * Math.cos(minuteRad)).toNumber();
         var minuteY2 = centerY + (minuteLength * Math.sin(minuteRad)).toNumber();
 
@@ -817,11 +413,11 @@ class TimeGateView extends WatchUi.WatchFace {
         var minutSmallereY2 = centerY + (minuteSmallerLength * Math.sin(minuteRad)).toNumber();
 
         dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(5);  // Thicker line for minute hand
+        dc.setPenWidth(6);  // Thicker line for minute hand
         dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
 
          // Hour hand: 30% of total width
-        var hourLength = halfClockWidth * 0.50;
+        var hourLength = halfClockWidth * 0.60;
         var hourX2 = centerX + (hourLength * Math.cos(hourRad)).toNumber();
         var hourY2 = centerY + (hourLength * Math.sin(hourRad)).toNumber();
 
@@ -849,181 +445,8 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.setAntiAlias(false);
     }
 
-    hidden function getFieldWidths() as Array<Number> {
-        if(propFieldLayout == 0) { // Auto
-            return bottomFieldWidths;
-        } else if(propFieldLayout == 1) {
-            return [3, 3, 3, 0];
-        } else if(propFieldLayout == 2) {
-            return [3, 4, 3, 0];
-        } else if(propFieldLayout == 3) {
-            return [3, 3, 4, 0];
-        } else if(propFieldLayout == 4) {
-            return [4, 3, 3, 0];
-        } else if(propFieldLayout == 5) {
-            return [4, 3, 4, 0];
-        } else if(propFieldLayout == 6) {
-            return [3, 4, 4, 0];
-        } else if(propFieldLayout == 7) {
-            return [4, 4, 3, 0];
-        } else if(propFieldLayout == 8) {
-            return [4, 4, 4, 0];
-        } else if(propFieldLayout == 9) {
-            return [3, 3, 3, 3];
-        } else if(propFieldLayout == 10) {
-            return [3, 3, 3, 4];
-        } else if(propFieldLayout == 11) {
-            return [4, 3, 3, 3];
-        } else if(propFieldLayout == 12) {
-            return [4, 4, 0, 0];
-        } else {
-            return [5, 3, 3, 0];
-        } 
-    }
-
-    hidden function drawDataField(dc as Dc, x as Number, y as Number, adjX as Number, label as String?, value as String, width as Number, font as FontResource, bgwidth as Number) as Number {
-    
-        if(value.equals("") and (label == null or label.equals(""))) { return 0; }
-        if(width == 0) { return 0; }
-        var valueBg = "";
-        var bgChar = "#";
-        if(screenHeight == 360 and width == 5 and label == null) { bgChar = "$"; }
-        for(var i=0; i<width; i++) { valueBg += bgChar; }
-
-        var value_bg_width = bgwidth;//dc.getTextWidthInPixels(valueBg, font);
-        var half_bg_width = Math.round(value_bg_width / 2);
-        var data_y = y;
-
-        if((propLabelVisibility == 0 or propLabelVisibility == 2) and !(label == null)) {
-            dc.setColor(themeColors[fieldLbl], Graphics.COLOR_TRANSPARENT);
-            if(propBottomFieldLabelAlignment == 0) {
-                dc.drawText(x + half_bg_width - 1 + adjX, y, fontLabel, label, Graphics.TEXT_JUSTIFY_RIGHT);
-            } else if (propBottomFieldLabelAlignment == 2) {
-                dc.drawText(x + half_bg_width - 1 + adjX, y, fontLabel, label, Graphics.TEXT_JUSTIFY_RIGHT);
-            } else {
-                dc.drawText(x, y, fontLabel, label, Graphics.TEXT_JUSTIFY_RIGHT);
-            }
-            data_y += labelHeight + labelMargin;
-        }
-
-        if(propShowDataBg) {
-            dc.setColor(themeColors[fieldBg], Graphics.COLOR_TRANSPARENT);
-            dc.drawText(x - half_bg_width + adjX, data_y, font, valueBg, Graphics.TEXT_JUSTIFY_LEFT);
-        }
-
-        dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-        if(propBottomFieldAlignment == 0) {
-            dc.drawText(x - half_bg_width + adjX, data_y, font, value, Graphics.TEXT_JUSTIFY_LEFT);
-        } else if (propBottomFieldAlignment == 1) {
-            dc.drawText(x + adjX, data_y, font, value, Graphics.TEXT_JUSTIFY_CENTER);
-        } else if (propBottomFieldAlignment == 2) {
-            dc.drawText(x + half_bg_width - 1 + adjX, data_y, font, value, Graphics.TEXT_JUSTIFY_RIGHT);
-        } else if (propBottomFieldAlignment == 3 and width != 7) {
-            dc.drawText(x - half_bg_width + adjX, data_y, font, value, Graphics.TEXT_JUSTIFY_LEFT);
-        } else if (propBottomFieldAlignment == 3 and width == 7) {
-            dc.drawText(x + adjX, data_y, font, value, Graphics.TEXT_JUSTIFY_CENTER);
-        } else if (propBottomFieldAlignment == 4 and width != 7) {
-            dc.drawText(x + half_bg_width - 1 + adjX, data_y, font, value, Graphics.TEXT_JUSTIFY_RIGHT);
-        } else if (propBottomFieldAlignment == 4 and width == 7) {
-            dc.drawText(x + adjX, data_y, font, value, Graphics.TEXT_JUSTIFY_CENTER);
-        }
-
-        return value_bg_width;
-    }
-
-    hidden function drawSideBars(dc as Dc) as Void {
-        if (dataLeftBar != null) {
-            var lbar = Math.round(dataLeftBar * (clockHeight / 100.0));
-            dc.setColor(themeColors[stress], Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(centerX - halfClockWidth - barWidth - barWidth, baseY + halfClockHeight - lbar + barBottomAdj, barWidth, lbar);
-            if(propLeftBarShows == 6) { // Move bar, draw ticks
-                drawMoveBarTicks(dc, centerX - halfClockWidth - barWidth - barWidth, centerX - halfClockWidth);
-            }
-        }
-        if (dataRightBar != null) {
-            var rbar = Math.round(dataRightBar * (clockHeight / 100.0));
-            dc.setColor(themeColors[bodybatt], Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(centerX + halfClockWidth + barWidth, baseY + halfClockHeight - rbar + barBottomAdj, barWidth, rbar);
-            if(propRightBarShows == 6) { // Move bar, draw ticks
-                drawMoveBarTicks(dc, centerX + halfClockWidth + barWidth + barWidth, centerX + halfClockWidth);
-            }
-        }
-    }
-
-    hidden function drawMoveBarTicks(dc as Dc, x1, x2) as Void {
-        dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(2);
-        dc.drawLine(x1, baseY + halfClockHeight - (40 * (clockHeight / 100.0)), x2, baseY + halfClockHeight - (40 * (clockHeight / 100.0)));
-        dc.drawLine(x1, baseY + halfClockHeight - (65 * (clockHeight / 100.0)), x2, baseY + halfClockHeight - (65 * (clockHeight / 100.0)));
-        dc.drawLine(x1, baseY + halfClockHeight - (70 * (clockHeight / 100.0)), x2, baseY + halfClockHeight - (70 * (clockHeight / 100.0)));
-        dc.drawLine(x1, baseY + halfClockHeight - (85 * (clockHeight / 100.0)), x2, baseY + halfClockHeight - (85 * (clockHeight / 100.0)));
-        dc.setPenWidth(1);
-    }
-
-    hidden function drawHistogram(dc as Dc, data as Array<Number>?, x as Number, y as Number, h as Number) as Void {
-        if(data == null) { return; }
-        var scale = 100.0 / h;
-        var half_width = Math.round((data.size() * (histogramBarWidth + histogramBarSpacing)) / 2);
-        var bar_height = 0;
-
-        dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
-        for(var i=0; i<data.size(); i++) {
-            if(data[i] == null) { break; }
-            if(propHistogramData == 7) {
-                if(data[i] <= 25) {
-                    dc.setColor(themeColors[bodybatt], Graphics.COLOR_TRANSPARENT);
-                } else {
-                    dc.setColor(themeColors[stress], Graphics.COLOR_TRANSPARENT);
-                }
-            }
-            bar_height = Math.round(data[i] / scale);
-            dc.drawRectangle(x - half_width + i * (histogramBarWidth + histogramBarSpacing), y + (h - bar_height), histogramBarWidth, bar_height);
-        }
-    }
-
-    (:AMOLED)
-    hidden function drawBatteryIcon(dc as Dc, x as Number?, y as Number?) {
-        if(propBatteryVariant == 2) { return; }
-        if(x == null) { x = centerX; }
-        if(y == null) { y =  screenHeight - 25; }
-
-        dc.setColor(0x555555, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(x, y, fontIcons, "C", Graphics.TEXT_JUSTIFY_CENTER);
-        if(System.getSystemStats().battery <= 15) {
-            dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
-        } else {
-            dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-        }
-        if(propBatteryVariant == 3) {
-            dc.drawText(x - 19, y + 4, fontBattery, dataBattery, Graphics.TEXT_JUSTIFY_LEFT);
-        } else { // centered when not a bar
-            dc.drawText(x - 1, y + 4, fontBattery, dataBattery, Graphics.TEXT_JUSTIFY_CENTER);
-        }
-    }
-
-    (:MIP)
-    hidden function drawBatteryIcon(dc as Dc, x as Number?, y as Number?) {
-        if(propBatteryVariant == 2) { return; }
-        if(x == null) { x = centerX; }
-        if(y == null) { y =  screenHeight - 18; }
-
-        dc.setColor(0x555555, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(x, y, fontIcons, "B", Graphics.TEXT_JUSTIFY_CENTER);
-        if(System.getSystemStats().battery <= 15) {
-            dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
-        } else {
-            dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-        }
-        if(propBatteryVariant == 3) {
-            dc.drawText(x - 11, y + 3, fontBattery, dataBattery, Graphics.TEXT_JUSTIFY_LEFT);
-        } else {
-            dc.drawText(x - 1, y + 3, fontBattery, dataBattery, Graphics.TEXT_JUSTIFY_CENTER);
-        }
-    }
-
     (:MIP)
     hidden function setColorTheme(theme as Number) as Array<Graphics.ColorType> {
-        if(theme == 30) { return customColorTheme(); }
         var skip = Graphics.COLOR_TRANSPARENT;
         var colBlack = Graphics.COLOR_BLACK;
         var colWhite = Graphics.COLOR_WHITE;
@@ -1060,7 +483,6 @@ class TimeGateView extends WatchUi.WatchFace {
 
     (:AMOLED)
     hidden function setColorTheme(theme as Number) as Array<Graphics.ColorType> {
-        if(theme == 30) { return customColorTheme(); }
 
         //                        bg,       clock,    clockBg,  outline,  dataVal,  fieldBg,  fieldLbl,   date,   dateDim,  notif,   stress,    bodybatt, moon
         if(theme == 0 ) { return [0x000000, 0xfbcb77, 0x0d333c, 0xffeac4, 0xFFFFFF, 0x0e333c, 0x55AAAA, 0xfbcb77, 0xa98753, 0x00AAFF, 0xFFAA00, 0x00AAFF, 0xFFFFFF]; } // Yellow on turquoise AMOLED
@@ -1092,90 +514,8 @@ class TimeGateView extends WatchUi.WatchFace {
 
     }
 
-    hidden function customColorTheme() as Array<Graphics.ColorType>{
-        var ret = [];
-        if(propColorOverride.equals("")) { return setColorTheme(-1); }
-        var color_str = "";
-        var color = null;
-        for(var i=0; i<propColorOverride.length(); i += 8) {
-            color_str = propColorOverride.substring(i+1, i+7);
-            color = color_str.toNumberWithBase(16) as Graphics.ColorType;
-            ret.add(color);
-        }
-
-        if(ret.size() != 13) {
-            ret = setColorTheme(-1);
-        }
-
-        for(var j=0; j<ret.size(); j++) {
-            if(ret[j] == null or ret[j] < 0 or ret[j] > 16777215) {
-                ret = setColorTheme(-1);
-                break;
-            }
-        }
-
-        return ret;
-    }
-
     hidden function updateColorTheme() {
-        var newValue = getNightModeValue();
-        if(nightModeOverride == 0) { newValue = false; }
-        if(nightModeOverride == 1) { newValue = true; }
-
-        if(nightMode != newValue) {
-            if(newValue == true and propNightTheme != -1) {
-                themeColors = setColorTheme(propNightTheme);
-            } else {
-                themeColors = setColorTheme(propTheme);
-            }
-            nightMode = newValue;
-        }
-    }
-
-    hidden function getNightModeValue() as Boolean {
-        if (propNightTheme == -1 || propNightTheme == propTheme) {
-            return false;
-        }
-
-        var now = Time.now(); // Moment
-        var todayMidnight = Time.today(); // Moment
-        var nowAsTimeSinceMidnight = now.subtract(todayMidnight) as Duration; // Duration
-
-        if(propNightThemeActivation == 0 or propNightThemeActivation == 1) {
-            var profile = UserProfile.getProfile();
-            if ((profile has :wakeTime) == false || (profile has :sleepTime) == false) {
-                return false;
-            }
-
-            var wakeTime = profile.wakeTime;
-            var sleepTime = profile.sleepTime;
-
-            if (wakeTime == null || sleepTime == null) {
-                return false;
-            }
-
-            if(propNightThemeActivation == 1) {
-                // Start two hours before sleep time
-                var twoHours = new Time.Duration(7200);
-                sleepTime = sleepTime.subtract(twoHours);
-            }
-
-            if(sleepTime.greaterThan(wakeTime)) {
-                return (nowAsTimeSinceMidnight.greaterThan(sleepTime) || nowAsTimeSinceMidnight.lessThan(wakeTime));
-            } else {
-                return (nowAsTimeSinceMidnight.greaterThan(sleepTime) and nowAsTimeSinceMidnight.lessThan(wakeTime));
-            }
-        }
-
-        // From Sunset to Sunrise
-        if(weatherCondition != null) {
-            var nextSunEventArray = getNextSunEvent();
-            if(nextSunEventArray != null && nextSunEventArray.size() == 2) { 
-                return nextSunEventArray[1] as Boolean;
-            }
-        }
-
-        return false;
+        themeColors = setColorTheme(propTheme);
     }
 
     hidden function getValueOrDefault(propName as String, defaultVal as PropertyValueType) as PropertyValueType {
@@ -1188,52 +528,26 @@ class TimeGateView extends WatchUi.WatchFace {
 
     hidden function updateProperties() as Void {
         propTheme = getValueOrDefault("colorTheme", 0) as Number;
-        propNightTheme = getValueOrDefault("nightColorTheme", -1) as Number;
-        propNightThemeActivation = getValueOrDefault("nightThemeActivation", 0) as Number;
-        propColorOverride = getValueOrDefault("colorOverride", "") as String;
-        propClockOutlineStyle = getValueOrDefault("clockOutlineStyle", 0) as Number;
 
-        propTopPartShows = getValueOrDefault("topPartShows", 0) as Number;
         propHistogramData = getValueOrDefault("histogramData", 0) as Number;
-        propSunriseFieldShows = getValueOrDefault("sunriseFieldShows", 39) as Number;
-        propSunsetFieldShows = getValueOrDefault("sunsetFieldShows", 40) as Number;
         propTopLineFieldShows = getValueOrDefault("topLineShows", 49) as Number;
         propBottomLineFieldShows = getValueOrDefault("bottomLineShows", 50) as Number;
-        propDateFieldShows = getValueOrDefault("dateFieldShows", -1) as Number;
         propShowSeconds = getValueOrDefault("showSeconds", true) as Boolean;
         propAlwaysShowSeconds = getValueOrDefault("alwaysShowSeconds", false) as Boolean;
-        propFieldLayout = getValueOrDefault("fieldLayout", 0) as Number;
-        propLeftValueShows = getValueOrDefault("leftValueShows", 6) as Number;
-        propMiddleValueShows = getValueOrDefault("middleValueShows", 10) as Number;
-        propRightValueShows = getValueOrDefault("rightValueShows", 0) as Number;
-        propFourthValueShows = getValueOrDefault("fourthValueShows", -2) as Number;
-        propValueInsteadOfSeconds = getValueOrDefault("valueInsteadOfSeconds", -2) as Number;
         propCircle1ValueShows = getValueOrDefault("circle1ValueShows", 0) as Number;
         propCircle2ValueShows = getValueOrDefault("circle2ValueShows", 0) as Number;
         propCircle3ValueShows = getValueOrDefault("circle3ValueShows", 0) as Number;
         propCircle4ValueShows = getValueOrDefault("circle4ValueShows", 0) as Number;
         propCircle5ValueShows = getValueOrDefault("circle5ValueShows", 0) as Number;
         propCircle6ValueShows = getValueOrDefault("circle6ValueShows", 0) as Number;
-        propBottomFieldShows = getValueOrDefault("bottomFieldShows", 17) as Number;
-        propLeftBarShows = getValueOrDefault("leftBarShows", 1) as Number;
-        propRightBarShows = getValueOrDefault("rightBarShows", 2) as Number;
-        propIcon1 = getValueOrDefault("icon1", 1) as Number;
-        propIcon2 = getValueOrDefault("icon2", 2) as Number;
-        propBatteryVariant = getValueOrDefault("batteryVariant", 3) as Number;
-        
         propUpdateFreq = getValueOrDefault("updateFreq", 5) as Number;
-        propShowClockBg = getValueOrDefault("showClockBg", true) as Boolean;
         propShowDataBg = getValueOrDefault("showDataBg", true) as Boolean;
         propAodStyle = getValueOrDefault("aodStyle", 1) as Number;
-        propAodFieldShows = getValueOrDefault("aodFieldShows", -1) as Number;
-        propAodRightFieldShows = getValueOrDefault("aodRightFieldShows", -2) as Number;
         propAodAlignment = getValueOrDefault("aodAlignment", 0) as Number;
-        propDateAlignment = getValueOrDefault("dateAlignment", 0) as Number;
         propBottomFieldAlignment = getValueOrDefault("bottomFieldAlignment", 2) as Number;
         propBottomFieldLabelAlignment = getValueOrDefault("bottomFieldLabelAlignment", 0) as Number;
         propHemisphere = getValueOrDefault("hemisphere", 0) as Number;
         propHourFormat = getValueOrDefault("hourFormat", 0) as Number;
-        propZeropadHour = getValueOrDefault("zeropadHour", true) as Boolean;
         propTimeSeparator = getValueOrDefault("timeSeparator", 0) as Number;
         propTempUnit = getValueOrDefault("tempUnit", 0) as Number;
         propWindUnit = getValueOrDefault("windUnit", 0) as Number;
@@ -1257,63 +571,23 @@ class TimeGateView extends WatchUi.WatchFace {
     }
 
     hidden function updateData(now as Gregorian.Info) as Void {
-        var fieldWidths = getFieldWidths();
-        dataTopLeft = getValueByType(propSunriseFieldShows, 5);
-        dataTopRight = getValueByType(propSunsetFieldShows, 5);
+       
         dataTopLine = getValueByTypeWithUnit(propTopLineFieldShows, 10);
         dataBottomLine = getValueByTypeWithUnit(propBottomLineFieldShows, 10);
-        dataBelow = getValueByTypeWithUnit(propDateFieldShows, 10);
-        dataNotifications = getNotificationsData();
-        dataNoSeconds = getValueByType(propValueInsteadOfSeconds,5);
-        dataBottomLeft = getValueByType(propLeftValueShows, fieldWidths[0]);
-        dataBottomMiddle = getValueByType(propMiddleValueShows, fieldWidths[1]);
-        dataBottomRight = getValueByType(propRightValueShows, fieldWidths[2]);
-        dataBottomFourth = getValueByType(propFourthValueShows, fieldWidths[3]);
-        dataBottom = getValueByType(propBottomFieldShows, 7);
+
         dataCircle1 = getValueByType(propCircle1ValueShows, 8);
         dataCircle2 = getValueByType(propCircle2ValueShows, 8);
         dataCircle3 = getValueByType(propCircle3ValueShows, 8);
         dataCircle4 = getValueByType(propCircle4ValueShows, 8);
         dataCircle5 = getValueByType(propCircle5ValueShows, 8);
         dataCircle6 = getValueByType(propCircle6ValueShows, 8);
-        dataIcon1 = getIconState(propIcon1);
-        dataIcon2 = getIconState(propIcon2);
-        dataBattery = getBattData();
-        dataAODLeft = getValueByType(propAodFieldShows, 10);
-        dataAODRight = getValueByType(propAodRightFieldShows, 5);
-        dataLeftBar = getBarData(propLeftBarShows);
-        dataRightBar = getBarData(propRightBarShows);
 
-        if(!infoMessage.equals("")) {
-            dataBelow = infoMessage;
-            infoMessage = "";
-        }
-    }
-
-    hidden function updateSlowData(now as Gregorian.Info) as Void {
-        dataClock = getClockData(now);
-        dataMoon = moonPhase(now);
-        if(propTopPartShows == 2) {
-            dataGraph1 = getDataArrayByType(propHistogramData);
-        }
-
-        var fieldWidths = getFieldWidths();
-        dataLabelTopLeft = getLabelByType(propSunriseFieldShows, 1);
-        dataLabelTopRight = getLabelByType(propSunsetFieldShows, 1);
-        dataLabelBottomLeft = getLabelByType(propLeftValueShows, fieldWidths[0] - 1);
-        dataLabelBottomMiddle = getLabelByType(propMiddleValueShows, fieldWidths[1] - 1);
-        dataLabelBottomRight = getLabelByType(propRightValueShows, fieldWidths[2] - 1);
-        dataLabelBottomFourth = getLabelByType(propFourthValueShows, fieldWidths[3] - 1);
-
-        dataTopLine = getValueByTypeWithUnit(propTopLineFieldShows, 10);
-        dataBottomLine = getValueByTypeWithUnit(propBottomLineFieldShows, 10);
-
-        dataLabelCircular1= getLabelByType(propCircle1ValueShows, 1);
-        dataLabelCircular2= getLabelByType(propCircle2ValueShows, 1);
-        dataLabelCircular3= getLabelByType(propCircle3ValueShows, 1);
-        dataLabelCircular4= getLabelByType(propCircle4ValueShows, 1);
-        dataLabelCircular5= getLabelByType(propCircle5ValueShows, 1);
-        dataLabelCircular6= getLabelByType(propCircle6ValueShows, 1);
+        dataLabelCircular1 = getLabelByType(propCircle1ValueShows, 1);
+        dataLabelCircular2 = getLabelByType(propCircle2ValueShows, 1);
+        dataLabelCircular3 = getLabelByType(propCircle3ValueShows, 1);
+        dataLabelCircular4 = getLabelByType(propCircle4ValueShows, 1);
+        dataLabelCircular5 = getLabelByType(propCircle5ValueShows, 1);
+        dataLabelCircular6 = getLabelByType(propCircle6ValueShows, 1);
 
         updateColorTheme();
     }
@@ -1331,75 +605,11 @@ class TimeGateView extends WatchUi.WatchFace {
         if(propTimeSeparator == 1) { separator = " "; }
         if(propTimeSeparator == 2) { separator = ""; }
 
-        if(propZeropadHour) {
-            return formatHour(now.hour).format("%02d") + separator + now.min.format("%02d");
-        } else {
-            return formatHour(now.hour).format("%2d") + separator + now.min.format("%02d");
-        }
+        return formatHour(now.hour).format("%02d") + separator + now.min.format("%02d");
+      
     }
 
-    hidden function getIconState(setting as Number) as String {
-        if(setting == 1) { // Alarm
-            var alarms = System.getDeviceSettings().alarmCount;
-            if(alarms > 0) {
-                return "A";
-            } else {
-                return "";
-            }
-        } else if(setting == 2) { // DND
-            var dnd = System.getDeviceSettings().doNotDisturb;
-            if(dnd) {
-                return "D";
-            } else {
-                return "";
-            }
-        } else if(setting == 3) { // Bluetooth (on / off)
-            var bl = System.getDeviceSettings().phoneConnected;
-            if(bl) {
-                return "L";
-            } else {
-                return "M";
-            }
-        } else if(setting == 4) { // Bluetooth (just off)
-            var bl = System.getDeviceSettings().phoneConnected;
-            if(bl) {
-                return "";
-            } else {
-                return "M";
-            }
-        } else if(setting == 5) { // Move bar
-            var mov = 0;
-            if(ActivityMonitor.getInfo() has :moveBarLevel) {
-                if(ActivityMonitor.getInfo().moveBarLevel != null) {
-                    mov = ActivityMonitor.getInfo().moveBarLevel;
-                }
-            }
-            if(mov == 0) { return ""; }
-            if(mov == 1) { return "N"; }
-            if(mov == 2) { return "O"; }
-            if(mov == 3) { return "P"; }
-            if(mov == 4) { return "Q"; }
-            if(mov == 5) { return "R"; }
-        }
-        return "";
-    }
-
-    hidden function getBarData(data_source as Number) as Number? {
-        if(data_source == 1) {
-            return getStressData();
-        } else if (data_source == 2) {
-            return getBBData();
-        } else if (data_source == 3) {
-            return getStepGoalProgress();
-        } else if (data_source == 4) {
-            return getFloorGoalProgress();
-        } else if (data_source == 5) {
-            return getActMinGoalProgress();
-        } else if (data_source == 6) {
-            return getMoveBar();
-        }
-        return null;
-    }
+    
 
     hidden function getStressData() as Number? {
         if (hasComplications) {
@@ -1493,49 +703,6 @@ class TimeGateView extends WatchUi.WatchFace {
             }
         }
         return null;
-    }
-
-    hidden function getBattData() as String {
-        var value = "";
-
-        if(propBatteryVariant == 0) {
-            if(System.getSystemStats() has :batteryInDays) {
-                if (System.getSystemStats().batteryInDays != null){
-                    var sample = Math.round(System.getSystemStats().batteryInDays);
-                    value = sample.format("%0d") + "D";
-                }
-            } else {
-                propBatteryVariant = 1;  // Fall back to percentage if days not available
-            }
-        }
-        if(propBatteryVariant == 1) {
-            var sample = System.getSystemStats().battery;
-            if(sample < 100) {
-                value = sample.format("%d") + "%";
-            } else {
-                value = sample.format("%d");
-            }
-        } else if(propBatteryVariant == 3) {
-            var sample = 0;
-            var max = 0;
-            if(screenHeight > 280) {
-                sample = Math.round(System.getSystemStats().battery / 100.0 * 35);
-                max = 35;
-            } else {
-                sample = Math.round(System.getSystemStats().battery / 100.0 * 20);
-                max = 20;
-            }
-            
-            for(var i = 0; i < sample; i++) {
-                value += "|";
-            }
-
-            for(var i = 0; i < max - sample; i++) {
-                value += "{"; // rendered as 1px space to always fill the same number of px
-            }
-        }
-        
-        return value;
     }
 
     hidden function getNotificationsData() as String {
