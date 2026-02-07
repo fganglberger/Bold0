@@ -396,7 +396,7 @@ class TimeGateView extends WatchUi.WatchFace {
         var secondRad = (secondAngle - 90.0) * Math.PI / 180.0;
 
         // Minute hand: 40% of total width
-        var minuteLength = halfClockWidth * 0.75;
+        var minuteLength = halfClockWidth * 0.80;
         var minuteWidth = 11;
         var minuteOutlineWidth = minuteWidth + 2;  // Slightly larger for outline
         var minuteX2 = centerX + (minuteLength * Math.cos(minuteRad)).toNumber();
@@ -422,6 +422,14 @@ class TimeGateView extends WatchUi.WatchFace {
         ];
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(minuteHandPoints);
+
+        var minuteSmallerLength = halfClockWidth * 0.3;
+        var minuteSmallerX2 = centerX + (minuteSmallerLength * Math.cos(minuteRad)).toNumber();
+        var minutSmallereY2 = centerY + (minuteSmallerLength * Math.sin(minuteRad)).toNumber();
+
+        dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(5);  // Thicker line for minute hand
+        dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
 
         // Hour hand: 30% of total width
         var hourLength = halfClockWidth * 0.50;
@@ -483,10 +491,10 @@ class TimeGateView extends WatchUi.WatchFace {
 
         // Draw center circle
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
-        dc.drawCircle(centerX, centerY, 5);
+        dc.drawCircle(centerX, centerY, 7);
         
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(centerX, centerY, 4);
+        dc.fillCircle(centerX, centerY, 6);
 
         // Reset and disable anti-aliasing
         dc.setAntiAlias(false);
