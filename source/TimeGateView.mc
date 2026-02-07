@@ -204,7 +204,7 @@ class TimeGateView extends WatchUi.WatchFace {
       
         drawClockFace = Application.loadResource(Rez.Drawables.clockFace) as BitmapResource;
         smallDataHeight = 23;
-        fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>20});
+        fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>22});
         fontInnerData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>25});
         clockHeight = 80;
         clockWidth = 227;
@@ -308,7 +308,7 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.drawBitmap(0, 0, drawClockFace);
         }
         
-        var y1 = centerY - halfClockHeight - marginY - 8;
+        var y1 = centerY - halfClockHeight - marginY - 13;
         var y2 = centerY + halfClockHeight - marginY + 8;
         
 
@@ -397,7 +397,7 @@ class TimeGateView extends WatchUi.WatchFace {
 
         // Minute hand: 40% of total width
         var minuteLength = halfClockWidth * 0.75;
-        var minuteWidth = 9;
+        var minuteWidth = 11;
         var minuteOutlineWidth = minuteWidth + 2;  // Slightly larger for outline
         var minuteX2 = centerX + (minuteLength * Math.cos(minuteRad)).toNumber();
         var minuteY2 = centerY + (minuteLength * Math.sin(minuteRad)).toNumber();
@@ -425,7 +425,7 @@ class TimeGateView extends WatchUi.WatchFace {
 
         // Hour hand: 30% of total width
         var hourLength = halfClockWidth * 0.50;
-        var hourWidth = 6;
+        var hourWidth = 8;
         var hourOutlineWidth = hourWidth + 2;  // Slightly larger for outline
         var hourX2 = centerX + (hourLength * Math.cos(hourRad)).toNumber();
         var hourY2 = centerY + (hourLength * Math.sin(hourRad)).toNumber();
