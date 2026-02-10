@@ -359,9 +359,9 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
             var notificationWith = dc.getTextWidthInPixels(dataNotifications, fontSmallData) + 2;
         
-            dc.fillRectangle(centerX+halfClockWidth - (notificationWith/2)-2, centerY-(smallDataHeight/2)-1,notificationWith+4,(smallDataHeight+2)); 
+            dc.fillRectangle(centerX+halfClockWidth - (notificationWith/2)-2, centerY-(smallDataHeight/2)-2,notificationWith+6,(smallDataHeight+3)); 
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(centerX+halfClockWidth- (notificationWith/2)+1, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_LEFT);
+            dc.drawText(centerX+halfClockWidth- (notificationWith/2)+2, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_LEFT);
             
         }
 
