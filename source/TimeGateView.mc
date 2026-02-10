@@ -206,7 +206,7 @@ class TimeGateView extends WatchUi.WatchFace {
         drawClockFace = Application.loadResource(Rez.Drawables.clockFace) as BitmapResource;
         smallDataHeight = 23;
         fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>22});
-        fontInnerData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>25});
+        fontInnerData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>22});
         clockHeight = 80;
         clockWidth = 227;
     }
@@ -309,8 +309,8 @@ class TimeGateView extends WatchUi.WatchFace {
             //dc.drawBitmap(0, 0, drawClockFace);
         }
         
-        var y1 = centerY - halfClockHeight - marginY - 5;
-        var y2 = centerY + halfClockHeight - marginY;
+        var y1 = centerY - halfClockHeight - marginY - 5 +10;
+        var y2 = centerY + halfClockHeight - marginY  - 10;
         
 
         // Draw Lines above clock
@@ -334,7 +334,7 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.setAntiAlias(false);
 
         for(var i = 0; i < numFields; i++) {
-            var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.5)); // Start from top (12 o'clock)
+            var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.25)); // Start from top (12 o'clock)
             
             dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
            
@@ -348,7 +348,7 @@ class TimeGateView extends WatchUi.WatchFace {
             else if(i == 5) { value = dataLabelCircular6 + dataCircle6; }
             
             // Draw radial text
-            if(i >=2 and i <= 4) {
+            if(i >=2 and i <= 3) {
             dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + (smallDataHeight /2) - 3 - 1, Graphics.RADIAL_TEXT_DIRECTION_COUNTER_CLOCKWISE);
             } else {
             dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius - 3 - 3, Graphics.RADIAL_TEXT_DIRECTION_CLOCKWISE);
@@ -1794,7 +1794,7 @@ class TimeGateView extends WatchUi.WatchFace {
             var temp_unit = getTempUnit();
             var temp_val = weatherCondition.temperature;
             var temp = formatTemperature(temp_val, temp_unit).format("%01d");
-            return temp + "°";
+            return temp + "";
         }
         return "";
     }
@@ -1914,7 +1914,7 @@ class TimeGateView extends WatchUi.WatchFace {
                 var tempUnit = getTempUnit();
                 var high = formatTemperature(weatherCondition.highTemperature, tempUnit);
                 var low = formatTemperature(weatherCondition.lowTemperature, tempUnit);
-                ret = "H " + high.format("%d") + "°" + "/L " + low.format("%d") + "°";
+                ret = "H " + high.format("%d") + "" + "/L " + low.format("%d") + "";
             }
         }
         return ret;
