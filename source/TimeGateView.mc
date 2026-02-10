@@ -58,6 +58,7 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var dataSeconds as String = "";
     hidden var dataNoSeconds as String = "";
     hidden var dataCircle1 as String = "";
+    hidden var dataNotifications as String = "";
     hidden var dataCircle2 as String = "";
     hidden var dataCircle3 as String = "";
     hidden var dataCircle4 as String = "";
@@ -304,12 +305,12 @@ class TimeGateView extends WatchUi.WatchFace {
         
         // Draw clock face background
         if(drawClockFace != null and !aod) {
-            //dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => 0xbdbdbd, :blendMode => Graphics.BLEND_MODE_MULTIPLY });
-            dc.drawBitmap(0, 0, drawClockFace);
+            dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => 0xbdbdbd, :blendMode => Graphics.BLEND_MODE_MULTIPLY });
+            //dc.drawBitmap(0, 0, drawClockFace);
         }
         
-        var y1 = centerY - halfClockHeight - marginY - 13;
-        var y2 = centerY + halfClockHeight - marginY + 8;
+        var y1 = centerY - halfClockHeight - marginY - 5;
+        var y2 = centerY + halfClockHeight - marginY;
         
 
         // Draw Lines above clock
@@ -318,34 +319,50 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.drawText(centerX, y2, fontInnerData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
         // Draw data fields in a ring around the clock
-        var ringRadius = halfClockWidth * 1.0;
-        var numFields = 6;
+        var ringRadius = halfClockWidth * 0.7;
+        var numFields = 5;
         var angleStep = 360.0 / numFields;
+        dc.setAntiAlias(true);
+        // Draw white ring with black outline
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(23);
+        dc.drawCircle(centerX, centerY, ringRadius);
+        
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(20);
+        dc.drawCircle(centerX, centerY, ringRadius);
+        dc.setAntiAlias(false);
 
         for(var i = 0; i < numFields; i++) {
             var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.5)); // Start from top (12 o'clock)
             
-            dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-           // dc.setAntiAlias(true);
-            
+            dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+           
             // Draw label and value (you can customize which data to show)
-                var value = "";
-                if(i == 0) { value = dataLabelCircular1 + dataCircle1; }
-                else if(i == 1) { value = dataLabelCircular2 + dataCircle2; }
-                else if(i == 2) { value = dataLabelCircular3 + dataCircle3; }
-                else if(i == 3) { value = dataLabelCircular4 + dataCircle4; }
-                else if(i == 4) { value = dataLabelCircular5 + dataCircle5; }
-                else if(i == 5) { value = dataLabelCircular6 + dataCircle6; }
+            var value = "";
+            if(i == 0) { value = dataLabelCircular1 + dataCircle1; }
+            else if(i == 1) { value = dataLabelCircular2 + dataCircle2; }
+            else if(i == 2) { value = dataLabelCircular3 + dataCircle3; }
+            else if(i == 3) { value = dataLabelCircular4 + dataCircle4; }
+            else if(i == 4) { value = dataLabelCircular5 + dataCircle5; }
+            else if(i == 5) { value = dataLabelCircular6 + dataCircle6; }
             
             // Draw radial text
             if(i >=2 and i <= 4) {
-                dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + (smallDataHeight /2) - 3 , Graphics.RADIAL_TEXT_DIRECTION_COUNTER_CLOCKWISE);
+            dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + (smallDataHeight /2) - 3 - 1, Graphics.RADIAL_TEXT_DIRECTION_COUNTER_CLOCKWISE);
             } else {
-                dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius - 3, Graphics.RADIAL_TEXT_DIRECTION_CLOCKWISE);
+            dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius - 3 - 3, Graphics.RADIAL_TEXT_DIRECTION_CLOCKWISE);
             }
-           
+        }
+
+        if(!dataNotifications.equals("")) {
+            dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
+            var notificationWith = dc.getTextWidthInPixels(dataNotifications, fontSmallData) + 2;
         
-           // dc.setAntiAlias(false);
+            dc.fillRectangle(centerX+halfClockWidth - (notificationWith/2)-2, centerY-(smallDataHeight/2)-1,notificationWith+4,(smallDataHeight+2)); 
+            dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(centerX+halfClockWidth- (notificationWith/2)+1, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_LEFT);
+            
         }
 
         // Draw hour and minute bars (lines with different thickness)
@@ -396,9 +413,9 @@ class TimeGateView extends WatchUi.WatchFace {
         var secondRad = (secondAngle - 90.0) * Math.PI / 180.0;
 
         // Minute hand: 40% of total width
-        var minuteLength = halfClockWidth * 0.80;
+        var minuteLength = halfClockWidth * 0.90;
         var minuteWidth = 11;
-        var minuteOutlineWidth = minuteWidth + 2;  // Slightly larger for outline
+        var minuteOutlineWidth = minuteWidth + 3;  // Slightly larger for outline
         var minuteX2 = centerX + (minuteLength * Math.cos(minuteRad)).toNumber();
         var minuteY2 = centerY + (minuteLength * Math.sin(minuteRad)).toNumber();
         var perpRad = minuteRad + Math.PI / 2.0;
@@ -434,7 +451,7 @@ class TimeGateView extends WatchUi.WatchFace {
         // Hour hand: 30% of total width
         var hourLength = halfClockWidth * 0.50;
         var hourWidth = 8;
-        var hourOutlineWidth = hourWidth + 2;  // Slightly larger for outline
+        var hourOutlineWidth = hourWidth + 3;  // Slightly larger for outline
         var hourX2 = centerX + (hourLength * Math.cos(hourRad)).toNumber();
         var hourY2 = centerY + (hourLength * Math.sin(hourRad)).toNumber();
         var hourPerpRad = hourRad + Math.PI / 2.0;
@@ -636,6 +653,8 @@ class TimeGateView extends WatchUi.WatchFace {
         dataCircle4 = getValueByType(propCircle4ValueShows, 8);
         dataCircle5 = getValueByType(propCircle5ValueShows, 8);
         dataCircle6 = getValueByType(propCircle6ValueShows, 8);
+
+        dataNotifications = getNotificationsData();
 
         dataLabelCircular1 = getLabelByType(propCircle1ValueShows, 1);
         dataLabelCircular2 = getLabelByType(propCircle2ValueShows, 1);
@@ -1556,6 +1575,7 @@ class TimeGateView extends WatchUi.WatchFace {
         var value = "";
 
         switch(propDateFormat) {
+    
             case 0: // Default: THU, 14 MAR 2024
                 value = dayName(today.day_of_week) + ", " + today.day + " " + monthName(today.month) + " " + today.year;
                 break;
@@ -1585,6 +1605,9 @@ class TimeGateView extends WatchUi.WatchFace {
                 break;
             case 9: // WEEKDAY, DD.MM.YYYY
                 value = dayName(today.day_of_week) + ", " + today.day.format("%02d") + "." + today.month.format("%02d") + "." + today.year;
+                break;
+            case 10: // WEEKDAY  DD
+                value = dayName(today.day_of_week) + " " + today.day;
                 break;
         }
 
