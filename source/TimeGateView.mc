@@ -418,8 +418,8 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.fillPolygon(minuteHandPoints);
 
         var minuteSmallerLength = centerX * 0.3;
-        var minuteSmallerX2 = centerX + (minuteSmallerLength * Math.cos(minuteRad)).toNumber();
-        var minutSmallereY2 = centerY + (minuteSmallerLength * Math.sin(minuteRad)).toNumber();
+        var minuteSmallerX2 = centerX + Math.round(minuteSmallerLength * Math.cos(minuteRad)).toNumber();
+        var minutSmallereY2 = centerY + Math.round(minuteSmallerLength * Math.sin(minuteRad)).toNumber();
 
         dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(5);  // Thicker line for minute hand
@@ -445,10 +445,10 @@ class TimeGateView extends WatchUi.WatchFace {
         
         // Draw hour hand fill
         var hourHandPoints = [
-            [Math.round(centerX + (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(centerY + (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
-            [Math.round(hourX2 + (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(hourY2 + (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
-            [Math.round(hourX2 - (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(hourY2 - (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
-            [Math.round(centerX - (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(centerY - (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()]
+            [centerX + (hourWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), centerY + (hourWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()],
+            [hourX2 + (hourWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), hourY2 + (hourWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()],
+            [hourX2 - (hourWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), hourY2 - (hourWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()],
+            [centerX - (hourWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), centerY - (hourWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()]
         ];
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(hourHandPoints);
