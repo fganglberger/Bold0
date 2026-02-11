@@ -240,7 +240,11 @@ class TimeGateView extends WatchUi.WatchFace {
         var timenow = Time.now();
         var now = Time.Gregorian.info(timenow, Time.FORMAT_SHORT);
         var unix_timestamp = timenow.value();
-        var updateNeeded = lastUpdate == null or now.sec % 60 == 0  or (unix_timestamp - lastUpdate >= propUpdateFreq and propUpdateFreq < 60);
+        var updateNeeded = lastUpdate == null or now.sec % 60 == 0 or (unix_timestamp - lastUpdate >= propUpdateFreq);
+
+         if(updateNeeded or propShowSeconds){
+            lastUpdate = unix_timestamp;
+         }
 
         if(updateNeeded) {
             updateData();
@@ -248,8 +252,6 @@ class TimeGateView extends WatchUi.WatchFace {
         }
 
         if(updateNeeded or propShowSeconds){
-            lastUpdate = unix_timestamp;
-
             if(isSleeping and canBurnIn) {
                 drawAOD(dc, now);
             } else {
@@ -399,20 +401,20 @@ class TimeGateView extends WatchUi.WatchFace {
 
         // Draw minute hand outline (larger)
         var minuteOutlinePoints = [
-            [centerX + (minuteOutlineWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY + (minuteOutlineWidth / 2.0 * Math.sin(perpRad)).toNumber()],
-            [minuteX2 + (minuteOutlineWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 + (minuteOutlineWidth / 2.0 * Math.sin(perpRad)).toNumber()],
-            [minuteX2 - (minuteOutlineWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 - (minuteOutlineWidth / 2.0 * Math.sin(perpRad)).toNumber()],
-            [centerX - (minuteOutlineWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY - (minuteOutlineWidth / 2.0 * Math.sin(perpRad)).toNumber()]
+            [centerX + Math.round(minuteOutlineWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY + Math.round(minuteOutlineWidth / 2.0 * Math.sin(perpRad)).toNumber()],
+            [minuteX2 + Math.round(minuteOutlineWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 + Math.round(minuteOutlineWidth / 2.0 * Math.sin(perpRad)).toNumber()],
+            [minuteX2 - Math.round(minuteOutlineWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 - Math.round(minuteOutlineWidth / 2.0 * Math.sin(perpRad)).toNumber()],
+            [centerX - Math.round(minuteOutlineWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY - Math.round(minuteOutlineWidth / 2.0 * Math.sin(perpRad)).toNumber()]
         ];
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(minuteOutlinePoints);
         
         // Draw minute hand fill
         var minuteHandPoints = [
-            [centerX + (minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY + (minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()],
-            [minuteX2 + (minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 + (minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()],
-            [minuteX2 - (minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 - (minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()],
-            [centerX - (minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY - (minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()]
+            [centerX + Math.round(minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY + Math.round(minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()],
+            [minuteX2 + Math.round(minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 + Math.round(minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()],
+            [minuteX2 - Math.round(minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 - Math.round(minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()],
+            [centerX - Math.round(minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY - Math.round(minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()]
         ];
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(minuteHandPoints);
