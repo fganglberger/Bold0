@@ -13,9 +13,7 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var visible as Boolean = true;
     hidden var screenHeight as Number;
     hidden var screenWidth as Number;
-    (:initialized) hidden var clockHeight as Number;
     (:initialized) hidden var bottomLargeDataHeightOffset as Number = 0;
-    (:initialized) hidden var clockWidth as Number;
     (:initialized) hidden var labelHeight as Number;
     (:initialized) hidden var tinyDataHeight as Number;
     (:initialized) hidden var smallDataHeight as Number;
@@ -27,9 +25,6 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var centerY as Number;
     hidden var marginX as Number;
     hidden var marginY as Number;
-    hidden var halfMarginY as Number;
-    hidden var halfClockHeight as Number;
-    hidden var halfClockWidth as Number;
     hidden var barBottomAdj as Number = 0;
     hidden var bottomFiveAdj as Number = 0;
     hidden var fieldSpaceingAdj as Number = 0;
@@ -170,19 +165,11 @@ class TimeGateView extends WatchUi.WatchFace {
         screenWidth = Toybox.System.getDeviceSettings().screenWidth;
         centerX = Math.round(screenWidth / 2);
         centerY = Math.round(screenHeight / 2);
-        marginY = Math.round(screenHeight / 30);
-        marginX = Math.round(screenWidth / 20);
+        marginY = Math.round(screenHeight / 6);
+        marginX = Math.round(screenWidth / 6);
         
         loadResources();
 
-        halfClockHeight = Math.round(clockHeight / 2);
-        if(clockBgText.length() == 4) {
-            halfClockWidth = Math.round((clockWidth / 5 * 4.2) / 2);
-        } else {
-            halfClockWidth = Math.round(clockWidth / 2);
-        }
-        
-        halfMarginY = Math.round(marginY / 2);
         hasComplications = Toybox has :Complications;
 
         updateWeather();
@@ -201,14 +188,11 @@ class TimeGateView extends WatchUi.WatchFace {
         // HERE HERE HERE HERE HERE HEREHERE HERE HEREHERE HERE HEREHERE HERE HEREHERE HERE HEREHERE HERE HERE
         // HERE HERE HERE HERE HERE HEREHERE HERE HEREHERE HERE HEREHERE HERE HEREHERE HERE HEREHERE HERE HERE
      
-        
       
         drawClockFace = Application.loadResource(Rez.Drawables.clockFace) as BitmapResource;
         smallDataHeight = 23;
         fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>22});
         fontInnerData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>22});
-        clockHeight = 80;
-        clockWidth = 227;
     }
 
     (:Round280)
@@ -253,21 +237,25 @@ class TimeGateView extends WatchUi.WatchFace {
     function onUpdate(dc as Dc) as Void {
         if(!visible) { return; }
 
-        var now = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
-        var unix_timestamp = Time.now().value();
+        var timenow = Time.now();
+        var now = Time.Gregorian.info(timenow, Time.FORMAT_SHORT);
+        var unix_timestamp = timenow.value();
+        var updateNeeded = lastUpdate == null or now.sec % 60 == 0  or (unix_timestamp - lastUpdate >= propUpdateFreq and propUpdateFreq < 60);
 
-        if(lastUpdate == null or unix_timestamp - lastUpdate >= propUpdateFreq) {
-            lastUpdate = unix_timestamp;
-            updateData(now);
+        if(updateNeeded) {
+            updateData();
             updateWeather();
+        }
+
+        if(updateNeeded or propShowSeconds){
+            lastUpdate = unix_timestamp;
 
             if(isSleeping and canBurnIn) {
                 drawAOD(dc, now);
             } else {
-                drawWatchface(dc, now, false);
+                drawWatchface(dc, now, false); //move this outside of this if, if you want to update 
             }
         }
-        
 
     }
 
@@ -305,12 +293,11 @@ class TimeGateView extends WatchUi.WatchFace {
         
         // Draw clock face background
         if(drawClockFace != null and !aod) {
-            dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => 0xbdbdbd, :blendMode => Graphics.BLEND_MODE_MULTIPLY });
-            //dc.drawBitmap(0, 0, drawClockFace);
+            dc.drawBitmap(0, 0, drawClockFace);
         }
         
-        var y1 = centerY - halfClockHeight - marginY - 5 +10;
-        var y2 = centerY + halfClockHeight - marginY  - 10;
+        var y1 = centerY  - marginY;
+        var y2 = centerY  + marginY  - 5;
         
 
         // Draw Lines above clock
@@ -319,19 +306,9 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.drawText(centerX, y2, fontInnerData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
         // Draw data fields in a ring around the clock
-        var ringRadius = halfClockWidth * 0.7;
+        var ringRadius = (centerY) * 0.65;
         var numFields = 5;
         var angleStep = 360.0 / numFields;
-        dc.setAntiAlias(true);
-        // Draw white ring with black outline
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(23);
-        dc.drawCircle(centerX, centerY, ringRadius);
-        
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(20);
-        dc.drawCircle(centerX, centerY, ringRadius);
-        dc.setAntiAlias(false);
 
         for(var i = 0; i < numFields; i++) {
             var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.25)); // Start from top (12 o'clock)
@@ -349,9 +326,9 @@ class TimeGateView extends WatchUi.WatchFace {
             
             // Draw radial text
             if(i >=2 and i <= 3) {
-            dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + (smallDataHeight /2) - 3 - 1, Graphics.RADIAL_TEXT_DIRECTION_COUNTER_CLOCKWISE);
+                dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + (smallDataHeight /2) - 2, Graphics.RADIAL_TEXT_DIRECTION_COUNTER_CLOCKWISE);
             } else {
-            dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius - 3 - 3, Graphics.RADIAL_TEXT_DIRECTION_CLOCKWISE);
+                dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius - 4, Graphics.RADIAL_TEXT_DIRECTION_CLOCKWISE);
             }
         }
 
@@ -359,9 +336,9 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
             var notificationWith = dc.getTextWidthInPixels(dataNotifications, fontSmallData) + 2;
         
-            dc.fillRectangle(centerX+halfClockWidth - (notificationWith/2)-2, centerY-(smallDataHeight/2)-2,notificationWith+6,(smallDataHeight+3)); 
+            dc.fillRectangle(centerX*2 - (notificationWith)-4, centerY-(smallDataHeight/2),notificationWith+6,(smallDataHeight)); 
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(centerX+halfClockWidth- (notificationWith/2)+2, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_LEFT);
+            dc.drawText(centerX*2- (notificationWith)-1, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_LEFT);
             
         }
 
@@ -384,8 +361,8 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => 0x4f4f4f, :blendMode => Graphics.BLEND_MODE_MULTIPLY });
         }
         
-        var y1 = centerY - halfClockHeight - marginY - 5;
-        var y2 = centerY + halfClockHeight - marginY + 5;
+        var y1 = centerY - marginY;
+        var y2 = centerY + marginY + 5;
         
 
         // Draw Lines above clock
@@ -413,7 +390,7 @@ class TimeGateView extends WatchUi.WatchFace {
         var secondRad = (secondAngle - 90.0) * Math.PI / 180.0;
 
         // Minute hand: 40% of total width
-        var minuteLength = halfClockWidth * 0.90;
+        var minuteLength = centerX * 0.95;
         var minuteWidth = 11;
         var minuteOutlineWidth = minuteWidth + 3;  // Slightly larger for outline
         var minuteX2 = centerX + (minuteLength * Math.cos(minuteRad)).toNumber();
@@ -440,7 +417,7 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(minuteHandPoints);
 
-        var minuteSmallerLength = halfClockWidth * 0.3;
+        var minuteSmallerLength = centerX * 0.3;
         var minuteSmallerX2 = centerX + (minuteSmallerLength * Math.cos(minuteRad)).toNumber();
         var minutSmallereY2 = centerY + (minuteSmallerLength * Math.sin(minuteRad)).toNumber();
 
@@ -449,7 +426,7 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
 
         // Hour hand: 30% of total width
-        var hourLength = halfClockWidth * 0.50;
+        var hourLength = centerX * 0.50;
         var hourWidth = 8;
         var hourOutlineWidth = hourWidth + 3;  // Slightly larger for outline
         var hourX2 = centerX + (hourLength * Math.cos(hourRad)).toNumber();
@@ -468,17 +445,17 @@ class TimeGateView extends WatchUi.WatchFace {
         
         // Draw hour hand fill
         var hourHandPoints = [
-            [centerX + (hourWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), centerY + (hourWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()],
-            [hourX2 + (hourWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), hourY2 + (hourWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()],
-            [hourX2 - (hourWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), hourY2 - (hourWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()],
-            [centerX - (hourWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), centerY - (hourWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()]
+            [Math.round(centerX + (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(centerY + (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
+            [Math.round(hourX2 + (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(hourY2 + (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
+            [Math.round(hourX2 - (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(hourY2 - (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
+            [Math.round(centerX - (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(centerY - (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()]
         ];
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(hourHandPoints);
 
         // Second hand
         if(propShowSeconds) {
-            var secondLength = halfClockWidth * 0.8;
+            var secondLength = centerX * 0.98;
             var secondWidth = 2;
             var secondOutlineWidth = secondWidth + 1;  // Slightly larger for outline
             var secondX2 = centerX + (secondLength * Math.cos(secondRad)).toNumber();
@@ -642,7 +619,7 @@ class TimeGateView extends WatchUi.WatchFace {
         if(propTimeSeparator == 2) { clockBgText = "####"; } else { clockBgText = "#####"; }
     }
 
-    hidden function updateData(now as Gregorian.Info) as Void {
+    hidden function updateData() as Void {
        
         dataTopLine = getValueByTypeWithUnit(propTopLineFieldShows, 10);
         dataBottomLine = getValueByTypeWithUnit(propBottomLineFieldShows, 10);
@@ -1794,7 +1771,7 @@ class TimeGateView extends WatchUi.WatchFace {
             var temp_unit = getTempUnit();
             var temp_val = weatherCondition.temperature;
             var temp = formatTemperature(temp_val, temp_unit).format("%01d");
-            return temp + "";
+            return temp + "°";
         }
         return "";
     }
@@ -1914,7 +1891,7 @@ class TimeGateView extends WatchUi.WatchFace {
                 var tempUnit = getTempUnit();
                 var high = formatTemperature(weatherCondition.highTemperature, tempUnit);
                 var low = formatTemperature(weatherCondition.lowTemperature, tempUnit);
-                ret = "H " + high.format("%d") + "" + "/L " + low.format("%d") + "";
+                ret = "H " + high.format("%d") + "°" + "/L " + low.format("%d") + "°";
             }
         }
         return ret;

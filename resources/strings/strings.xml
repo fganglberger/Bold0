@@ -163,7 +163,7 @@
     <string id="LABEL_SUN_1">SUN</string>
     <string id="LABEL_SUNINT_2">SUN INT</string>
     <string id="LABEL_SUNINT_3">SUN INTENSITY</string>
-    <string id="LABEL_TEMP_1">Temp</string>
+    <string id="LABEL_TEMP_1">Act</string>
     <string id="LABEL_STEMP_3">SENSOR TEMP</string>
     <string id="LABEL_DAWN_1">S RISE</string>
     <string id="LABEL_DAWN_2">SUNRISE</string>
