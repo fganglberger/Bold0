@@ -298,8 +298,8 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.drawBitmap(0, 0, drawClockFace);
         }
         
-        var y1 = centerY  - marginY;
-        var y2 = centerY  + marginY  - 5;
+        var y1 = centerY  - marginY - smallDataHeight + 5;
+        var y2 = centerY  + marginY - 5 ;
         
 
         // Draw Lines above clock
@@ -338,9 +338,9 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
             var notificationWith = dc.getTextWidthInPixels(dataNotifications, fontSmallData) + 2;
         
-            dc.fillRectangle(centerX*2 - (notificationWith)-4, centerY-(smallDataHeight/2),notificationWith+6,(smallDataHeight)); 
+            dc.fillRectangle(centerX*2 - (notificationWith)-4 - 12, centerY-(smallDataHeight/2) - 4,notificationWith+6 +10,(smallDataHeight)+8); 
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(centerX*2- (notificationWith)-1, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_LEFT);
+            dc.drawText(centerX*2- (notificationWith)-1 -6, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_LEFT);
             
         }
 
@@ -394,34 +394,40 @@ class TimeGateView extends WatchUi.WatchFace {
         // Minute hand: 40% of total width
         var minuteLength = centerX * 0.95;
         var minuteWidth = 11;
-        var minuteOutlineWidth = minuteWidth + 3;  // Slightly larger for outline
+        var outlineThickness = 2;  // Uniform outline thickness around the hand
+        var minuteOutlineWidth = minuteWidth + (outlineThickness * 2);
         var minuteX2 = centerX + (minuteLength * Math.cos(minuteRad)).toNumber();
         var minuteY2 = centerY + (minuteLength * Math.sin(minuteRad)).toNumber();
         var perpRad = minuteRad + Math.PI / 2.0;
 
-        // Draw minute hand outline (larger)
+        // Draw minute hand outline - uniform thickness around the hand
+        var minuteOutHalf = minuteOutlineWidth / 2.0;
         var minuteOutlinePoints = [
-            [centerX + Math.round(minuteOutlineWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY + Math.round(minuteOutlineWidth / 2.0 * Math.sin(perpRad)).toNumber()],
-            [minuteX2 + Math.round(minuteOutlineWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 + Math.round(minuteOutlineWidth / 2.0 * Math.sin(perpRad)).toNumber()],
-            [minuteX2 - Math.round(minuteOutlineWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 - Math.round(minuteOutlineWidth / 2.0 * Math.sin(perpRad)).toNumber()],
-            [centerX - Math.round(minuteOutlineWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY - Math.round(minuteOutlineWidth / 2.0 * Math.sin(perpRad)).toNumber()]
+            [centerX + (minuteOutHalf * Math.cos(perpRad)).toNumber() - (outlineThickness * Math.cos(minuteRad)).toNumber(), 
+             centerY + (minuteOutHalf * Math.sin(perpRad)).toNumber() - (outlineThickness * Math.sin(minuteRad)).toNumber()],
+            [minuteX2 + (minuteOutHalf * Math.cos(perpRad)).toNumber() + (outlineThickness * Math.cos(minuteRad)).toNumber(), 
+             minuteY2 + (minuteOutHalf * Math.sin(perpRad)).toNumber() + (outlineThickness * Math.sin(minuteRad)).toNumber()],
+            [minuteX2 - (minuteOutHalf * Math.cos(perpRad)).toNumber() + (outlineThickness * Math.cos(minuteRad)).toNumber(), 
+             minuteY2 - (minuteOutHalf * Math.sin(perpRad)).toNumber() + (outlineThickness * Math.sin(minuteRad)).toNumber()],
+            [centerX - (minuteOutHalf * Math.cos(perpRad)).toNumber() - (outlineThickness * Math.cos(minuteRad)).toNumber(), 
+             centerY - (minuteOutHalf * Math.sin(perpRad)).toNumber() - (outlineThickness * Math.sin(minuteRad)).toNumber()]
         ];
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(minuteOutlinePoints);
         
         // Draw minute hand fill
         var minuteHandPoints = [
-            [centerX + Math.round(minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY + Math.round(minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()],
-            [minuteX2 + Math.round(minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 + Math.round(minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()],
-            [minuteX2 - Math.round(minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 - Math.round(minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()],
-            [centerX - Math.round(minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY - Math.round(minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()]
+            [centerX + (minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY + (minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()],
+            [minuteX2 + (minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 + (minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()],
+            [minuteX2 - (minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), minuteY2 - (minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()],
+            [centerX - (minuteWidth / 2.0 * Math.cos(perpRad)).toNumber(), centerY - (minuteWidth / 2.0 * Math.sin(perpRad)).toNumber()]
         ];
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(minuteHandPoints);
 
         var minuteSmallerLength = centerX * 0.3;
-        var minuteSmallerX2 = centerX + Math.round(minuteSmallerLength * Math.cos(minuteRad)).toNumber();
-        var minutSmallereY2 = centerY + Math.round(minuteSmallerLength * Math.sin(minuteRad)).toNumber();
+        var minuteSmallerX2 = centerX + (minuteSmallerLength * Math.cos(minuteRad)).toNumber();
+        var minutSmallereY2 = centerY + (minuteSmallerLength * Math.sin(minuteRad)).toNumber();
 
         dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(5);  // Thicker line for minute hand
@@ -430,27 +436,32 @@ class TimeGateView extends WatchUi.WatchFace {
         // Hour hand: 30% of total width
         var hourLength = centerX * 0.50;
         var hourWidth = 8;
-        var hourOutlineWidth = hourWidth + 3;  // Slightly larger for outline
+        var hourOutlineWidth = hourWidth + (outlineThickness * 2);
         var hourX2 = centerX + (hourLength * Math.cos(hourRad)).toNumber();
         var hourY2 = centerY + (hourLength * Math.sin(hourRad)).toNumber();
         var hourPerpRad = hourRad + Math.PI / 2.0;
 
-        // Draw hour hand outline (larger)
+        // Draw hour hand outline - uniform thickness around the hand
+        var hourOutHalf = hourOutlineWidth / 2.0;
         var hourOutlinePoints = [
-            [centerX + (hourOutlineWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), centerY + (hourOutlineWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()],
-            [hourX2 + (hourOutlineWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), hourY2 + (hourOutlineWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()],
-            [hourX2 - (hourOutlineWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), hourY2 - (hourOutlineWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()],
-            [centerX - (hourOutlineWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), centerY - (hourOutlineWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()]
+            [centerX + (hourOutHalf * Math.cos(hourPerpRad)).toNumber() - (outlineThickness * Math.cos(hourRad)).toNumber(), 
+             centerY + (hourOutHalf * Math.sin(hourPerpRad)).toNumber() - (outlineThickness * Math.sin(hourRad)).toNumber()],
+            [hourX2 + (hourOutHalf * Math.cos(hourPerpRad)).toNumber() + (outlineThickness * Math.cos(hourRad)).toNumber(), 
+             hourY2 + (hourOutHalf * Math.sin(hourPerpRad)).toNumber() + (outlineThickness * Math.sin(hourRad)).toNumber()],
+            [hourX2 - (hourOutHalf * Math.cos(hourPerpRad)).toNumber() + (outlineThickness * Math.cos(hourRad)).toNumber(), 
+             hourY2 - (hourOutHalf * Math.sin(hourPerpRad)).toNumber() + (outlineThickness * Math.sin(hourRad)).toNumber()],
+            [centerX - (hourOutHalf * Math.cos(hourPerpRad)).toNumber() - (outlineThickness * Math.cos(hourRad)).toNumber(), 
+             centerY - (hourOutHalf * Math.sin(hourPerpRad)).toNumber() - (outlineThickness * Math.sin(hourRad)).toNumber()]
         ];
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(hourOutlinePoints);
         
         // Draw hour hand fill
         var hourHandPoints = [
-            [centerX + (hourWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), centerY + (hourWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()],
-            [hourX2 + (hourWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), hourY2 + (hourWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()],
-            [hourX2 - (hourWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), hourY2 - (hourWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()],
-            [centerX - (hourWidth / 2.0 * Math.cos(hourPerpRad)).toNumber(), centerY - (hourWidth / 2.0 * Math.sin(hourPerpRad)).toNumber()]
+            [Math.round(centerX + (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(centerY + (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
+            [Math.round(hourX2 + (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(hourY2 + (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
+            [Math.round(hourX2 - (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(hourY2 - (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
+            [Math.round(centerX - (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(centerY - (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()]
         ];
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(hourHandPoints);
@@ -459,17 +470,22 @@ class TimeGateView extends WatchUi.WatchFace {
         if(propShowSeconds) {
             var secondLength = centerX * 0.98;
             var secondWidth = 2;
-            var secondOutlineWidth = secondWidth + 1;  // Slightly larger for outline
+            var secondOutlineWidth = secondWidth + (outlineThickness * 2);
             var secondX2 = centerX + (secondLength * Math.cos(secondRad)).toNumber();
             var secondY2 = centerY + (secondLength * Math.sin(secondRad)).toNumber();
             var secondPerpRad = secondRad + Math.PI / 2.0;
 
-            // Draw second hand outline (larger)
+            // Draw second hand outline - uniform thickness around the hand
+            var secOutHalf = secondOutlineWidth / 2.0;
             var secondOutlinePoints = [
-                [centerX + (secondOutlineWidth / 2.0 * Math.cos(secondPerpRad)).toNumber(), centerY + (secondOutlineWidth / 2.0 * Math.sin(secondPerpRad)).toNumber()],
-                [secondX2 + (secondOutlineWidth / 2.0 * Math.cos(secondPerpRad)).toNumber(), secondY2 + (secondOutlineWidth / 2.0 * Math.sin(secondPerpRad)).toNumber()],
-                [secondX2 - (secondOutlineWidth / 2.0 * Math.cos(secondPerpRad)).toNumber(), secondY2 - (secondOutlineWidth / 2.0 * Math.sin(secondPerpRad)).toNumber()],
-                [centerX - (secondOutlineWidth / 2.0 * Math.cos(secondPerpRad)).toNumber(), centerY - (secondOutlineWidth / 2.0 * Math.sin(secondPerpRad)).toNumber()]
+                [centerX + (secOutHalf * Math.cos(secondPerpRad)).toNumber() - (outlineThickness * Math.cos(secondRad)).toNumber(), 
+                 centerY + (secOutHalf * Math.sin(secondPerpRad)).toNumber() - (outlineThickness * Math.sin(secondRad)).toNumber()],
+                [secondX2 + (secOutHalf * Math.cos(secondPerpRad)).toNumber() + (outlineThickness * Math.cos(secondRad)).toNumber(), 
+                 secondY2 + (secOutHalf * Math.sin(secondPerpRad)).toNumber() + (outlineThickness * Math.sin(secondRad)).toNumber()],
+                [secondX2 - (secOutHalf * Math.cos(secondPerpRad)).toNumber() + (outlineThickness * Math.cos(secondRad)).toNumber(), 
+                 secondY2 - (secOutHalf * Math.sin(secondPerpRad)).toNumber() + (outlineThickness * Math.sin(secondRad)).toNumber()],
+                [centerX - (secOutHalf * Math.cos(secondPerpRad)).toNumber() - (outlineThickness * Math.cos(secondRad)).toNumber(), 
+                 centerY - (secOutHalf * Math.sin(secondPerpRad)).toNumber() - (outlineThickness * Math.sin(secondRad)).toNumber()]
             ];
             dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
             dc.fillPolygon(secondOutlinePoints);
