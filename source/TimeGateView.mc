@@ -39,7 +39,6 @@ class TimeGateView extends WatchUi.WatchFace {
     (:initialized) hidden var fontClock as FontType;
     (:initialized) hidden var fontClockOutline as FontType;
     (:initialized) hidden var fontSmallData as FontType;
-    (:initialized) hidden var fontInnerData as FontType;
     hidden var weekNames as Array<String>?;
     hidden var monthNames as Array<String>?;
 
@@ -192,7 +191,6 @@ class TimeGateView extends WatchUi.WatchFace {
         drawClockFace = Application.loadResource(Rez.Drawables.clockFace) as BitmapResource;
         smallDataHeight = 23;
         fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>22});
-        fontInnerData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>22});
     }
 
     (:Round280)
@@ -298,14 +296,14 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.drawBitmap(0, 0, drawClockFace);
         }
         
-        var y1 = centerY  - marginY - smallDataHeight + 5;
-        var y2 = centerY  + marginY - 5 ;
+        var y1 = centerY  - marginY - smallDataHeight + 10;
+        var y2 = centerY  + marginY - 10 ;
         
 
         // Draw Lines above clock
         dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX, y1, fontInnerData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(centerX, y2, fontInnerData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y1, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y2, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
         // Draw data fields in a ring around the clock
         var ringRadius = (centerY) * 0.65;
@@ -336,11 +334,11 @@ class TimeGateView extends WatchUi.WatchFace {
 
         if(!dataNotifications.equals("")) {
             dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
-            var notificationWith = dc.getTextWidthInPixels(dataNotifications, fontSmallData) + 2;
+           
         
-            dc.fillRectangle(centerX*2 - (notificationWith)-4 - 12, centerY-(smallDataHeight/2) - 4,notificationWith+6 +10,(smallDataHeight)+8); 
+            dc.fillRectangle(centerX*2 - 27, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(centerX*2- (notificationWith)-1 -6, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_LEFT);
+            dc.drawText(centerX*2 - 13, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
             
         }
 
@@ -458,10 +456,10 @@ class TimeGateView extends WatchUi.WatchFace {
         
         // Draw hour hand fill
         var hourHandPoints = [
-            [Math.round(centerX + (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(centerY + (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
-            [Math.round(hourX2 + (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(hourY2 + (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
-            [Math.round(hourX2 - (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(hourY2 - (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
-            [Math.round(centerX - (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), Math.round(centerY - (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()]
+            [(centerX + (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(),(centerY + (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
+            [(hourX2 + (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), (hourY2 + (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
+            [(hourX2 - (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), (hourY2 - (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()],
+            [(centerX - (hourWidth / 2.0 * Math.cos(hourPerpRad))).toNumber(), (centerY - (hourWidth / 2.0 * Math.sin(hourPerpRad))).toNumber()]
         ];
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(hourHandPoints);
