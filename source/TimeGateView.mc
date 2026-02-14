@@ -164,8 +164,8 @@ class TimeGateView extends WatchUi.WatchFace {
         screenWidth = Toybox.System.getDeviceSettings().screenWidth;
         centerX = Math.round(screenWidth / 2);
         centerY = Math.round(screenHeight / 2);
-        marginY = Math.round(screenHeight / 6);
-        marginX = Math.round(screenWidth / 6);
+        marginY = Math.round(screenHeight / 10);
+        marginX = Math.round(screenWidth / 10);
         
         loadResources();
 
@@ -189,7 +189,7 @@ class TimeGateView extends WatchUi.WatchFace {
      
       
         drawClockFace = Application.loadResource(Rez.Drawables.clockFace) as BitmapResource;
-        smallDataHeight = 23;
+        smallDataHeight = 22;
         fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>22});
     }
 
@@ -287,7 +287,7 @@ class TimeGateView extends WatchUi.WatchFace {
     }
 
     hidden function drawWatchface(dc as Dc, now as Gregorian.Info, aod as Boolean) as Void {
-        // Clear
+        // Clearf
         dc.setColor(themeColors[bg], themeColors[bg]);
         dc.clear();
         
@@ -296,8 +296,8 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.drawBitmap(0, 0, drawClockFace);
         }
         
-        var y1 = centerY  - marginY - smallDataHeight + 10;
-        var y2 = centerY  + marginY - 10 ;
+        var y1 = centerY  - marginY - smallDataHeight;
+        var y2 = centerY  + marginY + 3;
         
 
         // Draw Lines above clock
@@ -333,12 +333,12 @@ class TimeGateView extends WatchUi.WatchFace {
         }
 
         if(!dataNotifications.equals("")) {
-            dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
-           
-        
-            dc.fillRectangle(centerX*2 - 27, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(centerX*2 - 13, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
+            dc.fillRectangle(centerX*2 - 27 - 3, centerY-((smallDataHeight+8)/2),27+3,(smallDataHeight+8)); 
+            dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
+            dc.fillRectangle(centerX*2 - 27 - 3, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
+            dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(centerX*2 - 13 - 3, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
             
         }
 
@@ -361,8 +361,8 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => 0x4f4f4f, :blendMode => Graphics.BLEND_MODE_MULTIPLY });
         }
         
-        var y1 = centerY - marginY;
-        var y2 = centerY + marginY + 5;
+        var y1 = centerY  - marginY - smallDataHeight;
+        var y2 = centerY  + marginY + 3;
         
 
         // Draw Lines above clock
