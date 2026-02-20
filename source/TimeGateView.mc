@@ -309,9 +309,17 @@ class TimeGateView extends WatchUi.WatchFace {
         var ringRadius = (centerY) * 0.65;
         var numFields = 5;
         var angleStep = 360.0 / numFields;
+        var minuteAngle = (now.min / 60.0) * 360.0;
+
+        // Keep the minute hand between two text boxes by rotating the ring
+        // toward the nearest gap center (max shift is +/- half of angleStep).
+        var baseGapAngle = angleStep*0.5; // First gap is centered at this angle (between field 0 and last field)
+        var nearestGapIndex = Math.round((minuteAngle - baseGapAngle) / angleStep);
+        var targetGapAngle = baseGapAngle + (nearestGapIndex * angleStep);
+        var ringRotation = targetGapAngle - minuteAngle;
 
         for(var i = 0; i < numFields; i++) {
-            var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.25)); // Start from top (12 o'clock)
+            var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.25)) + ringRotation; // Keep minute hand between labels
             
             dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
            
@@ -1907,7 +1915,7 @@ class TimeGateView extends WatchUi.WatchFace {
                 var tempUnit = getTempUnit();
                 var high = formatTemperature(weatherCondition.highTemperature, tempUnit);
                 var low = formatTemperature(weatherCondition.lowTemperature, tempUnit);
-                ret = "H " + high.format("%d") + "°" + "/L " + low.format("%d") + "°";
+                ret = "H" + high.format("%d") + "°" + "/L" + low.format("%d") + "°";
             }
         }
         return ret;
