@@ -386,122 +386,133 @@ class TimeGateView extends WatchUi.WatchFace {
         // Enable anti-aliasing for smoother hand edges
         dc.setAntiAlias(true);
 
-        // Calculate hour and minute angles (12 o'clock is 0 degrees, clockwise)
+        // Calculate hour/minute once and reuse vectors to reduce trig calls
+        var outlineThickness = 2;
         var totalMinutes = now.hour * 60 + now.min;
-        var hourAngle = (totalMinutes / 720.0) * 360.0;  // 720 minutes in 12 hours
-        var minuteAngle = (now.min / 60.0) * 360.0;
-        var secondAngle = (now.sec / 60.0) * 360.0;
+        var hourRad = (totalMinutes * Math.PI / 360.0) - (Math.PI / 2.0);
+        var minuteRad = (now.min * Math.PI / 30.0) - (Math.PI / 2.0);
 
-        // Convert angles to radians
-        var hourRad = (hourAngle - 90.0) * Math.PI / 180.0;
-        var minuteRad = (minuteAngle - 90.0) * Math.PI / 180.0;
-        var secondRad = (secondAngle - 90.0) * Math.PI / 180.0;
+        var hourCos = Math.cos(hourRad);
+        var hourSin = Math.sin(hourRad);
+        var minuteCos = Math.cos(minuteRad);
+        var minuteSin = Math.sin(minuteRad);
 
-        // Minute hand: 40% of total width
+        // Minute hand
         var minuteLength = centerX * 0.95;
         var minuteWidth = 11;
-        var outlineThickness = 2;  // Uniform outline thickness around the hand
-        var minuteOutlineWidth = minuteWidth + (outlineThickness * 2);
-        var minuteX2 = centerX + Math.round(minuteLength * Math.cos(minuteRad));
-        var minuteY2 = centerY + Math.round(minuteLength * Math.sin(minuteRad));
-        var perpRad = minuteRad + Math.PI / 2.0;
+        var minuteHalfWidth = minuteWidth / 2.0;
+        var minuteOutlineHalf = (minuteWidth + (outlineThickness * 2)) / 2.0;
 
-        // Draw minute hand outline - uniform thickness around the hand
-        var minuteOutHalf = minuteOutlineWidth / 2.0;
+        var minuteX2 = centerX + Math.round(minuteLength * minuteCos);
+        var minuteY2 = centerY + Math.round(minuteLength * minuteSin);
+
+        var minutePerpX = -minuteSin;
+        var minutePerpY = minuteCos;
+        var minuteOutlineDX = Math.round(minuteOutlineHalf * minutePerpX);
+        var minuteOutlineDY = Math.round(minuteOutlineHalf * minutePerpY);
+        var minuteAlongDX = Math.round(outlineThickness * minuteCos);
+        var minuteAlongDY = Math.round(outlineThickness * minuteSin);
+
         var minuteOutlinePoints = [
-            [centerX + Math.round(minuteOutHalf * Math.cos(perpRad)) - Math.round(outlineThickness * Math.cos(minuteRad)), 
-             centerY + Math.round(minuteOutHalf * Math.sin(perpRad)) - Math.round(outlineThickness * Math.sin(minuteRad))],
-            [minuteX2 + Math.round(minuteOutHalf * Math.cos(perpRad)) + Math.round(outlineThickness * Math.cos(minuteRad)), 
-             minuteY2 + Math.round(minuteOutHalf * Math.sin(perpRad)) + Math.round(outlineThickness * Math.sin(minuteRad))],
-            [minuteX2 - Math.round(minuteOutHalf * Math.cos(perpRad)) + Math.round(outlineThickness * Math.cos(minuteRad)), 
-             minuteY2 - Math.round(minuteOutHalf * Math.sin(perpRad)) + Math.round(outlineThickness * Math.sin(minuteRad))],
-            [centerX - Math.round(minuteOutHalf * Math.cos(perpRad)) - Math.round(outlineThickness * Math.cos(minuteRad)), 
-             centerY - Math.round(minuteOutHalf * Math.sin(perpRad)) - Math.round(outlineThickness * Math.sin(minuteRad))]
+            [centerX + minuteOutlineDX - minuteAlongDX, centerY + minuteOutlineDY - minuteAlongDY],
+            [minuteX2 + minuteOutlineDX + minuteAlongDX, minuteY2 + minuteOutlineDY + minuteAlongDY],
+            [minuteX2 - minuteOutlineDX + minuteAlongDX, minuteY2 - minuteOutlineDY + minuteAlongDY],
+            [centerX - minuteOutlineDX - minuteAlongDX, centerY - minuteOutlineDY - minuteAlongDY]
         ];
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(minuteOutlinePoints);
-        
-        // Draw minute hand fill
+
+        var minuteHandDX = Math.round(minuteHalfWidth * minutePerpX);
+        var minuteHandDY = Math.round(minuteHalfWidth * minutePerpY);
         var minuteHandPoints = [
-            [centerX + Math.round(minuteWidth / 2.0 * Math.cos(perpRad)), centerY + Math.round(minuteWidth / 2.0 * Math.sin(perpRad))],
-            [minuteX2 + Math.round(minuteWidth / 2.0 * Math.cos(perpRad)), minuteY2 + Math.round(minuteWidth / 2.0 * Math.sin(perpRad))],
-            [minuteX2 - Math.round(minuteWidth / 2.0 * Math.cos(perpRad)), minuteY2 - Math.round(minuteWidth / 2.0 * Math.sin(perpRad))],
-            [centerX - Math.round(minuteWidth / 2.0 * Math.cos(perpRad)), centerY - Math.round(minuteWidth / 2.0 * Math.sin(perpRad))]
+            [centerX + minuteHandDX, centerY + minuteHandDY],
+            [minuteX2 + minuteHandDX, minuteY2 + minuteHandDY],
+            [minuteX2 - minuteHandDX, minuteY2 - minuteHandDY],
+            [centerX - minuteHandDX, centerY - minuteHandDY]
         ];
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(minuteHandPoints);
 
         var minuteSmallerLength = centerX * 0.3;
-        var minuteSmallerX2 = centerX + Math.round(minuteSmallerLength * Math.cos(minuteRad));
-        var minutSmallereY2 = centerY + Math.round(minuteSmallerLength * Math.sin(minuteRad));
-
+        var minuteSmallerX2 = centerX + Math.round(minuteSmallerLength * minuteCos);
+        var minutSmallereY2 = centerY + Math.round(minuteSmallerLength * minuteSin);
         dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(5);  // Thicker line for minute hand
+        dc.setPenWidth(5);
         dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
 
-        // Hour hand: 30% of total width
+        // Hour hand
         var hourLength = centerX * 0.50;
         var hourWidth = 8;
-        var hourOutlineWidth = hourWidth + (outlineThickness * 2);
-        var hourX2 = centerX + Math.round(hourLength * Math.cos(hourRad));
-        var hourY2 = centerY + Math.round(hourLength * Math.sin(hourRad));
-        var hourPerpRad = hourRad + Math.PI / 2.0;
+        var hourHalfWidth = hourWidth / 2.0;
+        var hourOutlineHalf = (hourWidth + (outlineThickness * 2)) / 2.0;
 
-        // Draw hour hand outline - uniform thickness around the hand
-        var hourOutHalf = hourOutlineWidth / 2.0;
+        var hourX2 = centerX + Math.round(hourLength * hourCos);
+        var hourY2 = centerY + Math.round(hourLength * hourSin);
+
+        var hourPerpX = -hourSin;
+        var hourPerpY = hourCos;
+        var hourOutlineDX = Math.round(hourOutlineHalf * hourPerpX);
+        var hourOutlineDY = Math.round(hourOutlineHalf * hourPerpY);
+        var hourAlongDX = Math.round(outlineThickness * hourCos);
+        var hourAlongDY = Math.round(outlineThickness * hourSin);
+
         var hourOutlinePoints = [
-            [centerX + Math.round(hourOutHalf * Math.cos(hourPerpRad)) - Math.round(outlineThickness * Math.cos(hourRad)), 
-             centerY + Math.round(hourOutHalf * Math.sin(hourPerpRad)) - Math.round(outlineThickness * Math.sin(hourRad))],
-            [hourX2 + Math.round(hourOutHalf * Math.cos(hourPerpRad)) + Math.round(outlineThickness * Math.cos(hourRad)), 
-             hourY2 + Math.round(hourOutHalf * Math.sin(hourPerpRad)) + Math.round(outlineThickness * Math.sin(hourRad))],
-            [hourX2 - Math.round(hourOutHalf * Math.cos(hourPerpRad)) + Math.round(outlineThickness * Math.cos(hourRad)), 
-             hourY2 - Math.round(hourOutHalf * Math.sin(hourPerpRad)) + Math.round(outlineThickness * Math.sin(hourRad))],
-            [centerX - Math.round(hourOutHalf * Math.cos(hourPerpRad)) - Math.round(outlineThickness * Math.cos(hourRad)), 
-             centerY - Math.round(hourOutHalf * Math.sin(hourPerpRad)) - Math.round(outlineThickness * Math.sin(hourRad))]
+            [centerX + hourOutlineDX - hourAlongDX, centerY + hourOutlineDY - hourAlongDY],
+            [hourX2 + hourOutlineDX + hourAlongDX, hourY2 + hourOutlineDY + hourAlongDY],
+            [hourX2 - hourOutlineDX + hourAlongDX, hourY2 - hourOutlineDY + hourAlongDY],
+            [centerX - hourOutlineDX - hourAlongDX, centerY - hourOutlineDY - hourAlongDY]
         ];
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(hourOutlinePoints);
-        
-        // Draw hour hand fill
+
+        var hourHandDX = Math.round(hourHalfWidth * hourPerpX);
+        var hourHandDY = Math.round(hourHalfWidth * hourPerpY);
         var hourHandPoints = [
-            [(centerX + Math.round(hourWidth / 2.0 * Math.cos(hourPerpRad))),(centerY + Math.round(hourWidth / 2.0 * Math.sin(hourPerpRad)))],
-            [(hourX2 + Math.round(hourWidth / 2.0 * Math.cos(hourPerpRad))), (hourY2 + Math.round(hourWidth / 2.0 * Math.sin(hourPerpRad)))],
-            [(hourX2 - Math.round(hourWidth / 2.0 * Math.cos(hourPerpRad))), (hourY2 - Math.round(hourWidth / 2.0 * Math.sin(hourPerpRad)))],
-            [(centerX - Math.round(hourWidth / 2.0 * Math.cos(hourPerpRad))), (centerY - Math.round(hourWidth / 2.0 * Math.sin(hourPerpRad)))]
+            [centerX + hourHandDX, centerY + hourHandDY],
+            [hourX2 + hourHandDX, hourY2 + hourHandDY],
+            [hourX2 - hourHandDX, hourY2 - hourHandDY],
+            [centerX - hourHandDX, centerY - hourHandDY]
         ];
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(hourHandPoints);
 
         // Second hand
         if(propShowSeconds) {
+            var secondRad = (now.sec * Math.PI / 30.0) - (Math.PI / 2.0);
+            var secondCos = Math.cos(secondRad);
+            var secondSin = Math.sin(secondRad);
+
             var secondLength = centerX * 0.98;
             var secondWidth = 2;
-            var secondOutlineWidth = secondWidth + (outlineThickness * 2);
-            var secondX2 = centerX + Math.round(secondLength * Math.cos(secondRad));
-            var secondY2 = centerY + Math.round(secondLength * Math.sin(secondRad));
-            var secondPerpRad = secondRad + Math.PI / 2.0;
+            var secondHalfWidth = secondWidth / 2.0;
+            var secondOutlineHalf = (secondWidth + (outlineThickness * 2)) / 2.0;
 
-            // Draw second hand outline - uniform thickness around the hand
-            var secOutHalf = secondOutlineWidth / 2.0;
+            var secondX2 = centerX + Math.round(secondLength * secondCos);
+            var secondY2 = centerY + Math.round(secondLength * secondSin);
+
+            var secondPerpX = -secondSin;
+            var secondPerpY = secondCos;
+            var secondOutlineDX = Math.round(secondOutlineHalf * secondPerpX);
+            var secondOutlineDY = Math.round(secondOutlineHalf * secondPerpY);
+            var secondAlongDX = Math.round(outlineThickness * secondCos);
+            var secondAlongDY = Math.round(outlineThickness * secondSin);
+
             var secondOutlinePoints = [
-                [centerX + Math.round(secOutHalf * Math.cos(secondPerpRad)) - Math.round(outlineThickness * Math.cos(secondRad)), 
-                 centerY + Math.round(secOutHalf * Math.sin(secondPerpRad)) - Math.round(outlineThickness * Math.sin(secondRad))],
-                [secondX2 + Math.round(secOutHalf * Math.cos(secondPerpRad)) + Math.round(outlineThickness * Math.cos(secondRad)), 
-                 secondY2 + Math.round(secOutHalf * Math.sin(secondPerpRad)) + Math.round(outlineThickness * Math.sin(secondRad))],
-                [secondX2 - Math.round(secOutHalf * Math.cos(secondPerpRad)) + Math.round(outlineThickness * Math.cos(secondRad)), 
-                 secondY2 - Math.round(secOutHalf * Math.sin(secondPerpRad)) + Math.round(outlineThickness * Math.sin(secondRad))],
-                [centerX - Math.round(secOutHalf * Math.cos(secondPerpRad)) - Math.round(outlineThickness * Math.cos(secondRad)), 
-                 centerY - Math.round(secOutHalf * Math.sin(secondPerpRad)) - Math.round(outlineThickness * Math.sin(secondRad))]
+                [centerX + secondOutlineDX - secondAlongDX, centerY + secondOutlineDY - secondAlongDY],
+                [secondX2 + secondOutlineDX + secondAlongDX, secondY2 + secondOutlineDY + secondAlongDY],
+                [secondX2 - secondOutlineDX + secondAlongDX, secondY2 - secondOutlineDY + secondAlongDY],
+                [centerX - secondOutlineDX - secondAlongDX, centerY - secondOutlineDY - secondAlongDY]
             ];
             dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
             dc.fillPolygon(secondOutlinePoints);
-            
-            // Draw second hand fill
+
+            var secondHandDX = Math.round(secondHalfWidth * secondPerpX);
+            var secondHandDY = Math.round(secondHalfWidth * secondPerpY);
             var secondHandPoints = [
-                [centerX + Math.round(secondWidth / 2.0 * Math.cos(secondPerpRad)), centerY + Math.round(secondWidth / 2.0 * Math.sin(secondPerpRad))],
-                [secondX2 + Math.round(secondWidth / 2.0 * Math.cos(secondPerpRad)), secondY2 + Math.round(secondWidth / 2.0 * Math.sin(secondPerpRad))],
-                [secondX2 - Math.round(secondWidth / 2.0 * Math.cos(secondPerpRad)), secondY2 - Math.round(secondWidth / 2.0 * Math.sin(secondPerpRad))],
-                [centerX - Math.round(secondWidth / 2.0 * Math.cos(secondPerpRad)), centerY - Math.round(secondWidth / 2.0 * Math.sin(secondPerpRad))]
+                [centerX + secondHandDX, centerY + secondHandDY],
+                [secondX2 + secondHandDX, secondY2 + secondHandDY],
+                [secondX2 - secondHandDX, secondY2 - secondHandDY],
+                [centerX - secondHandDX, centerY - secondHandDY]
             ];
             dc.setColor(themeColors[date], Graphics.COLOR_TRANSPARENT);
             dc.fillPolygon(secondHandPoints);
