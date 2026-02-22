@@ -245,17 +245,19 @@ class TimeGateView extends WatchUi.WatchFace {
          }
 
         if(updateNeeded) {
+            if(weatherCondition == null || now.min % 30 == 0) { // Update weather every 30 minutes or if we don't have data yet
+                updateWeather();
+            }
             updateData();
-            updateWeather();
         }
 
-        if(updateNeeded or propShowSeconds){
+        
             if(isSleeping and canBurnIn) {
                 drawAOD(dc, now);
             } else {
                 drawWatchface(dc, now, false); //move this outside of this if, if you want to update 
             }
-        }
+        
 
     }
 
