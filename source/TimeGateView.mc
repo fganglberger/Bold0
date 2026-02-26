@@ -298,15 +298,7 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.drawBitmap(0, 0, drawClockFace);
         }
         
-        var y1 = centerY  - marginY - smallDataHeight;
-        var y2 = centerY  + marginY + 3;
-        
-
-        // Draw Lines above clock
-        dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX, y1, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(centerX, y2, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
-
+  
         // Draw data fields in a ring around the clock
         var ringRadius = (centerY) * 0.65;
         var numFields = 5;
@@ -342,6 +334,28 @@ class TimeGateView extends WatchUi.WatchFace {
             }
         }
 
+        // // Draw black lines in the gaps between ring text
+        // dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+        // dc.setPenWidth(8);
+        // var gapLineInnerRadius = ringRadius * 0.8;
+        // var gapLineOuterRadius = ringRadius * 1.15;
+        // dc.setAntiAlias(true);
+        // for(var gap = 0; gap < numFields; gap++) {
+        //     var gapAngle = 360-(baseGapAngle + (gap * angleStep) + ringRotation);
+        //     var gapAngleRad = gapAngle * Math.PI / 180.0 - (Math.PI / 2.0);
+            
+        //     var gapCos = Math.cos(gapAngleRad);
+        //     var gapSin = Math.sin(gapAngleRad);
+            
+        //     var xx1 = centerX + Math.round(gapLineInnerRadius * gapCos);
+        //     var yy1 = centerY + Math.round(gapLineInnerRadius * gapSin);
+        //     var xx2 = centerX + Math.round(gapLineOuterRadius * gapCos);
+        //     var yy2 = centerY + Math.round(gapLineOuterRadius * gapSin);
+            
+        //     dc.drawLine(xx1, yy1, xx2, yy2);
+        // }
+        //  dc.setAntiAlias(false);
+
         if(!dataNotifications.equals("")) {
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
             dc.fillRectangle(centerX*2 - 27 - 3, centerY-((smallDataHeight+8)/2),27+3,(smallDataHeight+8)); 
@@ -351,6 +365,15 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.drawText(centerX*2 - 13 - 3, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
             
         }
+
+        var y1 = centerY  - marginY - smallDataHeight;
+        var y2 = centerY  + marginY + 3;
+        
+
+        // Draw Lines above clock
+        dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
+        dc.drawText(centerX, y1, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y2, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
         // Draw hour and minute bars (lines with different thickness)
         drawTimeIndicators(dc, now);

@@ -152,11 +152,11 @@
     <string id="LABEL_WDISTKM_3">WEEK DIST KM</string>
     <string id="LABEL_WDISTMI_2">WEEK MI</string>
     <string id="LABEL_WDISTMI_3">WEEKLY MILES</string>
-    <string id="LABEL_BATT_1">Batt</string>
-    <string id="LABEL_BATT_2">BATT %</string>
+    <string id="LABEL_BATT_1">Bat</string>
+    <string id="LABEL_BATT_2">BAT %</string>
     <string id="LABEL_BATT_3">BATTERY %</string>
-    <string id="LABEL_BATTD_1">BATT D</string>
-    <string id="LABEL_BATTD_2">BATT DAYS</string>
+    <string id="LABEL_BATTD_1">BAT D</string>
+    <string id="LABEL_BATTD_2">BAT DAYS</string>
     <string id="LABEL_BATTD_3">BATTERY DAYS</string>
     <string id="LABEL_NOTIFS_1">Notif</string>
     <string id="LABEL_NOTIFS_3">NOTIFICATIONS</string>
