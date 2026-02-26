@@ -335,7 +335,7 @@ class TimeGateView extends WatchUi.WatchFace {
             else if(i == 5) { value = dataLabelCircular6 + dataCircle6; }
             
             // Draw radial text
-            if(i >=2 and i <= 3) {
+            if(angle<0 && angle> (-180)){
                 dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + (smallDataHeight /2) - 2, Graphics.RADIAL_TEXT_DIRECTION_COUNTER_CLOCKWISE);
             } else {
                 dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius - 4, Graphics.RADIAL_TEXT_DIRECTION_CLOCKWISE);
@@ -1304,7 +1304,9 @@ class TimeGateView extends WatchUi.WatchFace {
             var highlow = getHighLow();
             val = join([temp, precip, highlow]);
         } else if(complicationType == 53) { // Temperature
-            val = getTemperature();
+            var temp = getTemperature();
+            var cond = getWeatherCondition(false);
+            val = cond+" "+temp;
         } else if(complicationType == 54) { // Precipitation chance
             val = getPrecip();
             if(width == 3 and val.equals("100%")) { val = "100"; }
@@ -1564,7 +1566,7 @@ class TimeGateView extends WatchUi.WatchFace {
             case 42: return formatLabel(Rez.Strings.LABEL_ALARM_1, Rez.Strings.LABEL_ALARM_2, Rez.Strings.LABEL_ALARM_2, labelSize);
             case 43: return formatLabel(Rez.Strings.LABEL_HIGH_1, Rez.Strings.LABEL_HIGH_2, Rez.Strings.LABEL_HIGH_2, labelSize);
             case 44: return formatLabel(Rez.Strings.LABEL_LOW_1, Rez.Strings.LABEL_LOW_2, Rez.Strings.LABEL_LOW_2, labelSize);
-            case 53: return formatLabel(Rez.Strings.LABEL_TEMP_1, Rez.Strings.LABEL_TEMP_1, Rez.Strings.LABEL_TEMP_3, labelSize);
+            case 53: return "";
             case 54: return formatLabel(Rez.Strings.LABEL_PRECIP_1, Rez.Strings.LABEL_PRECIP_1, Rez.Strings.LABEL_PRECIP_3, labelSize);
             case 55: return formatLabel(Rez.Strings.LABEL_NEXTSUN_1, Rez.Strings.LABEL_NEXTSUN_2, Rez.Strings.LABEL_NEXTSUN_3, labelSize);
             case 57: return formatLabel(Rez.Strings.LABEL_NEXTCAL_1, Rez.Strings.LABEL_NEXTCAL_2, Rez.Strings.LABEL_NEXTCAL_3, labelSize);
