@@ -298,7 +298,13 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.drawBitmap(0, 0, drawClockFace);
         }
         
-  
+        // dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        // dc.setPenWidth(2);
+        // dc.setAntiAlias(true);
+        // dc.drawCircle(centerX, centerY, (centerY) * 0.57);
+        // dc.drawCircle(centerX, centerY, (centerY) * 0.77);
+        // dc.setAntiAlias(false);
+
         // Draw data fields in a ring around the clock
         var ringRadius = (centerY) * 0.65;
         var numFields = 5;
