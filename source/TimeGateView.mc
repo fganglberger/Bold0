@@ -295,7 +295,7 @@ class TimeGateView extends WatchUi.WatchFace {
         
         // Draw clock face background
         if(drawClockFace != null and !aod) {
-            dc.drawBitmap(0, 0, drawClockFace);
+            dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => 0x9D9D9D, :blendMode => Graphics.BLEND_MODE_MULTIPLY });
         }
         
         // dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
@@ -309,7 +309,7 @@ class TimeGateView extends WatchUi.WatchFace {
         var ringRadius = (centerY) * 0.90;
         var numFields = 6;
         var angleStep = 360.0 / numFields;
-        var minuteAngle = (now.min / 60.0) * 360.0;
+        // var minuteAngle = (now.min / 60.0) * 360.0;
 
         // Keep the minute hand between two text boxes by rotating the ring
         // toward the nearest gap center (max shift is +/- half of angleStep).
