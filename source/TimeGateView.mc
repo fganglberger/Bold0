@@ -252,11 +252,11 @@ class TimeGateView extends WatchUi.WatchFace {
         }
 
         
-            if(isSleeping and canBurnIn) {
-                drawAOD(dc, now);
-            } else {
-                drawWatchface(dc, now, false); //move this outside of this if, if you want to update 
-            }
+        if(isSleeping and canBurnIn) {
+            drawAOD(dc, now);
+        } else {
+            drawWatchface(dc, now, false); //move this outside of this if, if you want to update 
+        }
         
 
     }
@@ -373,6 +373,16 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
             dc.drawText(centerX*2 - 13 - 1 - 28, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
             
+        }else{
+            if(!isSleeping){
+                dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
+                dc.fillRectangle(centerX*2 - 27 - 1 -28, centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
+                dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
+                dc.setPenWidth(2);
+                dc.drawRectangle(centerX*2 - 27 - 1 -28, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
+                dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
+                dc.drawText(centerX*2 - 13 - 2 - 28, centerY-(smallDataHeight/2), fontSmallData, now.sec.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+            }
         }
 
         var y1 = centerY  - marginY - smallDataHeight;
@@ -511,46 +521,46 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.fillPolygon(hourHandPoints);
 
         // Second hand
-        if(propShowSeconds) {
-            var secondRad = (now.sec * Math.PI / 30.0) - (Math.PI / 2.0);
-            var secondCos = Math.cos(secondRad);
-            var secondSin = Math.sin(secondRad);
+        // if(propShowSeconds) {
+        //     var secondRad = (now.sec * Math.PI / 30.0) - (Math.PI / 2.0);
+        //     var secondCos = Math.cos(secondRad);
+        //     var secondSin = Math.sin(secondRad);
 
-            var secondLength = centerX * 0.98;
-            var secondWidth = 2;
-            var secondHalfWidth = secondWidth / 2.0;
-            var secondOutlineHalf = (secondWidth + (outlineThickness * 2)) / 2.0;
+        //     var secondLength = centerX * 0.98;
+        //     var secondWidth = 2;
+        //     var secondHalfWidth = secondWidth / 2.0;
+        //     var secondOutlineHalf = (secondWidth + (outlineThickness * 2)) / 2.0;
 
-            var secondX2 = centerX + Math.round(secondLength * secondCos);
-            var secondY2 = centerY + Math.round(secondLength * secondSin);
+        //     var secondX2 = centerX + Math.round(secondLength * secondCos);
+        //     var secondY2 = centerY + Math.round(secondLength * secondSin);
 
-            var secondPerpX = -secondSin;
-            var secondPerpY = secondCos;
-            var secondOutlineDX = Math.round(secondOutlineHalf * secondPerpX);
-            var secondOutlineDY = Math.round(secondOutlineHalf * secondPerpY);
-            var secondAlongDX = Math.round(outlineThickness * secondCos);
-            var secondAlongDY = Math.round(outlineThickness * secondSin);
+        //     var secondPerpX = -secondSin;
+        //     var secondPerpY = secondCos;
+        //     var secondOutlineDX = Math.round(secondOutlineHalf * secondPerpX);
+        //     var secondOutlineDY = Math.round(secondOutlineHalf * secondPerpY);
+        //     var secondAlongDX = Math.round(outlineThickness * secondCos);
+        //     var secondAlongDY = Math.round(outlineThickness * secondSin);
 
-            var secondOutlinePoints = [
-                [centerX + secondOutlineDX - secondAlongDX, centerY + secondOutlineDY - secondAlongDY],
-                [secondX2 + secondOutlineDX + secondAlongDX, secondY2 + secondOutlineDY + secondAlongDY],
-                [secondX2 - secondOutlineDX + secondAlongDX, secondY2 - secondOutlineDY + secondAlongDY],
-                [centerX - secondOutlineDX - secondAlongDX, centerY - secondOutlineDY - secondAlongDY]
-            ];
-            dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
-            dc.fillPolygon(secondOutlinePoints);
+        //     var secondOutlinePoints = [
+        //         [centerX + secondOutlineDX - secondAlongDX, centerY + secondOutlineDY - secondAlongDY],
+        //         [secondX2 + secondOutlineDX + secondAlongDX, secondY2 + secondOutlineDY + secondAlongDY],
+        //         [secondX2 - secondOutlineDX + secondAlongDX, secondY2 - secondOutlineDY + secondAlongDY],
+        //         [centerX - secondOutlineDX - secondAlongDX, centerY - secondOutlineDY - secondAlongDY]
+        //     ];
+        //     dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+        //     dc.fillPolygon(secondOutlinePoints);
 
-            var secondHandDX = Math.round(secondHalfWidth * secondPerpX);
-            var secondHandDY = Math.round(secondHalfWidth * secondPerpY);
-            var secondHandPoints = [
-                [centerX + secondHandDX, centerY + secondHandDY],
-                [secondX2 + secondHandDX, secondY2 + secondHandDY],
-                [secondX2 - secondHandDX, secondY2 - secondHandDY],
-                [centerX - secondHandDX, centerY - secondHandDY]
-            ];
-            dc.setColor(themeColors[date], Graphics.COLOR_TRANSPARENT);
-            dc.fillPolygon(secondHandPoints);
-        }
+        //     var secondHandDX = Math.round(secondHalfWidth * secondPerpX);
+        //     var secondHandDY = Math.round(secondHalfWidth * secondPerpY);
+        //     var secondHandPoints = [
+        //         [centerX + secondHandDX, centerY + secondHandDY],
+        //         [secondX2 + secondHandDX, secondY2 + secondHandDY],
+        //         [secondX2 - secondHandDX, secondY2 - secondHandDY],
+        //         [centerX - secondHandDX, centerY - secondHandDY]
+        //     ];
+        //     dc.setColor(themeColors[date], Graphics.COLOR_TRANSPARENT);
+        //     dc.fillPolygon(secondHandPoints);
+        // }
 
         // Draw center circle
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
