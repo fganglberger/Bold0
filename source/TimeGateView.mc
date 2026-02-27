@@ -298,12 +298,12 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.drawBitmap(0, 0, drawClockFace);
         }
         
-        // dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        // dc.setPenWidth(2);
-        // dc.setAntiAlias(true);
-        // dc.drawCircle(centerX, centerY, (centerY) * 0.57);
-        // dc.drawCircle(centerX, centerY, (centerY) * 0.77);
-        // dc.setAntiAlias(false);
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(2);
+        dc.setAntiAlias(true);
+        dc.drawCircle(centerX, centerY, (centerY) * 0.58);
+        dc.drawCircle(centerX, centerY, (centerY) * 0.76);
+        dc.setAntiAlias(false);
 
         // Draw data fields in a ring around the clock
         var ringRadius = (centerY) * 0.65;
@@ -321,7 +321,7 @@ class TimeGateView extends WatchUi.WatchFace {
         for(var i = 0; i < numFields; i++) {
             var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.25)) + ringRotation; // Keep minute hand between labels
             
-            dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
            
             // Draw label and value (you can customize which data to show)
             var value = "";
@@ -364,11 +364,11 @@ class TimeGateView extends WatchUi.WatchFace {
 
         if(!dataNotifications.equals("")) {
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(centerX*2 - 27 - 3, centerY-((smallDataHeight+8)/2),27+3,(smallDataHeight+8)); 
+            dc.fillRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
             dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(centerX*2 - 27 - 3, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
+            dc.fillRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(centerX*2 - 13 - 3, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
+            dc.drawText(centerX*2 - 13 - 1, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
             
         }
 
