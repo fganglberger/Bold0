@@ -164,8 +164,8 @@ class TimeGateView extends WatchUi.WatchFace {
         screenWidth = Toybox.System.getDeviceSettings().screenWidth;
         centerX = Math.round(screenWidth / 2);
         centerY = Math.round(screenHeight / 2);
-        marginY = Math.round(screenHeight / 6);
-        marginX = Math.round(screenWidth / 6);
+        marginY = Math.round(screenHeight / 8);
+        marginX = Math.round(screenWidth / 8);
         
         loadResources();
 
@@ -189,8 +189,8 @@ class TimeGateView extends WatchUi.WatchFace {
      
       
         drawClockFace = Application.loadResource(Rez.Drawables.clockFace) as BitmapResource;
-        smallDataHeight = 22;
-        fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>22});
+        smallDataHeight = 25;
+        fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>25});
     }
 
     (:Round280)
@@ -306,7 +306,7 @@ class TimeGateView extends WatchUi.WatchFace {
         // dc.setAntiAlias(false);
 
         // Draw data fields in a ring around the clock
-        var ringRadius = (centerY) * 0.90;
+        var ringRadius = (centerY) * 0.87;
         var numFields = 6;
         var angleStep = 360.0 / numFields;
         // var minuteAngle = (now.min / 60.0) * 360.0;
@@ -367,11 +367,11 @@ class TimeGateView extends WatchUi.WatchFace {
        
         if(!dataNotifications.equals("")) {
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(centerX*2 - 27 - 1 -22, centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
+            dc.fillRectangle(centerX*2 - 27 - 1 -28, centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
             dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(centerX*2 - 27 - 1 -22, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
+            dc.fillRectangle(centerX*2 - 27 - 1 -28, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(centerX*2 - 13 - 1 -22, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
+            dc.drawText(centerX*2 - 13 - 1 - 28, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
             
         }
 
@@ -432,7 +432,7 @@ class TimeGateView extends WatchUi.WatchFace {
         var minuteSin = Math.sin(minuteRad);
 
         // Minute hand
-        var minuteLength = centerX * 0.80;
+        var minuteLength = centerX * 0.75;
         var minuteWidth = 9;
         var minuteHalfWidth = minuteWidth / 2.0;
         var minuteOutlineHalf = (minuteWidth + (outlineThickness * 2)) / 2.0;
@@ -475,7 +475,7 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
 
         // Hour hand
-        var hourLength = centerX * 0.50;
+        var hourLength = centerX * 0.45;
         var hourWidth = 6;
         var hourHalfWidth = hourWidth / 2.0;
         var hourOutlineHalf = (hourWidth + (outlineThickness * 2)) / 2.0;

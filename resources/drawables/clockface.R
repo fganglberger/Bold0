@@ -1,13 +1,13 @@
 # Function to generate a clock face circle
 generate_clock_face <- function(filename = "clock_face.png",
-        width = 260*4,
-        height = 260*4,
-        diameter_ratio = 1.0,
-        line_length = 10*4,
-        extended_line_length = 15*4,
-        line_thickness = 2*4,
-        long_line_thickness = 3*4,
-        n_lines = 60) {
+  width = 260*4,
+  height = 260*4,
+  diameter_ratio = 0.83,
+  line_length = 10*4,
+  extended_line_length = 15*4,
+  line_thickness = 2*4,
+  long_line_thickness = 3*4,
+  n_lines = 60) {
   
   # Load required packages
   library(showtext)
@@ -27,7 +27,7 @@ generate_clock_face <- function(filename = "clock_face.png",
   cy <- height / 2
   
   # Radius of the circle - full width/height
-  radius <- min(width, height) / 2
+  radius <- min(width, height) / 2 * diameter_ratio
   
   # Counter for clock numbers (start at 12)
   clock_number <- 12
@@ -40,15 +40,18 @@ generate_clock_face <- function(filename = "clock_face.png",
   # Check if it's line 5, 15, 25, 35, 45, 55 (every 5 minutes)
   is_extended <- (i %% 5 == 0)
   
+  # Check if it's a major hour position (0, 10, 20, 30, 40, 50 minutes = 12, 2, 4, 6, 8, 10)
+  is_major_hour <- (i %% 10 == 0)
+  
   # Determine thickness for this line
   current_thickness <- if (is_extended) long_line_thickness else line_thickness
   
-  if (is_extended) {
-    # Extended lines go outward from the circle
-    x_inner <- cx + (radius - extended_line_length) * cos(angle)
-    y_inner <- cy + (radius - extended_line_length) * sin(angle)
-    x_outer <- cx + radius * cos(angle)
-    y_outer <- cy + radius * sin(angle)
+  if (is_major_hour) {
+    # Major hour lines extend to image borders
+    x_inner <- cx + (radius - extended_line_length ) * cos(angle)
+    y_inner <- cy + (radius - extended_line_length ) * sin(angle)
+    x_outer <- cx + (min(width, height)) * cos(angle)
+    y_outer <- cy + (min(width, height)) * sin(angle)
       
     # Add clock number more inward with rotation
     text_radius <- radius - extended_line_length - 35
@@ -66,6 +69,15 @@ generate_clock_face <- function(filename = "clock_face.png",
        cex = 3.0, font = 2, col = "white", family = "robotocondensed",
        srt = text_rotation)
     
+    clock_number <- clock_number + 1
+    if (clock_number > 12) clock_number <- 1
+  } else if (is_extended) {
+    # Extended lines go outward from the circle
+    x_inner <- cx + (radius - extended_line_length) * cos(angle)
+    y_inner <- cy + (radius - extended_line_length) * sin(angle)
+    x_outer <- cx + radius * cos(angle)
+    y_outer <- cy + radius * sin(angle)
+      
     clock_number <- clock_number + 1
     if (clock_number > 12) clock_number <- 1
   } else {
