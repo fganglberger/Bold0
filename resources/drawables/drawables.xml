@@ -1,4 +1,4 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="launcher_icon.png" />
-    <bitmap id="clockFace" filename="clock_face_no_circle.png" dithering="floyd_steinberg" compress="true" />
+    <bitmap id="clockFace" filename="clock_face_inner_ring.png" dithering="floyd_steinberg" compress="true" />
 </drawables>

@@ -164,8 +164,8 @@ class TimeGateView extends WatchUi.WatchFace {
         screenWidth = Toybox.System.getDeviceSettings().screenWidth;
         centerX = Math.round(screenWidth / 2);
         centerY = Math.round(screenHeight / 2);
-        marginY = Math.round(screenHeight / 10);
-        marginX = Math.round(screenWidth / 10);
+        marginY = Math.round(screenHeight / 6);
+        marginX = Math.round(screenWidth / 6);
         
         loadResources();
 
@@ -298,25 +298,27 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.drawBitmap(0, 0, drawClockFace);
         }
         
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(2);
-        dc.setAntiAlias(true);
-        dc.drawCircle(centerX, centerY, (centerY) * 0.58);
-        dc.drawCircle(centerX, centerY, (centerY) * 0.76);
-        dc.setAntiAlias(false);
+        // dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        // dc.setPenWidth(2);
+        // dc.setAntiAlias(true);
+        // dc.drawCircle(centerX, centerY, (centerY) * 0.58);
+        // dc.drawCircle(centerX, centerY, (centerY) * 0.76);
+        // dc.setAntiAlias(false);
 
         // Draw data fields in a ring around the clock
-        var ringRadius = (centerY) * 0.65;
-        var numFields = 5;
+        var ringRadius = (centerY) * 0.90;
+        var numFields = 6;
         var angleStep = 360.0 / numFields;
         var minuteAngle = (now.min / 60.0) * 360.0;
 
         // Keep the minute hand between two text boxes by rotating the ring
         // toward the nearest gap center (max shift is +/- half of angleStep).
-        var baseGapAngle = angleStep*0.5; // First gap is centered at this angle (between field 0 and last field)
-        var nearestGapIndex = Math.round((minuteAngle - baseGapAngle) / angleStep);
-        var targetGapAngle = baseGapAngle + (nearestGapIndex * angleStep);
-        var ringRotation = targetGapAngle - minuteAngle;
+        // var baseGapAngle = angleStep*0.5; // First gap is centered at this angle (between field 0 and last field)
+        // var nearestGapIndex = Math.round((minuteAngle - baseGapAngle) / angleStep);
+        // var targetGapAngle = baseGapAngle + (nearestGapIndex * angleStep);
+        // var ringRotation = targetGapAngle - minuteAngle;
+
+        var ringRotation = +45;
 
         for(var i = 0; i < numFields; i++) {
             var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.25)) + ringRotation; // Keep minute hand between labels
@@ -338,6 +340,7 @@ class TimeGateView extends WatchUi.WatchFace {
             } else {
                 dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius - 4, Graphics.RADIAL_TEXT_DIRECTION_CLOCKWISE);
             }
+
         }
 
         // // Draw black lines in the gaps between ring text
@@ -361,14 +364,14 @@ class TimeGateView extends WatchUi.WatchFace {
         //     dc.drawLine(xx1, yy1, xx2, yy2);
         // }
         //  dc.setAntiAlias(false);
-
+       
         if(!dataNotifications.equals("")) {
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
+            dc.fillRectangle(centerX*2 - 27 - 1 -22, centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
             dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
+            dc.fillRectangle(centerX*2 - 27 - 1 -22, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(centerX*2 - 13 - 1, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
+            dc.drawText(centerX*2 - 13 - 1 -22, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
             
         }
 
@@ -429,8 +432,8 @@ class TimeGateView extends WatchUi.WatchFace {
         var minuteSin = Math.sin(minuteRad);
 
         // Minute hand
-        var minuteLength = centerX * 0.95;
-        var minuteWidth = 11;
+        var minuteLength = centerX * 0.80;
+        var minuteWidth = 9;
         var minuteHalfWidth = minuteWidth / 2.0;
         var minuteOutlineHalf = (minuteWidth + (outlineThickness * 2)) / 2.0;
 
@@ -473,7 +476,7 @@ class TimeGateView extends WatchUi.WatchFace {
 
         // Hour hand
         var hourLength = centerX * 0.50;
-        var hourWidth = 8;
+        var hourWidth = 6;
         var hourHalfWidth = hourWidth / 2.0;
         var hourOutlineHalf = (hourWidth + (outlineThickness * 2)) / 2.0;
 
@@ -994,7 +997,9 @@ class TimeGateView extends WatchUi.WatchFace {
         } else if(complicationType == 0) { // Active min / week
             if(ActivityMonitor.getInfo() has :activeMinutesWeek) {
                 if(ActivityMonitor.getInfo().activeMinutesWeek != null) {
-                    val = ActivityMonitor.getInfo().activeMinutesWeek.total.format(numberFormat);
+                    var act = ActivityMonitor.getInfo().activeMinutesDay.total.format(numberFormat);
+                    var week = ActivityMonitor.getInfo().activeMinutesWeek.total.format(numberFormat);
+                    val = act + " / " + week;
                 }
             }
         } else if(complicationType == 1) { // Active min / day
@@ -1603,6 +1608,7 @@ class TimeGateView extends WatchUi.WatchFace {
             case 62: return formatLabel(Rez.Strings.LABEL_ACC_1, Rez.Strings.LABEL_ACC_2, Rez.Strings.LABEL_ACC_3, labelSize);
             case 64: return formatLabel(Rez.Strings.LABEL_UV_1, Rez.Strings.LABEL_UV_2, Rez.Strings.LABEL_UV_2, labelSize);
             case 66: return formatLabel(Rez.Strings.LABEL_HUM_1, Rez.Strings.LABEL_HUM_2, Rez.Strings.LABEL_HUM_2, labelSize);
+            case 70: return "Now: ";
         }
         
         return "";
