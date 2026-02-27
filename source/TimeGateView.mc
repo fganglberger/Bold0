@@ -189,8 +189,8 @@ class TimeGateView extends WatchUi.WatchFace {
      
       
         drawClockFace = Application.loadResource(Rez.Drawables.clockFace) as BitmapResource;
-        smallDataHeight = 25;
-        fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>25});
+        smallDataHeight = 23;
+        fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>23});
     }
 
     (:Round280)
