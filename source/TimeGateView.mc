@@ -72,11 +72,7 @@ class TimeGateView extends WatchUi.WatchFace {
     public var nightModeOverride as Number = -1;
     hidden var themeColors as Array<Graphics.ColorType> = [];
     hidden var nightMode as Boolean?;
-    hidden var isLowMem as Boolean = false;
     hidden var weatherCondition as CurrentConditions or StoredWeather or Null;
-    hidden var lastHfTime as Number? = null;
-    hidden var lastCcHash as Number? = null;
-    hidden var hrHistoryData as Array<Number>?;
     hidden var canBurnIn as Boolean = false;
     hidden var isSleeping as Boolean = false;
     hidden var lastUpdate as Number? = null;
@@ -92,6 +88,12 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var propCircle4ValueShows as Number = 0;
     hidden var propCircle5ValueShows as Number = 0;
     hidden var propCircle6ValueShows as Number = 0;
+    hidden var propCircle1AltValueShows as Number = 0;
+    hidden var propCircle2AltValueShows as Number = 0;
+    hidden var propCircle3AltValueShows as Number = 0;
+    hidden var propCircle4AltValueShows as Number = 0;
+    hidden var propCircle5AltValueShows as Number = 0;
+    hidden var propCircle6AltValueShows as Number = 0;
     hidden var propAlwaysShowSeconds as Boolean = false;
     hidden var propUpdateFreq as Number = 5;
     hidden var propShowDataBg as Boolean = false;
@@ -671,6 +673,12 @@ class TimeGateView extends WatchUi.WatchFace {
         propCircle4ValueShows = getValueOrDefault("circle4ValueShows", 0) as Number;
         propCircle5ValueShows = getValueOrDefault("circle5ValueShows", 0) as Number;
         propCircle6ValueShows = getValueOrDefault("circle6ValueShows", 0) as Number;
+        propCircle1AltValueShows = getValueOrDefault("circle1AltValueShows", 0) as Number;
+        propCircle2AltValueShows = getValueOrDefault("circle2AltValueShows", 0) as Number;
+        propCircle3AltValueShows = getValueOrDefault("circle3AltValueShows", 0) as Number;
+        propCircle4AltValueShows = getValueOrDefault("circle4AltValueShows", 0) as Number;
+        propCircle5AltValueShows = getValueOrDefault("circle5AltValueShows", 0) as Number;
+        propCircle6AltValueShows = getValueOrDefault("circle6AltValueShows", 0) as Number;
         propUpdateFreq = getValueOrDefault("updateFreq", 5) as Number;
         propShowDataBg = getValueOrDefault("showDataBg", true) as Boolean;
         propAodStyle = getValueOrDefault("aodStyle", 1) as Number;
@@ -708,21 +716,41 @@ class TimeGateView extends WatchUi.WatchFace {
         dataTopLine = getValueByTypeWithUnit(propTopLineFieldShows, 10);
         dataBottomLine = getValueByTypeWithUnit(propBottomLineFieldShows, 10);
 
-        dataCircle1 = getValueByType(propCircle1ValueShows, 8);
-        dataCircle2 = getValueByType(propCircle2ValueShows, 8);
-        dataCircle3 = getValueByType(propCircle3ValueShows, 8);
-        dataCircle4 = getValueByType(propCircle4ValueShows, 8);
-        dataCircle5 = getValueByType(propCircle5ValueShows, 8);
-        dataCircle6 = getValueByType(propCircle6ValueShows, 8);
+        if(System.getDeviceSettings().phoneConnected) {
+            dataCircle1 = getValueByType(propCircle1ValueShows, 8);
+            dataCircle2 = getValueByType(propCircle2ValueShows, 8);
+            dataCircle3 = getValueByType(propCircle3ValueShows, 8);
+            dataCircle4 = getValueByType(propCircle4ValueShows, 8);
+            dataCircle5 = getValueByType(propCircle5ValueShows, 8);
+            dataCircle6 = getValueByType(propCircle6ValueShows, 8);
+
+            dataLabelCircular1 = getLabelByType(propCircle1ValueShows, 1);
+            dataLabelCircular2 = getLabelByType(propCircle2ValueShows, 1);
+            dataLabelCircular3 = getLabelByType(propCircle3ValueShows, 1);
+            dataLabelCircular4 = getLabelByType(propCircle4ValueShows, 1);
+            dataLabelCircular5 = getLabelByType(propCircle5ValueShows, 1);
+            dataLabelCircular6 = getLabelByType(propCircle6ValueShows, 1);
+        } else {
+            dataCircle1 = getValueByType(propCircle1AltValueShows, 8);
+            dataCircle2 = getValueByType(propCircle2AltValueShows, 8);
+            dataCircle3 = getValueByType(propCircle3AltValueShows, 8);
+            dataCircle4 = getValueByType(propCircle4AltValueShows, 8);
+            dataCircle5 = getValueByType(propCircle5AltValueShows, 8);
+            dataCircle6 = getValueByType(propCircle6AltValueShows, 8);
+
+            dataLabelCircular1 = getLabelByType(propCircle1AltValueShows, 1);
+            dataLabelCircular2 = getLabelByType(propCircle2AltValueShows, 1);
+            dataLabelCircular3 = getLabelByType(propCircle3AltValueShows, 1);
+            dataLabelCircular4 = getLabelByType(propCircle4AltValueShows, 1);
+            dataLabelCircular5 = getLabelByType(propCircle5AltValueShows, 1);
+            dataLabelCircular6 = getLabelByType(propCircle6AltValueShows, 1);
+        }
+
+       
 
         dataNotifications = getNotificationsData();
 
-        dataLabelCircular1 = getLabelByType(propCircle1ValueShows, 1);
-        dataLabelCircular2 = getLabelByType(propCircle2ValueShows, 1);
-        dataLabelCircular3 = getLabelByType(propCircle3ValueShows, 1);
-        dataLabelCircular4 = getLabelByType(propCircle4ValueShows, 1);
-        dataLabelCircular5 = getLabelByType(propCircle5ValueShows, 1);
-        dataLabelCircular6 = getLabelByType(propCircle6ValueShows, 1);
+        
 
         updateColorTheme();
     }
@@ -863,182 +891,14 @@ class TimeGateView extends WatchUi.WatchFace {
 
      (:WeatherCache)
     hidden function initializeWeatherData() as Void {
-        if (weatherCondition == null) {
-            try { weatherCondition = readWeatherData(); } catch(e) {}
-            if (weatherCondition == null) {
-                if(Toybox has :Weather && Weather has :getCurrentConditions) {
-                    weatherCondition = Weather.getCurrentConditions();
-                }
-            }
-        }
+         weatherCondition = Weather.getCurrentConditions();     
     }
 
 
  
     hidden function updateWeather() as Void {
         if(!(Toybox has :Weather) or !(Weather has :getCurrentConditions)) { return; }
-
-        if(Weather.getCurrentConditions() != null) {
-            weatherCondition = Weather.getCurrentConditions();
-            try { storeWeatherData(); } catch(e) {}
-        } else {
-            try { weatherCondition = readWeatherData(); } catch(e) {}
-        }
-    }
-
-
-    hidden function isWeatherSource(id as Number) as Boolean {
-        if (id == 20 || id == 39 || id == 40 || (id >= 43 && id <= 55) || (id >= 63 && id <= 70)) {
-            return true;
-        }
-        return false;
-    }
-
-    hidden function computeCcHash(cc) as Number {
-        if (cc == null) { return 0; }
-        
-        var h = 17;
-
-        var t = (cc.temperature != null) ? cc.temperature : -127;
-        h = 31 * h + t;
-        var c = (cc.condition != null) ? cc.condition : -1;
-        h = 31 * h + c;
-        var w = (cc.windSpeed != null) ? cc.windSpeed.toNumber() : -1;
-        h = 31 * h + w;
-        var b = (cc.windBearing != null) ? cc.windBearing : -1;
-        h = 31 * h + b;
-
-        return h;
-    }
-
-
-    hidden function storeWeatherData() as Void {
-        var now = Time.now().value();
-        var sysStats = System.getSystemStats();
-
-        if (!isLowMem && sysStats.freeMemory < 15000) {
-            isLowMem = true;
-            Application.Storage.setValue("hourly_forecast", []); 
-            lastHfTime = null; 
-        } else if (isLowMem && sysStats.freeMemory > 17000) {
-            isLowMem = false;
-        }
-
-        var cc = Weather.getCurrentConditions();
-        var newCcHash = computeCcHash(cc);
-
-        if (lastCcHash == null || lastCcHash != newCcHash) {
-            var cc_data = {};
-            if(cc != null) {
-                if(cc.observationLocationPosition != null) {
-                    cc_data["observationLocationPosition"] = cc.observationLocationPosition.toDegrees();
-                }
-                if(cc.condition != null) { cc_data["condition"] = cc.condition; }
-                if(cc.highTemperature != null) { cc_data["highTemperature"] = cc.highTemperature; }
-                if(cc.lowTemperature != null) { cc_data["lowTemperature"] = cc.lowTemperature; }
-                if(cc.precipitationChance != null) { cc_data["precipitationChance"] = cc.precipitationChance; }
-                if(cc.relativeHumidity != null) { cc_data["relativeHumidity"] = cc.relativeHumidity; }
-                if(cc.temperature != null) { cc_data["temperature"] = cc.temperature; }
-                if(cc.feelsLikeTemperature != null) { cc_data["feelsLikeTemperature"] = cc.feelsLikeTemperature; }
-                if(cc.windBearing != null) { cc_data["windBearing"] = cc.windBearing; }
-                if(cc.windSpeed != null) { cc_data["windSpeed"] = cc.windSpeed; }
-                if (cc has :uvIndex && cc.uvIndex != null) {
-                    cc_data["uvIndex"] = cc.uvIndex;
-                } else {
-                    cc_data["uvIndex"] = -1;
-                }
-            }
-
-            cc_data["timestamp"] = now;
-            Application.Storage.setValue("current_conditions", cc_data);
-            
-            lastCcHash = newCcHash;
-        }
-
-        if (isLowMem) { return; }
-
-        var hf = Weather.getHourlyForecast();
-        
-        if (hf == null || hf.size() == 0) { return; }
-
-        var firstForecastTime = hf[0].forecastTime.value();
-
-        if (lastHfTime == null || lastHfTime != firstForecastTime) {
-            var hf_data = [];
-            
-            for(var i=0; i<hf.size(); i++) {
-                var tmp = {
-                    "forecastTime" => hf[i].forecastTime.value(),
-                    "condition" => hf[i].condition,
-                    "precipitationChance" => hf[i].precipitationChance,
-                    "temperature" => hf[i].temperature,
-                    "windBearing" => hf[i].windBearing,
-                    "windSpeed" => hf[i].windSpeed
-                };
-                if(hf[i] has :uvIndex && hf[i].uvIndex != null) { 
-                    tmp["uvIndex"] = hf[i].uvIndex; 
-                } else {
-                    tmp["uvIndex"] = -1;
-                }
-                
-                hf_data.add(tmp);
-            }
-
-            Application.Storage.setValue("hourly_forecast", hf_data);
-            lastHfTime = firstForecastTime;
-        }
-    }
-
-    hidden function readWeatherData() as StoredWeather {
-        var ret = new StoredWeather();
-        var now = Time.now().value();
-        var cc_data = Application.Storage.getValue("current_conditions") as Dictionary<String, Application.PropertyValueType>?;
-        if(cc_data == null) { return ret; }
-        
-        var data_age_s = now - (cc_data.get("timestamp") as Number);
-        var pos = cc_data.get("observationLocationPosition") as Array?;
-        if (pos != null) {
-            ret.observationLocationPosition = new Position.Location({:latitude => pos[0], :longitude => pos[1], :format => :degrees});
-        }
-        if(data_age_s > 0 and data_age_s < 3600) {
-            ret.condition = cc_data.get("condition") as Number;
-            ret.highTemperature = cc_data.get("highTemperature") as Number;
-            ret.lowTemperature = cc_data.get("lowTemperature") as Number;
-            ret.precipitationChance = cc_data.get("precipitationChance") as Number;
-            ret.relativeHumidity = cc_data.get("relativeHumidity") as Number;
-            ret.temperature = cc_data.get("temperature") as Number;
-            ret.feelsLikeTemperature = cc_data.get("feelsLikeTemperature") as Float;
-            ret.windBearing = cc_data.get("windBearing") as Number;
-            ret.windSpeed = cc_data.get("windSpeed") as Float;
-            ret.uvIndex = cc_data.get("uvIndex") as Float;
-        } else {
-            var hf_data = Application.Storage.getValue("hourly_forecast") as Array?;
-            if(hf_data == null) { return ret; }
-            for(var i=0; i<hf_data.size(); i++) {
-                var forecast_age = now - (hf_data[i].get("forecastTime") as Number);
-                if(forecast_age > 0 and forecast_age < 3600) {
-                    ret.condition = hf_data[i].get("condition") as Number;
-                    ret.temperature = hf_data[i].get("temperature") as Number;
-                    ret.precipitationChance = hf_data[i].get("precipitationChance") as Number;
-                    ret.windBearing = hf_data[i].get("windBearing") as Number;
-                    ret.windSpeed = hf_data[i].get("windSpeed") as Float;
-                    ret.uvIndex = cc_data.get("uvIndex") as Float;
-                    ret.highTemperature = cc_data.get("highTemperature") as Number;
-                    ret.lowTemperature = cc_data.get("lowTemperature") as Number;
-                }
-            }
-        }
-        
-        return ret;
-    }
-
-    hidden function getBatteryBars() as String {
-        var bat = Math.round(System.getSystemStats().battery / 100.0 * 6);
-        var value = "";
-        for(var i = 0; i < bat; i++) {
-            value += "|";
-        }
-        return value;
+        weatherCondition = Weather.getCurrentConditions();
     }
 
     hidden function getValueByTypeWithUnit(complicationType as Number, width as Number) as String {
@@ -1082,7 +942,10 @@ class TimeGateView extends WatchUi.WatchFace {
                 if(ActivityMonitor.getInfo().activeMinutesWeek != null) {
                     var act = ActivityMonitor.getInfo().activeMinutesDay.total.format(numberFormat);
                     var week = ActivityMonitor.getInfo().activeMinutesWeek.total.format(numberFormat);
-                    val = act + " / " + week;
+                    val = "Int: " + act + "/" + week;
+                    if(val.length() > 10) {
+                        val = act + "/" + week;
+                    }
                 }
             }
         } else if(complicationType == 1) { // Active min / day
@@ -1243,7 +1106,7 @@ class TimeGateView extends WatchUi.WatchFace {
                     if (complication != null && complication.value != null) {
                         val = complication.value.toLower();
                         if(val.length() > width) {
-                            val = val.substring(0, width);
+                            val = val.substring(0, width)+".";
                         }
                         
                         val = val.substring(0, 1).toUpper() + val.substring(1, val.length());
@@ -1648,7 +1511,7 @@ class TimeGateView extends WatchUi.WatchFace {
         }
         
         switch(complicationType) {
-            case 0: return formatLabel(Rez.Strings.LABEL_WMIN_1, Rez.Strings.LABEL_WMIN_2, Rez.Strings.LABEL_WMIN_3, labelSize);
+            case 0: return "";
             case 1: return formatLabel(Rez.Strings.LABEL_DMIN_1, Rez.Strings.LABEL_DMIN_2, Rez.Strings.LABEL_DMIN_3, labelSize);
             case 2: return formatLabel(Rez.Strings.LABEL_DKM_1, Rez.Strings.LABEL_DKM_2, Rez.Strings.LABEL_DKM_2, labelSize);
             case 3: return formatLabel(Rez.Strings.LABEL_DMI_1, Rez.Strings.LABEL_DMI_2, Rez.Strings.LABEL_DMI_3, labelSize);
@@ -1672,7 +1535,7 @@ class TimeGateView extends WatchUi.WatchFace {
             case 22: return formatLabel(Rez.Strings.LABEL_WMI_1, Rez.Strings.LABEL_WRUNMI_2, Rez.Strings.LABEL_WRUNMI_3, labelSize);
             case 23: return formatLabel(Rez.Strings.LABEL_WKM_1, Rez.Strings.LABEL_WBIKEKM_2, Rez.Strings.LABEL_WBIKEKM_3, labelSize);
             case 24: return formatLabel(Rez.Strings.LABEL_WMI_1, Rez.Strings.LABEL_WBIKEMI_2, Rez.Strings.LABEL_WBIKEMI_3, labelSize);
-            case 25: return Application.loadResource(Rez.Strings.LABEL_TRAINING);
+            case 25: return "";
             case 26: return Application.loadResource(Rez.Strings.LABEL_PRESSURE);
             case 27: return formatLabel(Rez.Strings.LABEL_KG_1, Rez.Strings.LABEL_WEIGHT_2, Rez.Strings.LABEL_KG_3, labelSize);
             case 28: return formatLabel(Rez.Strings.LABEL_LBS_1, Rez.Strings.LABEL_WEIGHT_2, Rez.Strings.LABEL_LBS_3, labelSize);
