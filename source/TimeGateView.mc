@@ -1426,7 +1426,7 @@ class TimeGateView extends WatchUi.WatchFace {
             if(temp.length() > 0 && cond.length() > 0) {
                 val = cond+" "+temp;
             }else{
-                val = "-- --";
+                val = "Unkn --";
             }
             
         } else if(complicationType == 54) { // Precipitation chance
