@@ -34,14 +34,14 @@
     <property id="circle1ValueShows" type="number">-1</property>
     <property id="circle2ValueShows" type="number">71</property>
     <property id="circle3ValueShows" type="number">53</property>
-    <property id="circle4ValueShows" type="number">70</property>
-    <property id="circle5ValueShows" type="number">57</property>
+    <property id="circle4ValueShows" type="number">57</property>
+    <property id="circle5ValueShows" type="number">70</property>
     <property id="circle6ValueShows" type="number">34</property>
     <property id="circle1AltValueShows" type="number">-1</property>
     <property id="circle2AltValueShows" type="number">25</property>
     <property id="circle3AltValueShows" type="number">0</property>
-    <property id="circle4AltValueShows" type="number">70</property>
-    <property id="circle5AltValueShows" type="number">6</property>
+    <property id="circle4AltValueShows" type="number">6</property>
+    <property id="circle5AltValueShows" type="number">70</property>
     <property id="circle6AltValueShows" type="number">34</property>
     <property id="bottomFieldShows" type="number">25</property>
     <property id="aodStyle" type="number">1</property>

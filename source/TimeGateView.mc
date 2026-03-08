@@ -986,7 +986,7 @@ class TimeGateView extends WatchUi.WatchFace {
                     var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_RECOVERY_TIME));
                     if (complication != null && complication.value != null) {
                         var recovery_h = complication.value / 60.0;
-                        if(recovery_h < 9.9 and recovery_h != 0) { val = recovery_h.format("%.1f"); } else { val = Math.round(recovery_h).format(numberFormat); }
+                        val = Math.round(recovery_h).format(numberFormat) +"h";
                     }
                 } catch(e) {}
             } else {
