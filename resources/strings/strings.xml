@@ -178,7 +178,7 @@
     <string id="LABEL_TEMP_3">TEMPERATURE</string>
     <string id="LABEL_PRECIP_1">PRECIP</string>
     <string id="LABEL_PRECIP_3">PRECIPITATION</string>
-    <string id="LABEL_NEXTSUN_1">SUN</string>
+    <string id="LABEL_NEXTSUN_1">Sun</string>
     <string id="LABEL_NEXTSUN_2">NEXT SUN</string>
     <string id="LABEL_NEXTSUN_3">NEXT SUN EVNT</string>
     <string id="LABEL_NEXTCAL_1">Cal</string>

@@ -39,6 +39,7 @@ class TimeGateView extends WatchUi.WatchFace {
     (:initialized) hidden var fontClock as FontType;
     (:initialized) hidden var fontClockOutline as FontType;
     (:initialized) hidden var fontSmallData as FontType;
+    (:initialized) hidden var fontBigData as FontType;
     hidden var weekNames as Array<String>?;
     hidden var monthNames as Array<String>?;
 
@@ -196,6 +197,7 @@ class TimeGateView extends WatchUi.WatchFace {
         drawClockFace = Application.loadResource(Rez.Drawables.clockFace) as BitmapResource;
         smallDataHeight = 23;
         fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>23});
+        fontBigData = Graphics.getVectorFont({:face=>["BionicBold"], :size=>90});
     }
 
     (:Round280)
@@ -399,6 +401,13 @@ class TimeGateView extends WatchUi.WatchFace {
         // dc.drawText(centerX, y1, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
         // dc.drawText(centerX, y2, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
+        var y3 = y1 - 31;
+        var y4 = y2 - 35;
+
+        dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
+        dc.drawText(centerX, y3, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y4, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+
         // Draw hour and minute bars (lines with different thickness)
         drawTimeIndicators(dc, now);
         
@@ -447,8 +456,9 @@ class TimeGateView extends WatchUi.WatchFace {
         var minuteSin = Math.sin(minuteRad);
 
         // Minute hand
-        var minuteLength = centerX * 0.75;
-        var minuteWidth = 9;
+        var minuteLength = centerX * 0.80;
+
+        var minuteWidth = 11;
         var minuteHalfWidth = minuteWidth / 2.0;
         var minuteOutlineHalf = (minuteWidth + (outlineThickness * 2)) / 2.0;
 
@@ -491,7 +501,7 @@ class TimeGateView extends WatchUi.WatchFace {
 
         // Hour hand
         var hourLength = centerX * 0.45;
-        var hourWidth = 6;
+        var hourWidth = 8;
         var hourHalfWidth = hourWidth / 2.0;
         var hourOutlineHalf = (hourWidth + (outlineThickness * 2)) / 2.0;
 
