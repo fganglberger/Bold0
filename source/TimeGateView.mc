@@ -302,7 +302,7 @@ class TimeGateView extends WatchUi.WatchFace {
         
         // Draw clock face background
         if(drawClockFace != null and !aod) {
-            dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => 0x9D9D9D, :blendMode => Graphics.BLEND_MODE_MULTIPLY });
+            dc.drawBitmap(0, 0, drawClockFace);
         }
         
         // dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
@@ -392,8 +392,8 @@ class TimeGateView extends WatchUi.WatchFace {
             }
         }
 
-        var y1 = centerY  - marginY - smallDataHeight;
-        var y2 = centerY  + marginY + 3;
+        // var y1 = centerY  - marginY - smallDataHeight;
+        // var y2 = centerY  + marginY + 3;
         
 
         // // Draw Lines above clock
@@ -456,7 +456,7 @@ class TimeGateView extends WatchUi.WatchFace {
         var minuteSin = Math.sin(minuteRad);
 
         // Minute hand
-        var minuteLength = centerX * 0.97;
+        var minuteLength = centerX * 0.93;
 
         var minuteWidth = 11;
         var minuteHalfWidth = minuteWidth / 2.0;
@@ -500,7 +500,7 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
 
         // Hour hand
-        var hourLength = centerX * 0.55;
+        var hourLength = centerX * 0.65;
         var hourWidth = 7;
         var hourHalfWidth = hourWidth / 2.0;
         var hourOutlineHalf = (hourWidth + (outlineThickness * 2)) / 2.0;
