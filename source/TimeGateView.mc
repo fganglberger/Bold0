@@ -456,7 +456,7 @@ class TimeGateView extends WatchUi.WatchFace {
         var minuteSin = Math.sin(minuteRad);
 
         // Minute hand
-        var minuteLength = centerX * 0.96;
+        var minuteLength = centerX * 0.89;
 
         var minuteWidth = 11;
         var minuteHalfWidth = minuteWidth / 2.0;
@@ -500,7 +500,7 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
 
         // Hour hand
-        var hourLength = centerX * 0.65;
+        var hourLength = centerX * 0.50;
         var hourWidth = 7;
         var hourHalfWidth = hourWidth / 2.0;
         var hourOutlineHalf = (hourWidth + (outlineThickness * 2)) / 2.0;
