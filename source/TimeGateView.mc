@@ -313,9 +313,9 @@ class TimeGateView extends WatchUi.WatchFace {
         // dc.setAntiAlias(false);
 
         // Draw data fields in a ring around the clock
-        var ringRadius = (centerY) * 0.87;
-        var numFields = 6;
-        var angleStep = 360.0 / numFields;
+        // var ringRadius = (centerY) * 0.87;
+        // var numFields = 6;
+        // var angleStep = 360.0 / numFields;
         // var minuteAngle = (now.min / 60.0) * 360.0;
 
         // Keep the minute hand between two text boxes by rotating the ring
@@ -325,30 +325,41 @@ class TimeGateView extends WatchUi.WatchFace {
         // var targetGapAngle = baseGapAngle + (nearestGapIndex * angleStep);
         // var ringRotation = targetGapAngle - minuteAngle;
 
-        var ringRotation = +45;
+        // var ringRotation = +45;
 
-        for(var i = 0; i < numFields; i++) {
-            var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.25)) + ringRotation; // Keep minute hand between labels
+        // for(var i = 0; i < numFields; i++) {
+        //     var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.25)) + ringRotation; // Keep minute hand between labels
             
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        //     dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
            
-            // Draw label and value (you can customize which data to show)
-            var value = "";
-            if(i == 0) { value = dataLabelCircular1 + dataCircle1; }
-            else if(i == 1) { value = dataLabelCircular2 +  dataCircle2; }
-            else if(i == 2) { value = dataLabelCircular3 + dataCircle3; }
-            else if(i == 3) { value = dataLabelCircular4 + dataCircle4; }
-            else if(i == 4) { value = dataLabelCircular5 + dataCircle5; }
-            else if(i == 5) { value = dataLabelCircular6 + dataCircle6; }
+        //     // Draw label and value (you can customize which data to show)
+        //     var value = "";
+        //     if(i == 0) { value = dataLabelCircular1 + dataCircle1; }
+        //     else if(i == 1) { value = dataLabelCircular2 +  dataCircle2; }
+        //     else if(i == 2) { value = dataLabelCircular3 + dataCircle3; }
+        //     else if(i == 3) { value = dataLabelCircular4 + dataCircle4; }
+        //     else if(i == 4) { value = dataLabelCircular5 + dataCircle5; }
+        //     else if(i == 5) { value = dataLabelCircular6 + dataCircle6; }
             
-            // Draw radial text
-            if(angle<0 && angle> (-180)){
-                dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + (smallDataHeight /2) - 2, Graphics.RADIAL_TEXT_DIRECTION_COUNTER_CLOCKWISE);
-            } else {
-                dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius - 4, Graphics.RADIAL_TEXT_DIRECTION_CLOCKWISE);
-            }
+        //     // Draw radial text
+        //     if(angle<0 && angle> (-180)){
+        //         dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + (smallDataHeight /2) - 2, Graphics.RADIAL_TEXT_DIRECTION_COUNTER_CLOCKWISE);
+        //     } else {
+        //         dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius - 4, Graphics.RADIAL_TEXT_DIRECTION_CLOCKWISE);
+        //     }
 
-        }
+        // }
+
+        var y1 = centerY  - marginY - smallDataHeight;
+        var y2 = centerY  + marginY + 3;
+        
+
+        // Draw Lines above clock
+        dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
+        dc.drawText(centerX, y1 - smallDataHeight - 3, fontSmallData, dataCircle3, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y1 , fontSmallData, dataCircle2, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y2, fontSmallData, dataCircle1 + " | "+ dataCircle6, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y2 + smallDataHeight + 3, fontSmallData, dataCircle4, Graphics.TEXT_JUSTIFY_CENTER);
 
         // // Draw black lines in the gaps between ring text
         // dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
@@ -371,7 +382,7 @@ class TimeGateView extends WatchUi.WatchFace {
         //     dc.drawLine(xx1, yy1, xx2, yy2);
         // }
         //  dc.setAntiAlias(false);
-       
+
         if(!dataNotifications.equals("")) {
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
             dc.fillRectangle(centerX*2 - 27 - 1 -28 -7, centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
@@ -456,7 +467,7 @@ class TimeGateView extends WatchUi.WatchFace {
         var minuteSin = Math.sin(minuteRad);
 
         // Minute hand
-        var minuteLength = centerX * 0.89;
+        var minuteLength = centerX * 0.95;
 
         var minuteWidth = 11;
         var minuteHalfWidth = minuteWidth / 2.0;
@@ -500,7 +511,7 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
 
         // Hour hand
-        var hourLength = centerX * 0.50;
+        var hourLength = centerX * 0.60;
         var hourWidth = 7;
         var hourHalfWidth = hourWidth / 2.0;
         var hourOutlineHalf = (hourWidth + (outlineThickness * 2)) / 2.0;
@@ -996,7 +1007,7 @@ class TimeGateView extends WatchUi.WatchFace {
                     var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_RECOVERY_TIME));
                     if (complication != null && complication.value != null) {
                         var recovery_h = complication.value / 60.0;
-                        val = Math.round(recovery_h).format(numberFormat) +"h";
+                        val = "Rcv: " + Math.round(recovery_h).format(numberFormat) + "h";
                     }
                 } catch(e) {}
             } else {
@@ -1115,9 +1126,9 @@ class TimeGateView extends WatchUi.WatchFace {
                     var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_TRAINING_STATUS));
                     if (complication != null && complication.value != null) {
                         val = complication.value.toLower();
-                        if(val.length() > width) {
-                            val = val.substring(0, width)+".";
-                        }
+                        // if(val.length() > width) {
+                        //     val = val.substring(0, width)+".";
+                        // }
                         
                         val = val.substring(0, 1).toUpper() + val.substring(1, val.length());
                     }
@@ -1428,7 +1439,7 @@ class TimeGateView extends WatchUi.WatchFace {
         } else if(complicationType == 71) { // High/Low
             val = getHighLow();
              if(val.length() == 0) {
-                val = "H--" + "/L--";
+                val = "H --" + "/L --";
             }
         }
         return val;
@@ -1929,7 +1940,7 @@ class TimeGateView extends WatchUi.WatchFace {
                 var tempUnit = getTempUnit();
                 var high = formatTemperature(weatherCondition.highTemperature, tempUnit);
                 var low = formatTemperature(weatherCondition.lowTemperature, tempUnit);
-                ret = "H" + high.format("%d") + "°" + "/L" + low.format("%d") + "°";
+                ret = "H " + high.format("%d") + "°" + "/L " + low.format("%d") + "°";
             }
         }
         return ret;
