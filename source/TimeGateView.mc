@@ -305,27 +305,26 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.drawBitmap(0, 0, drawClockFace);
         }
 
-        // dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        // dc.setPenWidth(2);
-        // dc.setAntiAlias(true);
-        // dc.drawCircle(centerX, centerY, (centerY) * 0.58);
-        // dc.drawCircle(centerX, centerY, (centerY) * 0.76);
-        // dc.setAntiAlias(false);
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(2);
+        dc.setAntiAlias(true);
+        dc.drawCircle(centerX, centerY, (centerY) * 0.58);
+        dc.drawCircle(centerX, centerY, (centerY) * 0.76);
+        dc.setAntiAlias(false);
 
         // Draw data fields in a ring around the clock
-        var ringRadius = (centerY) * 0.87;
-        var numFields = 6;
+        var ringRadius = (centerY) * 0.65;
+        var numFields = 5;
         var angleStep = 360.0 / numFields;
-        // var minuteAngle = (now.min / 60.0) * 360.0;
+        var minuteAngle = (now.min / 60.0) * 360.0;
 
         // Keep the minute hand between two text boxes by rotating the ring
         // toward the nearest gap center (max shift is +/- half of angleStep).
-        // var baseGapAngle = angleStep*0.5; // First gap is centered at this angle (between field 0 and last field)
-        // var nearestGapIndex = Math.round((minuteAngle - baseGapAngle) / angleStep);
-        // var targetGapAngle = baseGapAngle + (nearestGapIndex * angleStep);
-        // var ringRotation = targetGapAngle - minuteAngle;
+        var baseGapAngle = angleStep*0.5; // First gap is centered at this angle (between field 0 and last field)
+        var nearestGapIndex = Math.round((minuteAngle - baseGapAngle) / angleStep);
+        var targetGapAngle = baseGapAngle + (nearestGapIndex * angleStep);
+        var ringRotation = targetGapAngle - minuteAngle;
 
-        var ringRotation = +45;
 
         for(var i = 0; i < numFields; i++) {
             var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.25)) + ringRotation; // Keep minute hand between labels
