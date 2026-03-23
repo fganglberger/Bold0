@@ -197,7 +197,7 @@ class TimeGateView extends WatchUi.WatchFace {
         drawClockFace = Application.loadResource(Rez.Drawables.clockFace) as BitmapResource;
         smallDataHeight = 23;
         fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>23});
-        //fontBigData = Graphics.getVectorFont({:face=>["BionicBold"], :size=>90});
+        fontBigData = Graphics.getVectorFont({:face=>["BionicBold"], :size=>70});
     }
 
     (:Round280)
@@ -370,24 +370,24 @@ class TimeGateView extends WatchUi.WatchFace {
         //     dc.drawLine(xx1, yy1, xx2, yy2);
         // }
         //  dc.setAntiAlias(false);
-       
+  
         if(!dataNotifications.equals("")) {
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(centerX*2 - 27 - 1 -28 -7, centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
+            dc.fillRectangle(centerX*2 - 27 - 1 , centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
             dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(centerX*2 - 27 - 1 -28 -7, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
+            dc.fillRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
             dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(centerX*2 - 13 - 1 - 28 -7, centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
+            dc.drawText(centerX*2 - 13 - 1 , centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
             
         }else{
             if(!isSleeping && propShowSeconds){
                 dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
-                dc.fillRectangle(centerX*2 - 27 - 1 -28 -7, centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
+                dc.fillRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
                 dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
                 dc.setPenWidth(2);
-                dc.drawRectangle(centerX*2 - 27 - 1 -28 -7, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
+                dc.drawRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
                 dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(centerX*2 - 13 - 2 - 28 -7, centerY-(smallDataHeight/2), fontSmallData, now.sec.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+                dc.drawText(centerX*2 - 13 - 2 , centerY-(smallDataHeight/2), fontSmallData, now.sec.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
             }
         }
 
@@ -400,12 +400,12 @@ class TimeGateView extends WatchUi.WatchFace {
         // dc.drawText(centerX, y1, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
         // dc.drawText(centerX, y2, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
-        // var y3 = y1 - 31;
-        // var y4 = y2 - 35;
+        var y3 = centerY  - marginY - 30 - 5;
+        var y4 = centerY  + marginY - 35 + 5;
 
-        // dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-        // dc.drawText(centerX, y3, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
-        // dc.drawText(centerX, y4, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
+        dc.drawText(centerX, y3, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y4, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
 
         // Draw hour and minute bars (lines with different thickness)
         drawTimeIndicators(dc, now);
@@ -455,7 +455,7 @@ class TimeGateView extends WatchUi.WatchFace {
         var minuteSin = Math.sin(minuteRad);
 
         // Minute hand
-        var minuteLength = centerX * 0.89;
+        var minuteLength = centerX * 0.91;
 
         var minuteWidth = 11;
         var minuteHalfWidth = minuteWidth / 2.0;
