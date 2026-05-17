@@ -422,6 +422,7 @@
     <string id="settings_dd_mm_yyyy" scope="settings">DD.MM.YYYY</string>
     <string id="settings_weekday_yyyy_mm_dd" scope="settings">WEEKDAY, YYYY-MM-DD</string>
     <string id="settings_weekday_mm_dd_yyyy" scope="settings">WEEKDAY, MM/DD/YYYY</string>
+    <string id="settings_weekday_mm" scope="settings">WEEKDAY MM</string>
     <string id="settings_weekday_dd_mm_yyyy" scope="settings">WEEKDAY, DD.MM.YYYY</string>
     <string id="settings_weekday_dd_month_week" scope="settings">WEEKDAY, DD MONTH (Week)</string>
     <string id="settings_weekday_dd_month_yyyy_week" scope="settings">WEEKDAY, DD MONTH YYYY (Week)</string>

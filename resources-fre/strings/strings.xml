@@ -421,6 +421,7 @@
     <string id="settings_dd_mm_yyyy" scope="settings">JJ.MM.AAAA</string>
     <string id="settings_weekday_yyyy_mm_dd" scope="settings">JOUR, AAAA-MM-JJ</string>
     <string id="settings_weekday_mm_dd_yyyy" scope="settings">JOUR, MM/JJ/AAAA</string>
+    <string id="settings_weekday_mm" scope="settings">WEEKDAY MM</string>
     <string id="settings_weekday_dd_mm_yyyy" scope="settings">JOUR, JJ.MM.AAAA</string>
     <string id="settings_weekday_dd_month_week" scope="settings">JOUR, JJ MOIS (Semaine)</string>
     <string id="settings_weekday_dd_month_yyyy_week" scope="settings">JOUR, JJ MOIS AAAA (Semaine)</string>

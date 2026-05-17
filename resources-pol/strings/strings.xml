@@ -421,6 +421,7 @@
     <string id="settings_dd_mm_yyyy" scope="settings">DD.MM.RRRR</string>
     <string id="settings_weekday_yyyy_mm_dd" scope="settings">DZIEŃ TYGODNIA, RRRR-MM-DD</string>
     <string id="settings_weekday_mm_dd_yyyy" scope="settings">DZIEŃ TYGODNIA, MM/DD/RRRR</string>
+    <string id="settings_weekday_mm" scope="settings">WEEKDAY MM</string>
     <string id="settings_weekday_dd_mm_yyyy" scope="settings">DZIEŃ TYGODNIA, DD.MM.RRRR</string>
     <string id="settings_weekday_dd_month_week" scope="settings">DZIEŃ TYGODNIA, DD MIESIĄC (Tydzień)</string>
     <string id="settings_weekday_dd_month_yyyy_week" scope="settings">DZIEŃ TYGODNIA, DD MIESIĄC RRRR (Tydzień)</string>

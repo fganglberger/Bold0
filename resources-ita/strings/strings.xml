@@ -422,6 +422,7 @@
     <string id="settings_dd_mm_yyyy" scope="settings">GG.MM.AAAA</string>
     <string id="settings_weekday_yyyy_mm_dd" scope="settings">GIORNO, AAAA-MM-GG</string>
     <string id="settings_weekday_mm_dd_yyyy" scope="settings">GIORNO, MM/GG/AAAA</string>
+    <string id="settings_weekday_mm" scope="settings">WEEKDAY MM</string>
     <string id="settings_weekday_dd_mm_yyyy" scope="settings">GIORNO, GG.MM.AAAA</string>
     <string id="settings_weekday_dd_month_week" scope="settings">GIORNO, GG MESE (Settimana)</string>
     <string id="settings_weekday_dd_month_yyyy_week" scope="settings">GIORNO, GG MESE AAAA (Settimana)</string>

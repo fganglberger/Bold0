@@ -64,10 +64,10 @@
     <property id="icon1" type="number">1</property>
     <property id="icon2" type="number">2</property>
     <property id="weekOffset" type="number">0</property>
-    <property id="pressToOpenTop" type="number">0</property>
-    <property id="pressToOpenMiddle" type="number">0</property>
-    <property id="pressToOpenBottomLeft" type="number">0</property>
-    <property id="pressToOpenBottomCenter" type="number">0</property>
-    <property id="pressToOpenBottomRight" type="number">0</property>
+    <property id="pressToOpenTop" type="number">-1</property>
+    <property id="pressToOpenMiddle" type="number">-1</property>
+    <property id="pressToOpenBottomLeft" type="number">-1</property>
+    <property id="pressToOpenBottomCenter" type="number">-1</property>
+    <property id="pressToOpenBottomRight" type="number">-1</property>
     <property id="labelVisibility" type="number">0</property>
 </properties>

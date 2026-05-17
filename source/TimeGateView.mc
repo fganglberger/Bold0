@@ -72,7 +72,6 @@ class TimeGateView extends WatchUi.WatchFace {
     public var infoMessage as String = "";
     public var nightModeOverride as Number = -1;
     hidden var themeColors as Array<Graphics.ColorType> = [];
-    hidden var nightMode as Boolean?;
     hidden var weatherCondition as CurrentConditions or StoredWeather or Null;
     hidden var canBurnIn as Boolean = false;
     hidden var isSleeping as Boolean = false;
@@ -81,7 +80,7 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var hasComplications as Boolean = false;
     
     hidden var propIs24H as Boolean = false;
-    hidden var propTheme as Integer = 0;
+    var propTheme as Integer = -1;
     hidden var propShowSeconds as Boolean = true;
     hidden var propCircle1ValueShows as Number = 0;
     hidden var propCircle2ValueShows as Number = 0;
@@ -364,7 +363,7 @@ class TimeGateView extends WatchUi.WatchFace {
             dc.fillRectangle(centerX*2 - 27 - 1 , centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
             dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
             dc.fillRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
-            dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+            dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
             dc.drawText(centerX*2 - 13 - 1 , centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
             
         }else{
@@ -374,7 +373,7 @@ class TimeGateView extends WatchUi.WatchFace {
                 dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
                 dc.setPenWidth(2);
                 dc.drawRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
-                dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+                dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
                 dc.drawText(centerX*2 - 13 - 2 , centerY-(smallDataHeight/2), fontSmallData, now.sec.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
             }
         }
@@ -608,7 +607,9 @@ class TimeGateView extends WatchUi.WatchFace {
     }
 
     hidden function updateProperties() as Void {
-        propTheme = getValueOrDefault("colorTheme", 0) as Number;
+        if(propTheme == -1){
+            propTheme = getValueOrDefault("colorTheme", 0) as Number;
+        }
 
         propHistogramData = getValueOrDefault("histogramData", 0) as Number;
         propTopLineFieldShows = getValueOrDefault("topLineShows", 49) as Number;
@@ -651,7 +652,6 @@ class TimeGateView extends WatchUi.WatchFace {
         propLinesFontforBottomData = getValueOrDefault("linesFontforBottomData", false) as Boolean;
         propIs24H = System.getDeviceSettings().is24Hour;
         
-        nightMode = null; // force update color theme
         updateColorTheme();
 
         initializeWeatherData();
@@ -2109,45 +2109,22 @@ class TimeGatDelegate extends WatchUi.WatchFaceDelegate {
         return true;
     }
 
-    public function onMenu() {
-        var menu = new WatchUi.Menu();
-        var delegate;
-
-        menu.setTitle("Theme");
-        menu.addItem("Dark", :one);
-        menu.addItem("Light", :two);
-
-        delegate = new ThemeMenuDelegate(view);
-        try {
-            WatchUi.pushView(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
-        } catch(e) {
-            // fallback: toggle
-            var current = Application.Properties.getValue("colorTheme") as Number;
-            if (current == null) { current = 0; }
-            var next = (current == 0) ? 1 : 0;
-            Application.Properties.setValue("colorTheme", next);
-            WatchUi.requestUpdate();
-        }
-
-        return true;
-    }
-
     function handlePress(areaSetting as String) {
         var cID = Application.Properties.getValue(areaSetting) as Complications.Type;
 
         if(cID == -1) {
-            switch(view.nightModeOverride) {
+            switch(view.propTheme) {
                 case 1:
-                    view.nightModeOverride = 0;
+                    view.propTheme = 0;
                     view.infoMessage = "DAY THEME";
                     break;
                 case 0:
-                    view.nightModeOverride = -1;
-                    view.infoMessage = "THEME AUTO";
+                    view.propTheme = 1;
+                    view.infoMessage = "NIGHT THEME";
                     break;
                 default:
-                    view.nightModeOverride = 1;
-                    view.infoMessage = "NIGHT THEME";
+                    view.propTheme = 0;
+                    view.infoMessage = "DAY THEME";
             }
             view.onSettingsChanged();
         }
@@ -2159,29 +2136,6 @@ class TimeGatDelegate extends WatchUi.WatchFaceDelegate {
         }
     }
 
-}
-
-class ThemeMenuDelegate extends WatchUi.MenuInputDelegate {
-    hidden var parentView as TimeGateView;
-
-    public function initialize(p as TimeGateView) {
-        MenuInputDelegate.initialize();
-        parentView = p;
-    }
-
-    public function onSelect(item) as Void {
-        try {
-            if(item != null) {
-                Application.Properties.setValue("colorTheme", item);
-                WatchUi.requestUpdate();
-            }
-        } catch(e) {}
-        try { WatchUi.popView(SLIDE_IMMEDIATE); } catch(e) {}
-    }
-
-    public function onCancel() as Void {
-        try { WatchUi.popView(SLIDE_IMMEDIATE); } catch(e) {}
-    }
 }
 
 class StoredWeather {
