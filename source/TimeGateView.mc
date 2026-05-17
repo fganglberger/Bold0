@@ -127,19 +127,7 @@ class TimeGateView extends WatchUi.WatchFace {
 
     enum colorNames {
         bg = 0,
-        clock,
-        clockBg,
-        outline,
-        dataVal,
-        fieldBg,
-        fieldLbl,
-        date,
-        dateDim,
-        notif,
-        stress,
-        bodybatt,
-        moon,
-        lowBatt
+        fg
     }
 
     var clockBgText = "#####";
@@ -302,10 +290,10 @@ class TimeGateView extends WatchUi.WatchFace {
         
         // Draw clock face background
         if(drawClockFace != null and !aod) {
-            dc.drawBitmap(0, 0, drawClockFace);
+             dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => themeColors[fg], :blendMode => Graphics.BLEND_MODE_MULTIPLY });
         }
 
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(2);
         dc.setAntiAlias(true);
         dc.drawCircle(centerX, centerY, (centerY) * 0.58);
@@ -329,7 +317,7 @@ class TimeGateView extends WatchUi.WatchFace {
         for(var i = 0; i < numFields; i++) {
             var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.25)) + ringRotation; // Keep minute hand between labels
             
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+            dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
            
             // Draw label and value (you can customize which data to show)
             var value = "";
@@ -372,21 +360,21 @@ class TimeGateView extends WatchUi.WatchFace {
         //  dc.setAntiAlias(false);
   
         if(!dataNotifications.equals("")) {
-            dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
+            dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
             dc.fillRectangle(centerX*2 - 27 - 1 , centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
-            dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
+            dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
             dc.fillRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
-            dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
+            dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
             dc.drawText(centerX*2 - 13 - 1 , centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
             
         }else{
             if(!isSleeping && propShowSeconds){
-                dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
+                dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
                 dc.fillRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
-                dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
+                dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
                 dc.setPenWidth(2);
                 dc.drawRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
-                dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
+                dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
                 dc.drawText(centerX*2 - 13 - 2 , centerY-(smallDataHeight/2), fontSmallData, now.sec.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
             }
         }
@@ -400,12 +388,12 @@ class TimeGateView extends WatchUi.WatchFace {
         // dc.drawText(centerX, y1, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
         // dc.drawText(centerX, y2, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
-        var y3 = centerY  - marginY - 30 - 5;
-        var y4 = centerY  + marginY - 35 + 5;
+        // var y3 = centerY  - marginY - 30 - 5;
+        // var y4 = centerY  + marginY - 35 + 5;
 
-        dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX, y3, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(centerX, y4, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        // dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+        // dc.drawText(centerX, y3, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        // dc.drawText(centerX, y4, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
 
         // Draw hour and minute bars (lines with different thickness)
         drawTimeIndicators(dc, now);
@@ -423,7 +411,7 @@ class TimeGateView extends WatchUi.WatchFace {
         
         // Draw clock face background
         if(drawClockFace != null and !aod) {
-            dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => 0x4f4f4f, :blendMode => Graphics.BLEND_MODE_MULTIPLY });
+            dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => themeColors[fg], :blendMode => Graphics.BLEND_MODE_MULTIPLY });
         }
         
         var y1 = centerY  - marginY - smallDataHeight;
@@ -431,7 +419,7 @@ class TimeGateView extends WatchUi.WatchFace {
         
 
         // Draw Lines above clock
-        dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
+        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
         dc.drawText(centerX, y1, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
         dc.drawText(centerX, y2, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
@@ -477,7 +465,7 @@ class TimeGateView extends WatchUi.WatchFace {
             [minuteX2 - minuteOutlineDX + minuteAlongDX, minuteY2 - minuteOutlineDY + minuteAlongDY],
             [centerX - minuteOutlineDX - minuteAlongDX, centerY - minuteOutlineDY - minuteAlongDY]
         ];
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(minuteOutlinePoints);
 
         var minuteHandDX = Math.round(minuteHalfWidth * minutePerpX);
@@ -488,13 +476,13 @@ class TimeGateView extends WatchUi.WatchFace {
             [minuteX2 - minuteHandDX, minuteY2 - minuteHandDY],
             [centerX - minuteHandDX, centerY - minuteHandDY]
         ];
-        dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
+        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(minuteHandPoints);
 
         var minuteSmallerLength = centerX * 0.3;
         var minuteSmallerX2 = centerX + Math.round(minuteSmallerLength * minuteCos);
         var minutSmallereY2 = centerY + Math.round(minuteSmallerLength * minuteSin);
-        dc.setColor(0x000000, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(5);
         dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
 
@@ -520,7 +508,7 @@ class TimeGateView extends WatchUi.WatchFace {
             [hourX2 - hourOutlineDX + hourAlongDX, hourY2 - hourOutlineDY + hourAlongDY],
             [centerX - hourOutlineDX - hourAlongDX, centerY - hourOutlineDY - hourAlongDY]
         ];
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(hourOutlinePoints);
 
         var hourHandDX = Math.round(hourHalfWidth * hourPerpX);
@@ -531,7 +519,7 @@ class TimeGateView extends WatchUi.WatchFace {
             [hourX2 - hourHandDX, hourY2 - hourHandDY],
             [centerX - hourHandDX, centerY - hourHandDY]
         ];
-        dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
+        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(hourHandPoints);
 
         // Second hand
@@ -577,10 +565,10 @@ class TimeGateView extends WatchUi.WatchFace {
         // }
 
         // Draw center circle
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
         dc.drawCircle(centerX, centerY, 7);
         
-        dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
+        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
         dc.fillCircle(centerX, centerY, 6);
 
         // Reset and disable anti-aliasing
@@ -589,70 +577,21 @@ class TimeGateView extends WatchUi.WatchFace {
 
     (:MIP)
     hidden function setColorTheme(theme as Number) as Array<Graphics.ColorType> {
-        var skip = Graphics.COLOR_TRANSPARENT;
         var colBlack = Graphics.COLOR_BLACK;
         var colWhite = Graphics.COLOR_WHITE;
-        var colrGray = 0x555555;
 
-        //                        bg,       clock,    clockBg,  outl, dataVal,  fieldBg,  fieldLbl, date,     dDim, notif,    stress,   bodybatt, moon
-        if(theme == 0 ) { return [colBlack, 0xFFFF00, 0x005555, skip, colWhite, 0x005555, 0x55AAAA, 0xFFFF00, skip, 0x00AAFF, 0xFFAA00, 0x00AAFF, colWhite]; } // Yellow on turquoise MIP
-        if(theme == 1 ) { return [colBlack, 0xFF55AA, 0x005555, skip, colWhite, 0x005555, 0xAA55AA, colWhite, skip, 0xFF55AA, 0xFF55AA, 0x00FFAA, colWhite]; } // Hot pink MIP
-        if(theme == 2 ) { return [colBlack, 0x00FFFF, 0x0055AA, skip, colWhite, 0x0055AA, 0x55AAAA, 0x00FFFF, skip, 0x00AAFF, 0xFFAA00, 0x00AAFF, colWhite]; } // Blueish green MIP
-        if(theme == 3 ) { return [colBlack, 0x00FF00, 0x005500, skip, colWhite, 0x005500, 0x00AA55, 0x00FF00, skip, 0x00AAFF, 0xFFAA00, 0x00AAFF, colWhite]; } // Very green MIP
-        if(theme == 4 ) { return [colBlack, colWhite, 0x005555, skip, colWhite, 0x005555, 0x55AAAA, colWhite, skip, 0xAAAAAA, 0xFFAA55, 0x55AAFF, colWhite]; } // White on turquoise MIP
-        if(theme == 5 ) { return [colBlack, 0xFF5500, 0x5500AA, skip, colWhite, 0x5500AA, 0xFFAAAA, 0xFFAAAA, skip, colWhite, 0xFF5555, 0x00AAFF, colWhite]; } // Peachy Orange MIP
-        if(theme == 6 ) { return [colBlack, colWhite, 0xAA0000, skip, colWhite, 0xAA0000, 0xFF0000, colWhite, skip, 0xFF0000, 0xAA0000, 0x00AAFF, colWhite]; } // Red and White MIP
-        if(theme == 7 ) { return [colBlack, colWhite, 0x0055AA, skip, colWhite, 0x0055AA, 0x0055AA, colWhite, skip, 0x55AAFF, 0xFFAA00, 0x55AAFF, colWhite]; } // White on Blue MIP
-        if(theme == 8 ) { return [colBlack, 0xFFFF00, 0x0055AA, skip, colWhite, 0x0055AA, 0x0055AA, 0xFFFF00, skip, 0x55AAFF, 0xFFAA00, 0x55AAFF, colWhite]; } // Yellow on Blue MIP
-        if(theme == 9 ) { return [colBlack, colWhite, 0xaa5500, skip, colWhite, 0xaa5500, 0xFF5500, colWhite, skip, 0x00AAFF, 0xFFAA00, 0x00AAFF, colWhite]; } // White and Orange MIP
-        if(theme == 10) { return [colBlack, 0x0055AA, 0x000055, skip, colWhite, colrGray, 0x0055AA, colWhite, skip, 0x55AAFF, 0xFFAA00, 0x55AAFF, colWhite]; } // Blue MIP
-        if(theme == 11) { return [colBlack, 0xFFAA00, colrGray, skip, colWhite, colrGray, 0xFFAA00, colWhite, skip, 0x55AAFF, 0xFFAA00, 0x55AAFF, colWhite]; } // Orange MIP
-        if(theme == 12) { return [colBlack, colWhite, colrGray, skip, colWhite, colrGray, colWhite, colWhite, skip, colWhite, 0xFFAA00, 0x55AAFF, colWhite]; } // White on black MIP
-        if(theme == 13) { return [colWhite, colBlack, 0xAAAAAA, skip, colBlack, 0xAAAAAA, colBlack, colBlack, skip, colBlack, 0xFFAA00, 0x55AAFF, colrGray]; } // Black on White MIP
-        if(theme == 14) { return [colWhite, 0xAA0000, 0xAAAAAA, skip, colBlack, 0xAAAAAA, 0xAA0000, colBlack, skip, colBlack, 0xFFAA00, 0x55AAFF, colrGray]; } // Red on White MIP
-        if(theme == 15) { return [colWhite, 0x0000AA, 0xAAAAAA, skip, colBlack, 0xAAAAAA, 0x0000AA, colBlack, skip, colBlack, 0xFFAA00, 0x55AAFF, colrGray]; } // Blue on White MIP
-        if(theme == 16) { return [colWhite, 0x00AA00, 0xAAAAAA, skip, colBlack, 0xAAAAAA, 0x00AA00, colBlack, skip, colBlack, 0xFFAA00, 0x55AAFF, colrGray]; } // Green on White MIP
-        if(theme == 17) { return [colWhite, 0xFF5500, 0xAAAAAA, skip, colBlack, 0xAAAAAA, colrGray, colBlack, skip, colBlack, 0xFF5500, 0x55AAFF, colrGray]; } // Orange on White MIP
-        if(theme == 18) { return [colBlack, 0xFF5500, 0x005500, skip, 0x00FF00, 0x005500, 0xFF5500, 0x00FF00, skip, 0x55FF55, 0xFF5500, 0x00AAFF, colWhite]; } // Green and Orange MIP
-        if(theme == 19) { return [colBlack, 0xAAAA55, 0x005500, skip, 0x00FF00, 0x005500, 0xAAAA00, 0xAAAA55, skip, 0x00FF55, 0xAAAA55, 0x00FF00, colWhite]; } // Green Camo MIP
-        if(theme == 20) { return [colBlack, 0xFF0000, colrGray, skip, colWhite, colrGray, 0xFF0000, colWhite, skip, 0x55AAFF, 0xFF5555, 0x55AAFF, colWhite]; } // Red on Black MIP
-        if(theme == 21) { return [colWhite, 0xAA00FF, 0xAAAAAA, skip, colBlack, 0xAAAAAA, 0xAA00FF, colBlack, skip, colBlack, 0xFF5500, 0x55AAFF, colrGray]; } // Purple on White MIP
-        if(theme == 22) { return [colBlack, 0xAA00FF, colrGray, skip, colWhite, colrGray, 0xAA00FF, colWhite, skip, 0x55AAFF, 0xFFAA00, 0x55AAFF, colWhite]; } // Purple on black MIP
-        if(theme == 23) { return [colBlack, 0xFFAA00, colrGray, skip, 0xFFAA55, colrGray, 0xFFAA00, 0xFFAA55, skip, 0x55AAAA, 0xFFAA00, 0x55AAAA, colWhite]; } // Amber MIP
+        if(theme == 0) { return [colBlack, colWhite]; } // White on black MIP
+        if(theme == 1) { return [colWhite, colBlack]; } // Black on white MIP
         infoMessage = "THEME ERROR";
-        return [0xff0000, 0x00ff00, 0x0000ff, 0x550000, 0x005500, 0x000055, 0xff00ff, 0x00ffff, 0xffff00, 0x005555, 0x550055, 0x555500, 0xffffff]; // error case
+        return [0xff0000, 0x00ff00]; // error case
     }
 
     (:AMOLED)
     hidden function setColorTheme(theme as Number) as Array<Graphics.ColorType> {
-
-        //                        bg,       clock,    clockBg,  outline,  dataVal,  fieldBg,  fieldLbl,   date,   dateDim,  notif,   stress,    bodybatt, moon
-        if(theme == 0 ) { return [0x000000, 0xfbcb77, 0x0d333c, 0xffeac4, 0xFFFFFF, 0x0e333c, 0x55AAAA, 0xfbcb77, 0xa98753, 0x00AAFF, 0xFFAA00, 0x00AAFF, 0xFFFFFF]; } // Yellow on turquoise AMOLED
-        if(theme == 1 ) { return [0x000000, 0xffa5f9, 0x0f3b46, 0xffd9fc, 0xFFFFFF, 0x0e333c, 0xAA55AA, 0xFFFFFF, 0x984a8a, 0xFF55AA, 0xFF55AA, 0x00FFAA, 0xFFFFFF]; } // Hot pink AMOLED
-        if(theme == 2 ) { return [0x000000, 0x89efd2, 0x0f2246, 0xb8efdf, 0xFFFFFF, 0x0f2246, 0x55AAAA, 0x89efd2, 0x5ca28f, 0x00AAFF, 0xFFAA00, 0x00AAFF, 0xFFFFFF]; } // Blueish green AMOLED
-        if(theme == 3 ) { return [0x000000, 0x96e0ac, 0x152b19, 0xc3e0cc, 0xFFFFFF, 0x152b19, 0x00AA55, 0x96e0ac, 0x5ca28f, 0x00AAFF, 0xffc884, 0x59b9fe, 0xFFFFFF]; } // Very green AMOLED
-        if(theme == 4 ) { return [0x000000, 0xFFFFFF, 0x0d333c, 0xadeffe, 0xFFFFFF, 0x0e333c, 0x55AAAA, 0xFFFFFF, 0x1d7e99, 0xAAAAAA, 0xFFAA55, 0x55AAFF, 0xFFFFFF]; } // White on turquoise AMOLED
-        if(theme == 5 ) { return [0x000000, 0xff9161, 0x1b263d, 0xffb494, 0xFFFFFF, 0x1b263d, 0xFFAAAA, 0xffb383, 0xaa6e56, 0xFFFFFF, 0xFF5555, 0x00AAFF, 0xFFFFFF]; } // Peachy Orange AMOLED
-        if(theme == 6 ) { return [0x000000, 0xffffff, 0x550000, 0xc00003, 0xFFFFFF, 0x550000, 0xFF0000, 0xffffff, 0xAA0000, 0xFF0000, 0xAA0000, 0x00AAFF, 0xFFFFFF]; } // Red and White AMOLED
-        if(theme == 7 ) { return [0x000000, 0xffffff, 0x152a53, 0xaecaff, 0xFFFFFF, 0x152a53, 0x0055AA, 0xffffff, 0x0055AA, 0x55AAFF, 0xFFAA00, 0x55AAFF, 0xFFFFFF]; } // White on Blue AMOLED
-        if(theme == 8 ) { return [0x000000, 0xfbcb77, 0x152a53, 0xfbdda8, 0xFFFFFF, 0x152a53, 0x0055AA, 0xffeac4, 0xa98753, 0x55AAFF, 0xFFAA00, 0x55AAFF, 0xFFFFFF]; } // Yellow on Blue AMOLED
-        if(theme == 9 ) { return [0x000000, 0xffffff, 0x7d3f01, 0xffd6ae, 0xFFFFFF, 0x58250b, 0xFF5500, 0xffffff, 0xAA5500, 0x00AAFF, 0xFFAA00, 0x00AAFF, 0xFFFFFF]; } // White and Orange AMOLED
-        if(theme == 10) { return [0x000000, 0x3495d4, 0x191b33, 0x5fa6d4, 0xFFFFFF, 0x191b33, 0x0055AA, 0xffffff, 0x0055AA, 0x55AAFF, 0xFFAA00, 0x55AAFF, 0xFFFFFF]; } // Blue AMOLED
-        if(theme == 11) { return [0x000000, 0xff7600, 0x333333, 0xff9133, 0xFFFFFF, 0x333333, 0xFFAA00, 0xffffff, 0x9a9a9a, 0x55AAFF, 0xFFAA00, 0x55AAFF, 0xFFFFFF]; } // Orange AMOLED
-        if(theme == 12) { return [0x000000, 0xFFFFFF, 0x333333, 0xcbcbcb, 0xFFFFFF, 0x333333, 0xFFFFFF, 0xFFFFFF, 0x9a9a9a, 0x55AAFF, 0xFFAA00, 0x55AAFF, 0xFFFFFF]; } // White on black AMOLED
-        if(theme == 13) { return [0xFFFFFF, 0x000000, 0xCCCCCC, 0x666666, 0x000000, 0xCCCCCC, 0x000000, 0x000000, 0x9a9a9a, 0x000000, 0xFFAA00, 0x55AAFF, 0x555555]; } // Black on White AMOLED
-        if(theme == 14) { return [0xFFFFFF, 0xAA0000, 0xCCCCCC, 0xaa2325, 0x000000, 0xCCCCCC, 0xAA0000, 0x000000, 0x9a9a9a, 0x000000, 0xFFAA00, 0x55AAFF, 0x555555]; } // Red on White AMOLED
-        if(theme == 15) { return [0xFFFFFF, 0x0000AA, 0xCCCCCC, 0x2222aa, 0x000000, 0xCCCCCC, 0x0000AA, 0x000000, 0x9a9a9a, 0x000000, 0xFFAA00, 0x55AAFF, 0x555555]; } // Blue on White AMOLED
-        if(theme == 16) { return [0xFFFFFF, 0x00AA00, 0xCCCCCC, 0x22aa22, 0x000000, 0xCCCCCC, 0x00AA00, 0x000000, 0x9a9a9a, 0x000000, 0xFFAA00, 0x55AAFF, 0x555555]; } // Green on White AMOLED
-        if(theme == 17) { return [0xFFFFFF, 0xFF5500, 0xCCCCCC, 0xff7632, 0x000000, 0xCCCCCC, 0x555555, 0x000000, 0x9a9a9a, 0x000000, 0xFF5500, 0x55AAFF, 0x555555]; } // Orange on White AMOLED
-        if(theme == 18) { return [0x000000, 0xff7600, 0x152b19, 0xe64322, 0x41cb41, 0x152b19, 0xFF5500, 0x41cb41, 0x5f9956, 0x41cb41, 0xff7600, 0x59b9fe, 0xFFFFFF]; } // Green and Orange AMOLED
-        if(theme == 19) { return [0x000000, 0x889f4a, 0x152b19, 0x919f6b, 0x55AA55, 0x152b19, 0xa8aa6c, 0x889f4a, 0x7a9a4e, 0x00FF55, 0x889f4a, 0x55AA55, 0xe3efd2]; } // Green Camo AMOLED
-        if(theme == 20) { return [0x000000, 0xFF0000, 0x282828, 0xff3236, 0xFFFFFF, 0x282828, 0xFF0000, 0xFFFFFF, 0x9a9a9a, 0x55AAFF, 0xFF5555, 0x55AAFF, 0xFFFFFF]; } // Red on Black AMOLED
-        if(theme == 21) { return [0xFFFFFF, 0xAA00FF, 0xCCCCCC, 0xbb34ff, 0x000000, 0xCCCCCC, 0xAA00FF, 0x000000, 0x9a9a9a, 0x000000, 0xFF5500, 0x55AAFF, 0x555555]; } // Purple on White AMOLED
-        if(theme == 22) { return [0x000000, 0xAA55AA, 0x282828, 0xaa77aa, 0xFFFFFF, 0x282828, 0xAA55AA, 0xFFFFFF, 0x9a9a9a, 0x55AAFF, 0xFFAA00, 0x55AAFF, 0xFFFFFF]; } // Purple on black AMOLED
-        if(theme == 23) { return [0x000000, 0xff960c, 0x302b24, 0xffbf65, 0xffdeb4, 0x302b24, 0xffac3f, 0xffb759, 0x9a784d, 0xa8d6fd, 0xfdb500, 0xa8d6fd, 0xe3efd2]; } // Amber AMOLED
+        if(theme == 0) { return [0x000000, 0xFFFFFF]; } // White on black AMOLED
+        if(theme == 1) { return [0xFFFFFF, 0x000000]; } // Black on white AMOLED
         infoMessage = "THEME ERROR";
-        return [0xff0000, 0x00ff00, 0x0000ff, 0xff00ff, 0x00ffff, 0xffff00, 0x550000, 0x005500, 0x000055, 0x005555, 0x550055, 0x555500, 0xffffff];
+        return [0xff0000, 0x00ff00];
 
     }
 
@@ -1508,6 +1447,8 @@ class TimeGateView extends WatchUi.WatchFace {
         return ret;
     } 
 
+    
+
     hidden function getLabelByType(complicationType as Number, labelSize as Number) as String {
         // labelSize 1 = short, 2 = mid, 3 = long
 
@@ -2168,6 +2109,29 @@ class TimeGatDelegate extends WatchUi.WatchFaceDelegate {
         return true;
     }
 
+    public function onMenu() {
+        var menu = new WatchUi.Menu();
+        var delegate;
+
+        menu.setTitle("Theme");
+        menu.addItem("Dark", :one);
+        menu.addItem("Light", :two);
+
+        delegate = new ThemeMenuDelegate(view);
+        try {
+            WatchUi.pushView(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
+        } catch(e) {
+            // fallback: toggle
+            var current = Application.Properties.getValue("colorTheme") as Number;
+            if (current == null) { current = 0; }
+            var next = (current == 0) ? 1 : 0;
+            Application.Properties.setValue("colorTheme", next);
+            WatchUi.requestUpdate();
+        }
+
+        return true;
+    }
+
     function handlePress(areaSetting as String) {
         var cID = Application.Properties.getValue(areaSetting) as Complications.Type;
 
@@ -2195,6 +2159,29 @@ class TimeGatDelegate extends WatchUi.WatchFaceDelegate {
         }
     }
 
+}
+
+class ThemeMenuDelegate extends WatchUi.MenuInputDelegate {
+    hidden var parentView as TimeGateView;
+
+    public function initialize(p as TimeGateView) {
+        MenuInputDelegate.initialize();
+        parentView = p;
+    }
+
+    public function onSelect(item) as Void {
+        try {
+            if(item != null) {
+                Application.Properties.setValue("colorTheme", item);
+                WatchUi.requestUpdate();
+            }
+        } catch(e) {}
+        try { WatchUi.popView(SLIDE_IMMEDIATE); } catch(e) {}
+    }
+
+    public function onCancel() as Void {
+        try { WatchUi.popView(SLIDE_IMMEDIATE); } catch(e) {}
+    }
 }
 
 class StoredWeather {

@@ -2,62 +2,16 @@
 
     <setting propertyKey="@Properties.colorTheme" title="@Strings.settings_color_theme">
         <settingConfig type="list">
-            <listEntry value="0">@Strings.settings_yellow_on_turquoise</listEntry>
-            <listEntry value="8">@Strings.settings_yellow_on_blue</listEntry>
-            <listEntry value="1">@Strings.settings_hot_pink</listEntry>
-            <listEntry value="10">@Strings.settings_blue</listEntry>
-            <listEntry value="2">@Strings.settings_blueish_green</listEntry>
-            <listEntry value="3">@Strings.settings_green</listEntry>
-            <listEntry value="19">@Strings.settings_green_camo</listEntry>
-            <listEntry value="18">@Strings.settings_green_and_orange</listEntry>
-            <listEntry value="11">@Strings.settings_orange</listEntry>
-            <listEntry value="23">@Strings.settings_amber</listEntry>
-            <listEntry value="5">@Strings.settings_peachy_orange</listEntry>
-            <listEntry value="20">@Strings.settings_red</listEntry>
-            <listEntry value="22">@Strings.settings_purple</listEntry>
-            <listEntry value="4">@Strings.settings_white_on_turquoise</listEntry>
-            <listEntry value="6">@Strings.settings_white_on_red</listEntry>
-            <listEntry value="7">@Strings.settings_white_on_blue</listEntry>
-            <listEntry value="9">@Strings.settings_white_on_orange</listEntry>
-            <listEntry value="12">@Strings.settings_white_on_black</listEntry>
-            <listEntry value="13">@Strings.settings_black_on_white</listEntry>
-            <listEntry value="14">@Strings.settings_red_on_white</listEntry>
-            <listEntry value="15">@Strings.settings_blue_on_white</listEntry>
-            <listEntry value="16">@Strings.settings_green_on_white</listEntry>
-            <listEntry value="17">@Strings.settings_orange_on_white</listEntry>
-            <listEntry value="21">@Strings.settings_purple_on_white</listEntry>
-            <listEntry value="30">@Strings.settings_custom_colors</listEntry>
+            <listEntry value="0">@Strings.settings_white_on_black</listEntry>
+            <listEntry value="1">@Strings.settings_black_on_white</listEntry>
         </settingConfig>
     </setting>
 
     <setting propertyKey="@Properties.nightColorTheme" title="@Strings.settings_night_color_theme">
         <settingConfig type="list">
             <listEntry value="-1">@Strings.settings_no_change</listEntry>
-            <listEntry value="0">@Strings.settings_yellow_on_turquoise</listEntry>
-            <listEntry value="8">@Strings.settings_yellow_on_blue</listEntry>
-            <listEntry value="1">@Strings.settings_hot_pink</listEntry>
-            <listEntry value="10">@Strings.settings_blue</listEntry>
-            <listEntry value="2">@Strings.settings_blueish_green</listEntry>
-            <listEntry value="3">@Strings.settings_green</listEntry>
-            <listEntry value="19">@Strings.settings_green_camo</listEntry>
-            <listEntry value="18">@Strings.settings_green_and_orange</listEntry>
-            <listEntry value="11">@Strings.settings_orange</listEntry>
-            <listEntry value="23">@Strings.settings_amber</listEntry>
-            <listEntry value="5">@Strings.settings_peachy_orange</listEntry>
-            <listEntry value="20">@Strings.settings_red</listEntry>
-            <listEntry value="22">@Strings.settings_purple</listEntry>
-            <listEntry value="4">@Strings.settings_white_on_turquoise</listEntry>
-            <listEntry value="6">@Strings.settings_white_on_red</listEntry>
-            <listEntry value="7">@Strings.settings_white_on_blue</listEntry>
-            <listEntry value="9">@Strings.settings_white_on_orange</listEntry>
-            <listEntry value="12">@Strings.settings_white_on_black</listEntry>
-            <listEntry value="13">@Strings.settings_black_on_white</listEntry>
-            <listEntry value="14">@Strings.settings_red_on_white</listEntry>
-            <listEntry value="15">@Strings.settings_blue_on_white</listEntry>
-            <listEntry value="16">@Strings.settings_green_on_white</listEntry>
-            <listEntry value="17">@Strings.settings_orange_on_white</listEntry>
-            <listEntry value="21">@Strings.settings_purple_on_white</listEntry>
-            <listEntry value="30">@Strings.settings_custom_colors_faq</listEntry>
+            <listEntry value="0">@Strings.settings_white_on_black</listEntry>
+            <listEntry value="1">@Strings.settings_black_on_white</listEntry>
         </settingConfig>
     </setting>
 
@@ -419,6 +373,7 @@
     <setting propertyKey="@Properties.leftValueShows" title="@Strings.settings_bottom_value_1_left">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -474,6 +429,7 @@
     <setting propertyKey="@Properties.middleValueShows" title="@Strings.settings_bottom_value_2">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -529,6 +485,7 @@
     <setting propertyKey="@Properties.rightValueShows" title="@Strings.settings_bottom_value_3">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -584,6 +541,7 @@
     <setting propertyKey="@Properties.fourthValueShows" title="@Strings.settings_bottom_value_4">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -639,6 +597,7 @@
     <setting propertyKey="@Properties.circle1ValueShows" title="@Strings.settings_circle_value_1">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -694,6 +653,7 @@
     <setting propertyKey="@Properties.circle2ValueShows" title="@Strings.settings_circle_value_2">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -750,6 +710,7 @@
     <setting propertyKey="@Properties.circle3ValueShows" title="@Strings.settings_circle_value_3">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -806,6 +767,7 @@
     <setting propertyKey="@Properties.circle4ValueShows" title="@Strings.settings_circle_value_4">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -862,6 +824,7 @@
     <setting propertyKey="@Properties.circle5ValueShows" title="@Strings.settings_circle_value_5">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -918,6 +881,7 @@
     <setting propertyKey="@Properties.circle6ValueShows" title="@Strings.settings_circle_value_6">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -974,6 +938,7 @@
      <setting propertyKey="@Properties.circle1AltValueShows" title="@Strings.settings_circle_value_1">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -1029,6 +994,7 @@
     <setting propertyKey="@Properties.circle2AltValueShows" title="@Strings.settings_circle_value_2">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -1085,6 +1051,7 @@
     <setting propertyKey="@Properties.circle3AltValueShows" title="@Strings.settings_circle_value_3">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -1141,6 +1108,7 @@
     <setting propertyKey="@Properties.circle4AltValueShows" title="@Strings.settings_circle_value_4">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -1197,6 +1165,7 @@
     <setting propertyKey="@Properties.circle5AltValueShows" title="@Strings.settings_circle_value_5">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
@@ -1253,6 +1222,7 @@
     <setting propertyKey="@Properties.circle6AltValueShows" title="@Strings.settings_circle_value_6">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
+            <listEntry value="-1">@Strings.settings_date</listEntry>
             <listEntry value="17">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
