@@ -292,15 +292,27 @@ class TimeGateView extends WatchUi.WatchFace {
              dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => themeColors[fg], :blendMode => Graphics.BLEND_MODE_MULTIPLY });
         }
 
+        // dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+        // dc.setPenWidth(2);
+        // dc.setAntiAlias(true);
+        // dc.drawCircle(centerX, centerY, (centerY) * 0.54);
+        // dc.drawCircle(centerX, centerY, (centerY) * 0.76);
+        // dc.setAntiAlias(false);
+
+        // dc.setAntiAlias(true);
+        // dc.drawCircle(centerX, centerY, (centerY) * 0.58);
+        // dc.drawCircle(centerX, centerY, (centerY) * 0.76);
+        // dc.setAntiAlias(false);
+
         dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(2);
+        dc.setPenWidth(22);
         dc.setAntiAlias(true);
-        dc.drawCircle(centerX, centerY, (centerY) * 0.58);
-        dc.drawCircle(centerX, centerY, (centerY) * 0.76);
+        dc.drawCircle(centerX, centerY, (centerY) * 0.65);
         dc.setAntiAlias(false);
 
+
         // Draw data fields in a ring around the clock
-        var ringRadius = (centerY) * 0.65;
+        var ringRadius = (centerY) * 0.63;
         var numFields = 5;
         var angleStep = 360.0 / numFields;
         var minuteAngle = (now.min / 60.0) * 360.0;
@@ -316,7 +328,7 @@ class TimeGateView extends WatchUi.WatchFace {
         for(var i = 0; i < numFields; i++) {
             var angle = (numFields - i) * angleStep - (360 - (angleStep * 1.25)) + ringRotation; // Keep minute hand between labels
             
-            dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+            dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
            
             // Draw label and value (you can customize which data to show)
             var value = "";
@@ -329,7 +341,7 @@ class TimeGateView extends WatchUi.WatchFace {
             
             // Draw radial text
             if(angle<0 && angle> (-180)){
-                dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + (smallDataHeight /2) - 2, Graphics.RADIAL_TEXT_DIRECTION_COUNTER_CLOCKWISE);
+                dc.drawRadialText(centerX, centerY+1, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius + (smallDataHeight /2) - 2, Graphics.RADIAL_TEXT_DIRECTION_COUNTER_CLOCKWISE);
             } else {
                 dc.drawRadialText(centerX, centerY, fontSmallData, value, Graphics.TEXT_JUSTIFY_CENTER, angle, ringRadius - 4, Graphics.RADIAL_TEXT_DIRECTION_CLOCKWISE);
             }
@@ -387,12 +399,12 @@ class TimeGateView extends WatchUi.WatchFace {
         // dc.drawText(centerX, y1, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
         // dc.drawText(centerX, y2, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
-        // var y3 = centerY  - marginY - 30 - 5;
-        // var y4 = centerY  + marginY - 35 + 5;
+        var y3 = centerY  - marginY - 30 - 5;
+        var y4 = centerY  + marginY - 35 + 5;
 
-        // dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-        // dc.drawText(centerX, y3, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
-        // dc.drawText(centerX, y4, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+        dc.drawText(centerX, y3, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y4, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
 
         // Draw hour and minute bars (lines with different thickness)
         drawTimeIndicators(dc, now);
@@ -478,12 +490,12 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(minuteHandPoints);
 
-        var minuteSmallerLength = centerX * 0.3;
-        var minuteSmallerX2 = centerX + Math.round(minuteSmallerLength * minuteCos);
-        var minutSmallereY2 = centerY + Math.round(minuteSmallerLength * minuteSin);
-        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+        // var minuteSmallerLength = centerX * 0.3;
+        // var minuteSmallerX2 = centerX + Math.round(minuteSmallerLength * minuteCos);
+        // var minutSmallereY2 = centerY + Math.round(minuteSmallerLength * minuteSin);
+        dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(5);
-        dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
+        // dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
 
         // Hour hand
         var hourLength = centerX * 0.50;
