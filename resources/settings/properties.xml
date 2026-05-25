@@ -23,8 +23,8 @@
     <property id="alwaysShowSeconds" type="boolean">false</property>
     <property id="updateFreq" type="number">60</property>
     <property id="batteryVariant" type="number">3</property>
-    <property id="topLineShows" type="number">25</property>
-    <property id="bottomLineShows" type="number">0</property>
+    <property id="topLineShows" type="number">70</property>
+    <property id="bottomLineShows" type="number">55</property>
     <property id="fieldLayout" type="number">2</property>
     <property id="valueInsteadOfSeconds" type="number">57</property>
     <property id="leftValueShows" type="number">6</property>

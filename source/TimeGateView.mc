@@ -184,7 +184,7 @@ class TimeGateView extends WatchUi.WatchFace {
         drawClockFace = Application.loadResource(Rez.Drawables.clockFace) as BitmapResource;
         smallDataHeight = 23;
         fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>23});
-        fontBigData = Graphics.getVectorFont({:face=>["BionicBold"], :size=>70});
+        fontBigData = Graphics.getVectorFont({:face=>["BionicBold"], :size=>42});
     }
 
     (:Round280)
@@ -392,19 +392,20 @@ class TimeGateView extends WatchUi.WatchFace {
 
         // var y1 = centerY  - marginY - smallDataHeight;
         // var y2 = centerY  + marginY + 3;
-        
+        var y3 = centerY  - marginY  - 42 + 20;
+        var y4 = centerY  + marginY  + 2 - 20;
 
-        // // Draw Lines above clock
-        // dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-        // dc.drawText(centerX, y1, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
-        // dc.drawText(centerX, y2, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
-
-        var y3 = centerY  - marginY - 30 - 5;
-        var y4 = centerY  + marginY - 35 + 5;
-
+        // Draw Lines above clock
         dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX, y3, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(centerX, y4, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y3, fontBigData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y4, fontBigData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
+
+        // var y3 = centerY  - marginY - 30 - 5;
+        // var y4 = centerY  + marginY - 35 + 5;
+
+        // dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+        // dc.drawText(centerX, y3, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        // dc.drawText(centerX, y4, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
 
         // Draw hour and minute bars (lines with different thickness)
         drawTimeIndicators(dc, now);
