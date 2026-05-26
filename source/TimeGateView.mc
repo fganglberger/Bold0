@@ -72,7 +72,7 @@ class TimeGateView extends WatchUi.WatchFace {
     public var infoMessage as String = "";
     public var nightModeOverride as Number = -1;
     hidden var themeColors as Array<Graphics.ColorType> = [];
-    hidden var weatherCondition as CurrentConditions or StoredWeather or Null;
+    hidden var weatherCondition as CurrentConditions? = null;
     hidden var canBurnIn as Boolean = false;
     hidden var isSleeping as Boolean = false;
     hidden var lastUpdate as Number? = null;
@@ -184,7 +184,7 @@ class TimeGateView extends WatchUi.WatchFace {
         drawClockFace = Application.loadResource(Rez.Drawables.clockFace) as BitmapResource;
         smallDataHeight = 23;
         fontSmallData = Graphics.getVectorFont({:face=>["RobotoCondensedBold"], :size=>23});
-        fontBigData = Graphics.getVectorFont({:face=>["BionicBold"], :size=>43});
+        fontBigData = Graphics.getVectorFont({:face=>["BionicBold"], :size=>70});
     }
 
     (:Round280)
@@ -392,13 +392,13 @@ class TimeGateView extends WatchUi.WatchFace {
 
         // var y1 = centerY  - marginY - smallDataHeight;
         // var y2 = centerY  + marginY + 3;
-        var y3 = centerY  - marginY  - smallDataHeight ;
-        var y4 = centerY  + marginY  + 3;
+        // var y3 = centerY  - marginY  - smallDataHeight ;
+        // var y4 = centerY  + marginY  + 3;
 
         // Draw Lines above clock
-        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX, y3, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(centerX, y4, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
+        // dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+        // dc.drawText(centerX, y3, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
+        // dc.drawText(centerX, y4, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
         // var y3 = centerY  - marginY - 30 - 5;
         // var y4 = centerY  + marginY - 35 + 5;
@@ -448,6 +448,81 @@ class TimeGateView extends WatchUi.WatchFace {
         var totalMinutes = now.hour * 60 + now.min;
         var hourRad = (totalMinutes * Math.PI / 360.0) - (Math.PI / 2.0);
         var minuteRad = (now.min * Math.PI / 30.0) - (Math.PI / 2.0);
+
+        ///////////////////////////
+
+        // left, top, bottom, right
+        var timePosArray = [0, 0, 0, 0];
+        var minuteAngle = now.min * 6.0;
+        var hourAngle = (((now.hour % 12) * 60) + now.min) * 0.5;
+
+        //LEFT
+        if((minuteAngle >= 225.0 && minuteAngle < 315.0) || (hourAngle >= 225.0 && hourAngle < 315.0)){
+            timePosArray[0] = 1;
+        }
+
+        //TOP
+        if((minuteAngle >= 315.0 || minuteAngle < 45.0) || (hourAngle >= 315.0 || hourAngle < 45.0)){
+            timePosArray[1] = 1;
+        }
+
+        //BOTTOM
+        if((minuteAngle >= 135.0 && minuteAngle < 225.0) || (hourAngle >= 135.0 && hourAngle < 225.0)){
+            timePosArray[2] = 1;
+        }
+
+        //RIGHT
+        if((minuteAngle >= 45.0 && minuteAngle < 135.0) || (hourAngle >= 45.0 && hourAngle < 135.0)){
+            timePosArray[3] = 1;
+        }
+        
+        var hourPos = -1;
+
+        for(var actpos = 0; actpos < 4; actpos++) { 
+            if(timePosArray[actpos]==0){
+                timePosArray[actpos]=1;
+                hourPos = actpos;
+                break;
+            }
+        }
+
+        var minPos = -1;
+        for(var actpos = 3; actpos >=0 ; actpos--) { 
+            if(timePosArray[actpos]==0){
+                timePosArray[actpos]=1;
+                minPos = actpos;
+                break;
+            }
+        }
+
+        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+
+        if(hourPos==0){
+            dc.drawText(centerX - 12, centerY - 33, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_RIGHT);
+        }
+        if(minPos==0){
+            dc.drawText(centerX - 12, centerY - 33, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_RIGHT);
+        }
+        if(hourPos==1){
+            dc.drawText(centerX, centerY - marginY - 35 - 5, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        }
+        if(minPos==1){
+            dc.drawText(centerX, centerY - marginY - 35 - 5, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        }
+        if(hourPos==2){
+            dc.drawText(centerX, centerY  + marginY - 30 +5, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        }
+        if(minPos==2){
+            dc.drawText(centerX, centerY  + marginY - 30 +5, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        }
+        if(hourPos==3){
+            dc.drawText(centerX + 12, centerY - 33, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_LEFT);
+        }
+        if(minPos==3){
+            dc.drawText(centerX + 12, centerY - 33, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_LEFT);
+        }
+    
+        ////////////////////////////
 
         var hourCos = Math.cos(hourRad);
         var hourSin = Math.sin(hourRad);
@@ -2148,19 +2223,4 @@ class TimeGatDelegate extends WatchUi.WatchFaceDelegate {
             } catch (e) {}
         }
     }
-
-}
-
-class StoredWeather {
-    public var observationLocationPosition as Position.Location or Null;
-    public var precipitationChance as Lang.Number or Null;
-    public var temperature as Lang.Numeric or Null;
-    public var windBearing as Lang.Number or Null;
-    public var windSpeed as Lang.Float or Null;
-    public var highTemperature as Lang.Numeric or Null;
-    public var lowTemperature as Lang.Numeric or Null;
-    public var feelsLikeTemperature as Lang.Float or Null;
-    public var relativeHumidity as Lang.Number or Null;
-    public var condition as Lang.Number or Null;
-    public var uvIndex as Lang.Float or Null;
 }
