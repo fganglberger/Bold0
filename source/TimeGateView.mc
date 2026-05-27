@@ -480,7 +480,7 @@ class TimeGateView extends WatchUi.WatchFace {
 
         for(var actpos = 0; actpos < 4; actpos++) { 
             if(timePosArray[actpos]==0){
-                timePosArray[actpos]=1;
+                timePosArray[actpos]=2;
                 hourPos = actpos;
                 break;
             }
@@ -493,6 +493,14 @@ class TimeGateView extends WatchUi.WatchFace {
                 minPos = actpos;
                 break;
             }
+        }
+
+        if(timePosArray[1]==2 && timePosArray[2]==0){
+            minPos = 2;
+        }
+
+        if(timePosArray[0]==2 && timePosArray[3]==0){
+            minPos = 3;
         }
 
         dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
