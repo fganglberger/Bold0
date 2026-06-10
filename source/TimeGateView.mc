@@ -71,6 +71,7 @@ class TimeGateView extends WatchUi.WatchFace {
 
     hidden var dataRightBar as Number = 0;
     hidden var dataLeftBar as Number = 0;
+    hidden var dataBottomBar as Number = 0;
 
     public var infoMessage as String = "";
     public var nightModeOverride as Number = -1;
@@ -107,6 +108,7 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var propBottomFieldLabelAlignment as Number = 0;
     hidden var propLeftBarShows as Number = 7;
     hidden var propRightBarShows as Number = 5;
+    hidden var propBottomBarShows as Number = 8;
     hidden var propHemisphere as Number = 0;
     hidden var propHourFormat as Number = 0;
     hidden var propTimeSeparator as Number = 0;
@@ -395,12 +397,12 @@ class TimeGateView extends WatchUi.WatchFace {
 
         // var y1 = centerY  - marginY - smallDataHeight;
         // var y2 = centerY  + marginY + 3;
-        // var y3 = centerY  - marginY  - smallDataHeight ;
+         var y3 = centerY  - marginY  - smallDataHeight + 3;
         // var y4 = centerY  + marginY  + 3;
 
         // Draw Lines above clock
-        // dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-        // dc.drawText(centerX, y3, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+        dc.drawText(centerX, y3, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
         // dc.drawText(centerX, y4, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
         // var y3 = centerY  - marginY - 30 - 5;
@@ -454,57 +456,61 @@ class TimeGateView extends WatchUi.WatchFace {
 
         // ///////////////////////////
 
-        // left, top, bottom, right
-        var timePosArray = [0, 0, 0, 0];
-        var minuteAngle = now.min * 6.0;
-        var hourAngle = (((now.hour % 12) * 60) + now.min) * 0.5;
+        // // left, top, bottom, right
+        // var timePosArray = [0, 0, 0, 0];
+        // var minuteAngle = now.min * 6.0;
+        // var hourAngle = (((now.hour % 12) * 60) + now.min) * 0.5;
 
-        //LEFT
-        if((minuteAngle >= 225.0 && minuteAngle < 315.0) || (hourAngle >= 225.0 && hourAngle < 315.0)){
-            timePosArray[0] = 1;
-        }
+        // //LEFT
+        // if((minuteAngle >= 225.0 && minuteAngle < 315.0) || (hourAngle >= 225.0 && hourAngle < 315.0)){
+        //     timePosArray[0] = 1;
+        // }
 
-        //TOP
-        if((minuteAngle >= 315.0 || minuteAngle < 45.0) || (hourAngle >= 315.0 || hourAngle < 45.0)){
-            timePosArray[1] = 1;
-        }
+        // //TOP
+        // if((minuteAngle >= 315.0 || minuteAngle < 45.0) || (hourAngle >= 315.0 || hourAngle < 45.0)){
+        //     timePosArray[1] = 1;
+        // }
 
-        //BOTTOM
-        if((minuteAngle >= 135.0 && minuteAngle < 225.0) || (hourAngle >= 135.0 && hourAngle < 225.0)){
-            timePosArray[2] = 1;
-        }
+        // //BOTTOM
+        // if((minuteAngle >= 135.0 && minuteAngle < 225.0) || (hourAngle >= 135.0 && hourAngle < 225.0)){
+        //     timePosArray[2] = 1;
+        // }
 
-        //RIGHT
-        if((minuteAngle >= 45.0 && minuteAngle < 135.0) || (hourAngle >= 45.0 && hourAngle < 135.0)){
-            timePosArray[3] = 1;
-        }
+        // //RIGHT
+        // if((minuteAngle >= 45.0 && minuteAngle < 135.0) || (hourAngle >= 45.0 && hourAngle < 135.0)){
+        //     timePosArray[3] = 1;
+        // }
         
-        var hourPos = -1;
+        // var hourPos = -1;
 
-        for(var actpos = 0; actpos < 4; actpos++) { 
-            if(timePosArray[actpos]==0){
-                timePosArray[actpos]=2;
-                hourPos = actpos;
-                break;
-            }
-        }
+        // for(var actpos = 0; actpos < 4; actpos++) { 
+        //     if(timePosArray[actpos]==0){
+        //         timePosArray[actpos]=2;
+        //         hourPos = actpos;
+        //         break;
+        //     }
+        // }
 
-        var minPos = -1;
-        for(var actpos = 3; actpos >=0 ; actpos--) { 
-            if(timePosArray[actpos]==0){
-                timePosArray[actpos]=1;
-                minPos = actpos;
-                break;
-            }
-        }
+        // var minPos = -1;
+        // for(var actpos = 3; actpos >=0 ; actpos--) { 
+        //     if(timePosArray[actpos]==0){
+        //         timePosArray[actpos]=1;
+        //         minPos = actpos;
+        //         break;
+        //     }
+        // }
 
-        if(timePosArray[1]==2 && timePosArray[2]==0){
-            minPos = 2;
-        }
+        // if(timePosArray[1]==2 && timePosArray[2]==0){
+        //     minPos = 2;
+        // }
 
-        if(timePosArray[0]==2 && timePosArray[3]==0){
-            minPos = 3;
-        }
+        // if(timePosArray[0]==2 && timePosArray[3]==0){
+        //     minPos = 3;
+        // }
+
+        var hourPos = 0;
+        var minPos = 3;
+        var secPos = 2;
 
         dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(5);
@@ -523,7 +529,7 @@ class TimeGateView extends WatchUi.WatchFace {
         ];
 
         for(var idx = 0; idx < 4; idx++) {
-            if(hourPos == idx || minPos == idx) {
+            if(hourPos == idx || minPos == idx || secPos == idx) {
                 var x = posX[idx];
                 var y = posY[idx];
 
@@ -537,10 +543,13 @@ class TimeGateView extends WatchUi.WatchFace {
                 if(minPos == idx && dataRightBar > 0) {
                     dc.drawArc(x, y, 24, Graphics.ARC_CLOCKWISE, 90, 360 - Math.round(dataRightBar / 100.0 * 360 - 90));
                 }
+                if(secPos == idx && dataBottomBar > 0) {
+                    dc.drawArc(x, y, 24, Graphics.ARC_CLOCKWISE, 90, 360 - Math.round(dataBottomBar / 100.0 * 360 - 90));
+                }
 
                 // Draw the letter D or W in the center of the circle
                 dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-                var letter = (hourPos == idx) ? "D" : "W";
+                var letter = (hourPos == idx) ? "D" : (minPos == idx) ? "W" : "R";
                 dc.drawText(x, y - 10, fontSmallData, letter, Graphics.TEXT_JUSTIFY_CENTER);
             }
         }
@@ -723,7 +732,7 @@ class TimeGateView extends WatchUi.WatchFace {
         }
 
         propHistogramData = getValueOrDefault("histogramData", 0) as Number;
-        propTopLineFieldShows = getValueOrDefault("topLineShows", 49) as Number;
+        propTopLineFieldShows = getValueOrDefault("topLineShows", 25) as Number;
         propBottomLineFieldShows = getValueOrDefault("bottomLineShows", 50) as Number;
         propShowSeconds = getValueOrDefault("showSeconds", true) as Boolean;
         propAlwaysShowSeconds = getValueOrDefault("alwaysShowSeconds", false) as Boolean;
@@ -764,6 +773,7 @@ class TimeGateView extends WatchUi.WatchFace {
         propIs24H = System.getDeviceSettings().is24Hour;
         propLeftBarShows = getValueOrDefault("leftBarShows", 0) as Number;
         propRightBarShows = getValueOrDefault("rightBarShows", 0) as Number;
+        propBottomBarShows = getValueOrDefault("bottomBarShows", -2) as Number;
         
         updateColorTheme();
 
@@ -808,7 +818,8 @@ class TimeGateView extends WatchUi.WatchFace {
         }
 
         dataLeftBar = getBarData(propLeftBarShows);
-        dataRightBar = getBarData(propRightBarShows);       
+        dataRightBar = getBarData(propRightBarShows);
+        dataBottomBar = getBarData(propBottomBarShows);
 
         dataNotifications = getNotificationsData();
 
@@ -897,6 +908,8 @@ class TimeGateView extends WatchUi.WatchFace {
             return getMoveBar();
         }else if (data_source == 7) {
             return getActMinDayGoalProgress();
+        }else if (data_source == 8) {
+            return getRecoveryProgress();
         }
         return null;
     }
@@ -947,6 +960,18 @@ class TimeGateView extends WatchUi.WatchFace {
             return Math.round(val.toFloat() / goal.toFloat() * 100.0);
         }
         return null;
+    }
+
+    hidden function getRecoveryProgress() as Number? {
+        var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_RECOVERY_TIME));
+        if (complication != null && complication.value != null) {
+            var recovery_h = complication.value / 60.0;
+            var val = Math.round(recovery_h) / 96.0 * 100.0; // 96 hours is the max recovery time shown in Garmin Connect, using it as 100% for the progress bar
+            if(val > 100) { val = 100; }
+            return val;
+        }else{
+            return 0;
+        }
     }
 
     hidden function getMoveBar() as Number? {
