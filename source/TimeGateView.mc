@@ -72,6 +72,7 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var dataRightBar as Number = 0;
     hidden var dataLeftBar as Number = 0;
     hidden var dataBottomBar as Number = 0;
+    hidden var dataTopBar as Number = 0;
 
     public var infoMessage as String = "";
     public var nightModeOverride as Number = -1;
@@ -397,12 +398,12 @@ class TimeGateView extends WatchUi.WatchFace {
 
         // var y1 = centerY  - marginY - smallDataHeight;
         // var y2 = centerY  + marginY + 3;
-         var y3 = centerY  - marginY  - smallDataHeight + 3;
+        // var y3 = centerY  - marginY  - smallDataHeight ;
         // var y4 = centerY  + marginY  + 3;
 
         // Draw Lines above clock
-        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX, y3, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
+        // dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+        // dc.drawText(centerX, y3, fontSmallData, dataTopLine, Graphics.TEXT_JUSTIFY_CENTER);
         // dc.drawText(centerX, y4, fontSmallData, dataBottomLine, Graphics.TEXT_JUSTIFY_CENTER);
 
         // var y3 = centerY  - marginY - 30 - 5;
@@ -509,6 +510,7 @@ class TimeGateView extends WatchUi.WatchFace {
         // }
 
         var hourPos = 0;
+        var topPos = 1;
         var minPos = 3;
         var secPos = 2;
 
@@ -529,7 +531,7 @@ class TimeGateView extends WatchUi.WatchFace {
         ];
 
         for(var idx = 0; idx < 4; idx++) {
-            if(hourPos == idx || minPos == idx || secPos == idx) {
+            if(hourPos == idx || topPos == idx || minPos == idx || secPos == idx) {
                 var x = posX[idx];
                 var y = posY[idx];
 
@@ -540,6 +542,9 @@ class TimeGateView extends WatchUi.WatchFace {
                 if(hourPos == idx && dataLeftBar > 0) {
                     dc.drawArc(x, y, 24, Graphics.ARC_CLOCKWISE, 90, 360 - Math.round(dataLeftBar / 100.0 * 360 - 90));
                 }
+                if(topPos == idx && dataTopBar > 0) {
+                    dc.drawArc(x, y, 24, Graphics.ARC_CLOCKWISE, 90, 360 - Math.round(dataTopBar / 100.0 * 360 - 90));
+                }
                 if(minPos == idx && dataRightBar > 0) {
                     dc.drawArc(x, y, 24, Graphics.ARC_CLOCKWISE, 90, 360 - Math.round(dataRightBar / 100.0 * 360 - 90));
                 }
@@ -547,9 +552,9 @@ class TimeGateView extends WatchUi.WatchFace {
                     dc.drawArc(x, y, 24, Graphics.ARC_CLOCKWISE, 90, 360 - Math.round(dataBottomBar / 100.0 * 360 - 90));
                 }
 
-                // Draw the letter D or W in the center of the circle
+                // Draw the letter D, B, W or R in the center of the circle
                 dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-                var letter = (hourPos == idx) ? "D" : (minPos == idx) ? "W" : "R";
+                var letter = (hourPos == idx) ? "D" : (topPos == idx) ? "B" : (minPos == idx) ? "W" : "R";
                 dc.drawText(x, y - 10, fontSmallData, letter, Graphics.TEXT_JUSTIFY_CENTER);
             }
         }
@@ -732,7 +737,7 @@ class TimeGateView extends WatchUi.WatchFace {
         }
 
         propHistogramData = getValueOrDefault("histogramData", 0) as Number;
-        propTopLineFieldShows = getValueOrDefault("topLineShows", 25) as Number;
+        propTopLineFieldShows = getValueOrDefault("topLineShows", 49) as Number;
         propBottomLineFieldShows = getValueOrDefault("bottomLineShows", 50) as Number;
         propShowSeconds = getValueOrDefault("showSeconds", true) as Boolean;
         propAlwaysShowSeconds = getValueOrDefault("alwaysShowSeconds", false) as Boolean;
@@ -820,6 +825,7 @@ class TimeGateView extends WatchUi.WatchFace {
         dataLeftBar = getBarData(propLeftBarShows);
         dataRightBar = getBarData(propRightBarShows);
         dataBottomBar = getBarData(propBottomBarShows);
+        dataTopBar = getBatteryPercent();
 
         dataNotifications = getNotificationsData();
 
@@ -972,6 +978,13 @@ class TimeGateView extends WatchUi.WatchFace {
         }else{
             return 0;
         }
+    }
+
+    hidden function getBatteryPercent() as Number? {
+        if(System.getSystemStats() has :battery && System.getSystemStats().battery != null) {
+            return System.getSystemStats().battery.toNumber();
+        }
+        return 0;
     }
 
     hidden function getMoveBar() as Number? {
