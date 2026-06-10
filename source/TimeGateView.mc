@@ -69,6 +69,9 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var dataLabelCircular5 as String = "";
     hidden var dataLabelCircular6 as String = "";
 
+    hidden var dataRightBar as Number = 0;
+    hidden var dataLeftBar as Number = 0;
+
     public var infoMessage as String = "";
     public var nightModeOverride as Number = -1;
     hidden var themeColors as Array<Graphics.ColorType> = [];
@@ -102,8 +105,8 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var propAodAlignment as Number = 0;
     hidden var propBottomFieldAlignment as Number = 2;
     hidden var propBottomFieldLabelAlignment as Number = 0;
-    hidden var propLeftBarShows as Number = 1;
-    hidden var propRightBarShows as Number = 2;
+    hidden var propLeftBarShows as Number = 7;
+    hidden var propRightBarShows as Number = 5;
     hidden var propHemisphere as Number = 0;
     hidden var propHourFormat as Number = 0;
     hidden var propTimeSeparator as Number = 0;
@@ -449,7 +452,7 @@ class TimeGateView extends WatchUi.WatchFace {
         var hourRad = (totalMinutes * Math.PI / 360.0) - (Math.PI / 2.0);
         var minuteRad = (now.min * Math.PI / 30.0) - (Math.PI / 2.0);
 
-        ///////////////////////////
+        // ///////////////////////////
 
         // left, top, bottom, right
         var timePosArray = [0, 0, 0, 0];
@@ -504,33 +507,45 @@ class TimeGateView extends WatchUi.WatchFace {
         }
 
         dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(5);
 
-        if(hourPos==0){
-            dc.drawText(centerX - 12, centerY - 33, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_RIGHT);
-        }
-        if(minPos==0){
-            dc.drawText(centerX - 12, centerY - 33, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_RIGHT);
-        }
-        if(hourPos==1){
-            dc.drawText(centerX, centerY - marginY - 35 - 5, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
-        }
-        if(minPos==1){
-            dc.drawText(centerX, centerY - marginY - 35 - 5, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
-        }
-        if(hourPos==2){
-            dc.drawText(centerX, centerY  + marginY - 30 +5, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
-        }
-        if(minPos==2){
-            dc.drawText(centerX, centerY  + marginY - 30 +5, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
-        }
-        if(hourPos==3){
-            dc.drawText(centerX + 12, centerY - 33, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_LEFT);
-        }
-        if(minPos==3){
-            dc.drawText(centerX + 12, centerY - 33, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_LEFT);
+        var posX = [
+            centerX - centerY * 0.3,
+            centerX,
+            centerX,
+            centerX + centerY * 0.3
+        ];
+        var posY = [
+            centerY,
+            centerY - centerY * 0.3,
+            centerY + centerY * 0.3,
+            centerY
+        ];
+
+        for(var idx = 0; idx < 4; idx++) {
+            if(hourPos == idx || minPos == idx) {
+                var x = posX[idx];
+                var y = posY[idx];
+
+                dc.setColor(0x707070, Graphics.COLOR_TRANSPARENT);
+                dc.drawCircle(x, y, 24);
+                dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+
+                if(hourPos == idx && dataLeftBar > 0) {
+                    dc.drawArc(x, y, 24, Graphics.ARC_CLOCKWISE, 90, 360 - Math.round(dataLeftBar / 100.0 * 360 - 90));
+                }
+                if(minPos == idx && dataRightBar > 0) {
+                    dc.drawArc(x, y, 24, Graphics.ARC_CLOCKWISE, 90, 360 - Math.round(dataRightBar / 100.0 * 360 - 90));
+                }
+
+                // Draw the letter D or W in the center of the circle
+                dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+                var letter = (hourPos == idx) ? "D" : "W";
+                dc.drawText(x, y - 10, fontSmallData, letter, Graphics.TEXT_JUSTIFY_CENTER);
+            }
         }
     
-        ////////////////////////////
+        // ////////////////////////////
 
         var hourCos = Math.cos(hourRad);
         var hourSin = Math.sin(hourRad);
@@ -747,6 +762,8 @@ class TimeGateView extends WatchUi.WatchFace {
         propSmallFontVariant = getValueOrDefault("smallFontVariant", 2) as Number;
         propLinesFontforBottomData = getValueOrDefault("linesFontforBottomData", false) as Boolean;
         propIs24H = System.getDeviceSettings().is24Hour;
+        propLeftBarShows = getValueOrDefault("leftBarShows", 0) as Number;
+        propRightBarShows = getValueOrDefault("rightBarShows", 0) as Number;
         
         updateColorTheme();
 
@@ -790,7 +807,8 @@ class TimeGateView extends WatchUi.WatchFace {
             dataLabelCircular6 = getLabelByType(propCircle6AltValueShows, 1);
         }
 
-       
+        dataLeftBar = getBarData(propLeftBarShows);
+        dataRightBar = getBarData(propRightBarShows);       
 
         dataNotifications = getNotificationsData();
 
@@ -864,6 +882,25 @@ class TimeGateView extends WatchUi.WatchFace {
         return null;
     }
 
+    hidden function getBarData(data_source as Number) as Number? {
+        if(data_source == 1) {
+            return getStressData();
+        } else if (data_source == 2) {
+            return getBBData();
+        } else if (data_source == 3) {
+            return getStepGoalProgress();
+        } else if (data_source == 4) {
+            return getFloorGoalProgress();
+        } else if (data_source == 5) {
+            return getActMinGoalProgress();
+        } else if (data_source == 6) {
+            return getMoveBar();
+        }else if (data_source == 7) {
+            return getActMinDayGoalProgress();
+        }
+        return null;
+    }
+
     hidden function getStepGoalProgress() as Number? {
         if(ActivityMonitor.getInfo().steps != null and ActivityMonitor.getInfo().stepGoal != null) {
             var steps = ActivityMonitor.getInfo().steps;
@@ -893,6 +930,20 @@ class TimeGateView extends WatchUi.WatchFace {
             var goal = ActivityMonitor.getInfo().activeMinutesWeekGoal;
             if(goal == null or goal == 0) { return 0; }
             if(val == null or val == 0) { return 0; }
+            if(val > goal) { val = goal; }
+            return Math.round(val.toFloat() / goal.toFloat() * 100.0);
+        }
+        return null;
+    }
+
+    hidden function getActMinDayGoalProgress() as Number? {
+        if(ActivityMonitor.getInfo().activeMinutesDay != null) {
+            var actmin = ActivityMonitor.getInfo().activeMinutesDay;
+            var val = actmin.total;
+            var goal = 100; // There is no day goal in Garmin API, so using 100% as goal for day progress bar
+            if(goal == null or goal == 0) { return 0; }
+            if(val == null or val == 0) { return 0; }
+            if(val > goal) { val = goal; }
             return Math.round(val.toFloat() / goal.toFloat() * 100.0);
         }
         return null;
