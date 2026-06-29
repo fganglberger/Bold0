@@ -69,11 +69,6 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var dataLabelCircular5 as String = "";
     hidden var dataLabelCircular6 as String = "";
 
-    hidden var dataRightBar as Number = 0;
-    hidden var dataLeftBar as Number = 0;
-    hidden var dataBottomBar as Number = 0;
-    hidden var dataTopBar as Number = 0;
-
     public var infoMessage as String = "";
     public var nightModeOverride as Number = -1;
     hidden var themeColors as Array<Graphics.ColorType> = [];
@@ -107,9 +102,8 @@ class TimeGateView extends WatchUi.WatchFace {
     hidden var propAodAlignment as Number = 0;
     hidden var propBottomFieldAlignment as Number = 2;
     hidden var propBottomFieldLabelAlignment as Number = 0;
-    hidden var propLeftBarShows as Number = 7;
-    hidden var propRightBarShows as Number = 5;
-    hidden var propBottomBarShows as Number = 8;
+    hidden var propLeftBarShows as Number = 1;
+    hidden var propRightBarShows as Number = 2;
     hidden var propHemisphere as Number = 0;
     hidden var propHourFormat as Number = 0;
     hidden var propTimeSeparator as Number = 0;
@@ -298,12 +292,12 @@ class TimeGateView extends WatchUi.WatchFace {
              dc.drawBitmap2(0, 0, drawClockFace, { :tintColor => themeColors[fg], :blendMode => Graphics.BLEND_MODE_MULTIPLY });
         }
 
-        // dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-        // dc.setPenWidth(2);
-        // dc.setAntiAlias(true);
-        // dc.drawCircle(centerX, centerY, (centerY) * 0.54);
-        // dc.drawCircle(centerX, centerY, (centerY) * 0.76);
-        // dc.setAntiAlias(false);
+        dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(3);
+        dc.setAntiAlias(true);
+        dc.drawCircle(centerX, centerY, (centerY) * 0.56);
+        dc.drawCircle(centerX, centerY, (centerY) * 0.74);
+        dc.setAntiAlias(false);
 
         // dc.setAntiAlias(true);
         // dc.drawCircle(centerX, centerY, (centerY) * 0.58);
@@ -376,23 +370,74 @@ class TimeGateView extends WatchUi.WatchFace {
         // }
         //  dc.setAntiAlias(false);
   
-        if(!dataNotifications.equals("")) {
-            dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(centerX*2 - 27 - 1 , centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
-            dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
-            dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
-            dc.drawText(centerX*2 - 13 - 1 , centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
-            
-        }else{
-            if(!isSleeping && propShowSeconds){
+        if (System.getDeviceSettings().phoneConnected) {
+            if(!dataNotifications.equals("")) {
                 dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
-                dc.fillRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27+1,(smallDataHeight+8)); 
+                dc.fillRectangle(centerX*2 - 27 - 3 , centerY-((smallDataHeight+8)/2),27+3,(smallDataHeight+8)); 
                 dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-                dc.setPenWidth(2);
-                dc.drawRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
+                dc.fillRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
                 dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(centerX*2 - 13 - 2 , centerY-(smallDataHeight/2), fontSmallData, now.sec.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+                dc.drawText(centerX*2 - 13 - 1 , centerY-(smallDataHeight/2), fontSmallData, dataNotifications, Graphics.TEXT_JUSTIFY_CENTER);
+                
+            }else{
+                if(!isSleeping && propShowSeconds){
+                    dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
+                    dc.fillRectangle(centerX*2 - 27 - 3, centerY-((smallDataHeight+8)/2),27+3,(smallDataHeight+8)); 
+                    dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+                    dc.setPenWidth(2);
+                    dc.drawRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
+                    dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(centerX*2 - 13 - 2 , centerY-(smallDataHeight/2), fontSmallData, now.sec.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+                }else{
+                    var actMin = 0;
+                    if(ActivityMonitor.getInfo() has :activeMinutesDay) {
+                        if(ActivityMonitor.getInfo().activeMinutesDay != null) {
+                            actMin = ActivityMonitor.getInfo().activeMinutesDay.total;
+                        }
+                    }
+     
+                    if(actMin > 0){
+                        dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
+                        dc.fillRectangle(centerX*2 - 27 - 3, centerY-((smallDataHeight+8)/2),27+3,(smallDataHeight+8)); 
+                        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+                        dc.setPenWidth(2);
+                        dc.drawRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
+
+                        var actMinText = actMin.format("%d");
+                        var dividerCount = Math.floor(actMin / 100.0);
+                        if(actMin > 100) {
+                            actMinText = (actMin % 100).format("%02d");
+                        }
+
+                        var boxLeft = centerX*2 - 27 - 1;
+                        var boxTop = centerY - ((smallDataHeight+8)/2);
+                        var boxRight = boxLeft + 27 - 1;
+                        var boxMiddleY = boxTop + (smallDataHeight + 8) / 2;
+                        var lineStartX = boxLeft + 5;
+                        var lineEndX = boxRight - 5;
+                        var lineCenterX = (lineStartX + lineEndX) / 2;
+                        var lineBaseY = boxMiddleY - 2;
+                        if(actMin > 100 && dividerCount > 0) {
+                            var dividerBaseY = lineBaseY - 9;
+                            var segmentGap = 4;
+                            var availableWidth = lineEndX - lineStartX;
+                            var segmentLength = (availableWidth - ((dividerCount - 1) * segmentGap)) / dividerCount;
+                            if(segmentLength < 1) {
+                                segmentLength = 1;
+                            }
+                            var totalSpan = (dividerCount * segmentLength) + ((dividerCount - 1) * segmentGap);
+                            var dividerStartX = lineCenterX - (totalSpan / 2);
+                            for(var dividerIndex = 0; dividerIndex < dividerCount; dividerIndex++) {
+                                var segmentStartX = dividerStartX + (dividerIndex * (segmentLength + segmentGap));
+                                var segmentEndX = segmentStartX + segmentLength;
+                                dc.drawLine(segmentStartX, dividerBaseY, segmentEndX, dividerBaseY);
+                            }
+                        }
+
+                        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
+                        dc.drawText(centerX*2 - 13 - 2 , centerY-(smallDataHeight/2), fontSmallData, actMinText, Graphics.TEXT_JUSTIFY_CENTER);
+                    }
+                }
             }
         }
 
@@ -509,55 +554,32 @@ class TimeGateView extends WatchUi.WatchFace {
         //     minPos = 3;
         // }
 
-        var hourPos = 0;
-        var topPos = 1;
-        var minPos = 3;
-        var secPos = 2;
+        // dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
 
-        dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(5);
-
-        var posX = [
-            centerX - centerY * 0.3,
-            centerX,
-            centerX,
-            centerX + centerY * 0.3
-        ];
-        var posY = [
-            centerY,
-            centerY - centerY * 0.3,
-            centerY + centerY * 0.3,
-            centerY
-        ];
-
-        for(var idx = 0; idx < 4; idx++) {
-            if(hourPos == idx || topPos == idx || minPos == idx || secPos == idx) {
-                var x = posX[idx];
-                var y = posY[idx];
-
-                dc.setColor(0x707070, Graphics.COLOR_TRANSPARENT);
-                dc.drawCircle(x, y, 24);
-                dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-
-                if(hourPos == idx && dataLeftBar > 0) {
-                    dc.drawArc(x, y, 24, Graphics.ARC_CLOCKWISE, 90, 360 - Math.round(dataLeftBar / 100.0 * 360 - 90));
-                }
-                if(topPos == idx && dataTopBar > 0) {
-                    dc.drawArc(x, y, 24, Graphics.ARC_CLOCKWISE, 90, 360 - Math.round(dataTopBar / 100.0 * 360 - 90));
-                }
-                if(minPos == idx && dataRightBar > 0) {
-                    dc.drawArc(x, y, 24, Graphics.ARC_CLOCKWISE, 90, 360 - Math.round(dataRightBar / 100.0 * 360 - 90));
-                }
-                if(secPos == idx && dataBottomBar > 0) {
-                    dc.drawArc(x, y, 24, Graphics.ARC_CLOCKWISE, 90, 360 - Math.round(dataBottomBar / 100.0 * 360 - 90));
-                }
-
-                // Draw the letter D, B, W or R in the center of the circle
-                dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
-                var letter = (hourPos == idx) ? "D" : (topPos == idx) ? "B" : (minPos == idx) ? "W" : "R";
-                dc.drawText(x, y - 10, fontSmallData, letter, Graphics.TEXT_JUSTIFY_CENTER);
-            }
-        }
+        // if(hourPos==0){
+        //     dc.drawText(centerX - 12, centerY - 33, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_RIGHT);
+        // }
+        // if(minPos==0){
+        //     dc.drawText(centerX - 12, centerY - 33, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_RIGHT);
+        // }
+        // if(hourPos==1){
+        //     dc.drawText(centerX, centerY - marginY - 35 - 5, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        // }
+        // if(minPos==1){
+        //     dc.drawText(centerX, centerY - marginY - 35 - 5, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        // }
+        // if(hourPos==2){
+        //     dc.drawText(centerX, centerY  + marginY - 30 +5, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        // }
+        // if(minPos==2){
+        //     dc.drawText(centerX, centerY  + marginY - 30 +5, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER);
+        // }
+        // if(hourPos==3){
+        //     dc.drawText(centerX + 12, centerY - 33, fontBigData, now.hour.format("%02d"), Graphics.TEXT_JUSTIFY_LEFT);
+        // }
+        // if(minPos==3){
+        //     dc.drawText(centerX + 12, centerY - 33, fontBigData, now.min.format("%02d"), Graphics.TEXT_JUSTIFY_LEFT);
+        // }
     
         // ////////////////////////////
 
@@ -776,9 +798,6 @@ class TimeGateView extends WatchUi.WatchFace {
         propSmallFontVariant = getValueOrDefault("smallFontVariant", 2) as Number;
         propLinesFontforBottomData = getValueOrDefault("linesFontforBottomData", false) as Boolean;
         propIs24H = System.getDeviceSettings().is24Hour;
-        propLeftBarShows = getValueOrDefault("leftBarShows", 0) as Number;
-        propRightBarShows = getValueOrDefault("rightBarShows", 0) as Number;
-        propBottomBarShows = getValueOrDefault("bottomBarShows", -2) as Number;
         
         updateColorTheme();
 
@@ -822,10 +841,7 @@ class TimeGateView extends WatchUi.WatchFace {
             dataLabelCircular6 = getLabelByType(propCircle6AltValueShows, 1);
         }
 
-        dataLeftBar = getBarData(propLeftBarShows);
-        dataRightBar = getBarData(propRightBarShows);
-        dataBottomBar = getBarData(propBottomBarShows);
-        dataTopBar = getBatteryPercent();
+       
 
         dataNotifications = getNotificationsData();
 
@@ -899,27 +915,6 @@ class TimeGateView extends WatchUi.WatchFace {
         return null;
     }
 
-    hidden function getBarData(data_source as Number) as Number? {
-        if(data_source == 1) {
-            return getStressData();
-        } else if (data_source == 2) {
-            return getBBData();
-        } else if (data_source == 3) {
-            return getStepGoalProgress();
-        } else if (data_source == 4) {
-            return getFloorGoalProgress();
-        } else if (data_source == 5) {
-            return getActMinGoalProgress();
-        } else if (data_source == 6) {
-            return getMoveBar();
-        }else if (data_source == 7) {
-            return getActMinDayGoalProgress();
-        }else if (data_source == 8) {
-            return getRecoveryProgress();
-        }
-        return null;
-    }
-
     hidden function getStepGoalProgress() as Number? {
         if(ActivityMonitor.getInfo().steps != null and ActivityMonitor.getInfo().stepGoal != null) {
             var steps = ActivityMonitor.getInfo().steps;
@@ -949,42 +944,9 @@ class TimeGateView extends WatchUi.WatchFace {
             var goal = ActivityMonitor.getInfo().activeMinutesWeekGoal;
             if(goal == null or goal == 0) { return 0; }
             if(val == null or val == 0) { return 0; }
-            if(val > goal) { val = goal; }
             return Math.round(val.toFloat() / goal.toFloat() * 100.0);
         }
         return null;
-    }
-
-    hidden function getActMinDayGoalProgress() as Number? {
-        if(ActivityMonitor.getInfo().activeMinutesDay != null) {
-            var actmin = ActivityMonitor.getInfo().activeMinutesDay;
-            var val = actmin.total;
-            var goal = 100; // There is no day goal in Garmin API, so using 100% as goal for day progress bar
-            if(goal == null or goal == 0) { return 0; }
-            if(val == null or val == 0) { return 0; }
-            if(val > goal) { val = goal; }
-            return Math.round(val.toFloat() / goal.toFloat() * 100.0);
-        }
-        return null;
-    }
-
-    hidden function getRecoveryProgress() as Number? {
-        var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_RECOVERY_TIME));
-        if (complication != null && complication.value != null) {
-            var recovery_h = complication.value / 60.0;
-            var val = Math.round(recovery_h) / 96.0 * 100.0; // 96 hours is the max recovery time shown in Garmin Connect, using it as 100% for the progress bar
-            if(val > 100) { val = 100; }
-            return val;
-        }else{
-            return 0;
-        }
-    }
-
-    hidden function getBatteryPercent() as Number? {
-        if(System.getSystemStats() has :battery && System.getSystemStats().battery != null) {
-            return System.getSystemStats().battery.toNumber();
-        }
-        return 0;
     }
 
     hidden function getMoveBar() as Number? {
