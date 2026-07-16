@@ -295,8 +295,8 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(3);
         dc.setAntiAlias(true);
-        dc.drawCircle(centerX, centerY, (centerY) * 0.535);
-        dc.drawCircle(centerX, centerY, (centerY) * 0.715);
+        dc.drawCircle(centerX, centerY, (centerY) * 0.56);
+        dc.drawCircle(centerX, centerY, (centerY) * 0.74);
         dc.setAntiAlias(false);
 
         // dc.setAntiAlias(true);
@@ -307,12 +307,12 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(22);
         dc.setAntiAlias(true);
-        dc.drawCircle(centerX, centerY, (centerY) * 0.625);
+        dc.drawCircle(centerX, centerY, (centerY) * 0.65);
         dc.setAntiAlias(false);
 
 
         // Draw data fields in a ring around the clock
-        var ringRadius = (centerY) * 0.60;
+        var ringRadius = (centerY) * 0.63;
         var numFields = 5;
         var angleStep = 360.0 / numFields;
         var minuteAngle = (now.min / 60.0) * 360.0;
@@ -373,7 +373,7 @@ class TimeGateView extends WatchUi.WatchFace {
         if (System.getDeviceSettings().phoneConnected) {
             if(!dataNotifications.equals("")) {
                 dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
-                dc.fillRectangle(centerX*2 - 27 - 6 , centerY-((smallDataHeight+8)/2),27+6,(smallDataHeight+8)); 
+                dc.fillRectangle(centerX*2 - 27 - 3 , centerY-((smallDataHeight+8)/2),27+3,(smallDataHeight+8)); 
                 dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
                 dc.fillRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
                 dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
@@ -382,7 +382,7 @@ class TimeGateView extends WatchUi.WatchFace {
             }else{
                 if(!isSleeping && propShowSeconds){
                     dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
-                    dc.fillRectangle(centerX*2 - 27 - 6 , centerY-((smallDataHeight+8)/2),27+6,(smallDataHeight+8)); 
+                    dc.fillRectangle(centerX*2 - 27 - 3, centerY-((smallDataHeight+8)/2),27+3,(smallDataHeight+8)); 
                     dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
                     dc.setPenWidth(2);
                     dc.drawRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
@@ -398,7 +398,7 @@ class TimeGateView extends WatchUi.WatchFace {
      
                     if(actMin > 0){
                         dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
-                        dc.fillRectangle(centerX*2 - 27 - 6, centerY-((smallDataHeight+8)/2),27+6,(smallDataHeight+8)); 
+                        dc.fillRectangle(centerX*2 - 27 - 3, centerY-((smallDataHeight+8)/2),27+3,(smallDataHeight+8)); 
                         dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
                         dc.setPenWidth(2);
                         dc.drawRectangle(centerX*2 - 27 - 1, centerY-((smallDataHeight+8)/2),27,(smallDataHeight+8)); 
