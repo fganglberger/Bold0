@@ -625,12 +625,12 @@ class TimeGateView extends WatchUi.WatchFace {
         dc.setColor(themeColors[fg], Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon(minuteHandPoints);
 
-        // var minuteSmallerLength = centerX * 0.3;
-        // var minuteSmallerX2 = centerX + Math.round(minuteSmallerLength * minuteCos);
-        // var minutSmallereY2 = centerY + Math.round(minuteSmallerLength * minuteSin);
+         var minuteSmallerLength = centerX * 0.3;
+         var minuteSmallerX2 = centerX + Math.round(minuteSmallerLength * minuteCos);
+         var minutSmallereY2 = centerY + Math.round(minuteSmallerLength * minuteSin);
         dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(5);
-        // dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
+        dc.drawLine(centerX, centerY, minuteSmallerX2, minutSmallereY2);
 
         // Hour hand
         var hourLength = centerX * 0.50;
